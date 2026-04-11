@@ -1,0 +1,1872 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+eslint.config.js
+index.html
+package.json
+postcss.config.js
+public/background.mp4
+public/favicon.svg
+public/icons.svg
+README.md
+src/App.css
+src/App.jsx
+src/assets/hero.png
+src/assets/react.svg
+src/assets/vite.svg
+src/components/ChatDrawer.jsx
+src/components/ContactDrawer.jsx
+src/components/Footer.jsx
+src/components/Navbar.jsx
+src/components/PromoSection.jsx
+src/components/RevealOnScroll.jsx
+src/components/SlideshowGallery.jsx
+src/data/dummyData.jsx
+src/index.css
+src/main.jsx
+src/pages/About.jsx
+src/pages/Detail.jsx
+src/pages/Gallery.jsx
+src/pages/Intro.jsx
+src/pages/Landing.jsx
+src/pages/Search.jsx
+src/pages/SignIn.jsx
+tailwind.config.js
+vite.config.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+</file>
+
+<file path="eslint.config.js">
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cosmait-web</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="package.json">
+{
+  "name": "cosmait-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.7.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-icons": "^5.6.0",
+    "react-router-dom": "^7.14.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "postcss": "^8.5.9",
+    "tailwindcss": "^3.4.19",
+    "vite": "^5.4.21"
+  }
+}
+</file>
+
+<file path="postcss.config.js">
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+</file>
+
+<file path="public/favicon.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="46" fill="none" viewBox="0 0 48 46"><path fill="#863bff" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" style="fill:#863bff;fill:color(display-p3 .5252 .23 1);fill-opacity:1"/><mask id="a" width="48" height="46" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M25.842 44.938c-.664.844-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.183c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.498 0-3.579-1.842-3.579H1.133c-.92 0-1.456-1.04-.92-1.787L9.91.473c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.578 1.842 3.578h11.377c.943 0 1.473 1.088.89 1.832L25.843 44.94z" style="fill:#000;fill-opacity:1"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#ede6ff" rx="5.508" ry="14.704" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -4.47 31.516)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#ede6ff" rx="10.399" ry="29.851" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -39.328 7.883)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#7e14ff" rx="5.508" ry="30.487" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -25.913 -14.639)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -32.644 -3.334)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -34.34 30.47)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#ede6ff" rx="14.072" ry="22.078" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="rotate(93.35 24.506 48.493)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx=".387" cy="8.972" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(39.51 .387 8.972)"/></g><g filter="url(#k)"><ellipse cx="47.523" cy="-6.092" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 47.523 -6.092)"/></g><g filter="url(#l)"><ellipse cx="41.412" cy="6.333" fill="#47bfff" rx="5.971" ry="9.665" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 41.412 6.333)"/></g><g filter="url(#m)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#n)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#o)"><ellipse cx="35.651" cy="29.907" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 35.651 29.907)"/></g><g filter="url(#p)"><ellipse cx="38.418" cy="32.4" fill="#47bfff" rx="5.971" ry="15.297" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 38.418 32.4)"/></g></g><defs><filter id="b" width="60.045" height="41.654" x="-19.77" y="16.149" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-54.613" y="-7.533" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-49.64" y="2.03" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-45.045" y="20.029" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-43.513" y="21.178" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="15.756" y="-17.901" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-27.636" y="-22.853" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="20.116" y="-38.415" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="24.641" y="-11.323" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="8.244" y="-2.416" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="18.713" y="10.588" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter></defs></svg>
+</file>
+
+<file path="public/icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="bluesky-icon" viewBox="0 0 16 17">
+    <g clip-path="url(#bluesky-clip)"><path fill="#08060d" d="M7.75 7.735c-.693-1.348-2.58-3.86-4.334-5.097-1.68-1.187-2.32-.981-2.74-.79C.188 2.065.1 2.812.1 3.251s.241 3.602.398 4.13c.52 1.744 2.367 2.333 4.07 2.145-2.495.37-4.71 1.278-1.805 4.512 3.196 3.309 4.38-.71 4.987-2.746.608 2.036 1.307 5.91 4.93 2.746 2.72-2.746.747-4.143-1.747-4.512 1.702.189 3.55-.4 4.07-2.145.156-.528.397-3.691.397-4.13s-.088-1.186-.575-1.406c-.42-.19-1.06-.395-2.741.79-1.755 1.24-3.64 3.752-4.334 5.099"/></g>
+    <defs><clipPath id="bluesky-clip"><path fill="#fff" d="M.1.85h15.3v15.3H.1z"/></clipPath></defs>
+  </symbol>
+  <symbol id="discord-icon" viewBox="0 0 20 19">
+    <path fill="#08060d" d="M16.224 3.768a14.5 14.5 0 0 0-3.67-1.153c-.158.286-.343.67-.47.976a13.5 13.5 0 0 0-4.067 0c-.128-.306-.317-.69-.476-.976A14.4 14.4 0 0 0 3.868 3.77C1.546 7.28.916 10.703 1.231 14.077a14.7 14.7 0 0 0 4.5 2.306q.545-.748.965-1.587a9.5 9.5 0 0 1-1.518-.74q.191-.14.372-.293c2.927 1.369 6.107 1.369 8.999 0q.183.152.372.294-.723.437-1.52.74.418.838.963 1.588a14.6 14.6 0 0 0 4.504-2.308c.37-3.911-.63-7.302-2.644-10.309m-9.13 8.234c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.894 0 1.614.82 1.599 1.82.001 1-.705 1.82-1.6 1.82m5.91 0c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.893 0 1.614.82 1.599 1.82 0 1-.706 1.82-1.6 1.82"/>
+  </symbol>
+  <symbol id="documentation-icon" viewBox="0 0 21 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="m15.5 13.333 1.533 1.322c.645.555.967.833.967 1.178s-.322.623-.967 1.179L15.5 18.333m-3.333-5-1.534 1.322c-.644.555-.966.833-.966 1.178s.322.623.966 1.179l1.534 1.321"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M17.167 10.836v-4.32c0-1.41 0-2.117-.224-2.68-.359-.906-1.118-1.621-2.08-1.96-.599-.21-1.349-.21-2.848-.21-2.623 0-3.935 0-4.983.369-1.684.591-3.013 1.842-3.641 3.428C3 6.449 3 7.684 3 10.154v2.122c0 2.558 0 3.838.706 4.726q.306.383.713.671c.76.536 1.79.64 3.581.66"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M3 10a2.78 2.78 0 0 1 2.778-2.778c.555 0 1.209.097 1.748-.047.48-.129.854-.503.982-.982.145-.54.048-1.194.048-1.749a2.78 2.78 0 0 1 2.777-2.777"/>
+  </symbol>
+  <symbol id="github-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1 .077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844" clip-rule="evenodd"/>
+  </symbol>
+  <symbol id="social-icon" viewBox="0 0 20 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M12.5 6.667a4.167 4.167 0 1 0-8.334 0 4.167 4.167 0 0 0 8.334 0"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M2.5 16.667a5.833 5.833 0 0 1 8.75-5.053m3.837.474.513 1.035c.07.144.257.282.414.309l.93.155c.596.1.736.536.307.965l-.723.73a.64.64 0 0 0-.152.531l.207.903c.164.715-.213.991-.84.618l-.872-.52a.63.63 0 0 0-.577 0l-.872.52c-.624.373-1.003.094-.84-.618l.207-.903a.64.64 0 0 0-.152-.532l-.723-.729c-.426-.43-.289-.864.306-.964l.93-.156a.64.64 0 0 0 .412-.31l.513-1.034c.28-.562.735-.562 1.012 0"/>
+  </symbol>
+  <symbol id="x-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M1.893 1.98c.052.072 1.245 1.769 2.653 3.77l2.892 4.114c.183.261.333.48.333.486s-.068.089-.152.183l-.522.593-.765.867-3.597 4.087c-.375.426-.734.834-.798.905a1 1 0 0 0-.118.148c0 .01.236.017.664.017h.663l.729-.83c.4-.457.796-.906.879-.999a692 692 0 0 0 1.794-2.038c.034-.037.301-.34.594-.675l.551-.624.345-.392a7 7 0 0 1 .34-.374c.006 0 .93 1.306 2.052 2.903l2.084 2.965.045.063h2.275c1.87 0 2.273-.003 2.266-.021-.008-.02-1.098-1.572-3.894-5.547-2.013-2.862-2.28-3.246-2.273-3.266.008-.019.282-.332 2.085-2.38l2-2.274 1.567-1.782c.022-.028-.016-.03-.65-.03h-.674l-.3.342a871 871 0 0 1-1.782 2.025c-.067.075-.405.458-.75.852a100 100 0 0 1-.803.91c-.148.172-.299.344-.99 1.127-.304.343-.32.358-.345.327-.015-.019-.904-1.282-1.976-2.808L6.365 1.85H1.8zm1.782.91 8.078 11.294c.772 1.08 1.413 1.973 1.425 1.984.016.017.241.02 1.05.017l1.03-.004-2.694-3.766L7.796 5.75 5.722 2.852l-1.039-.004-1.039-.004z" clip-rule="evenodd"/>
+  </symbol>
+</svg>
+</file>
+
+<file path="README.md">
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+</file>
+
+<file path="src/App.css">
+/* File ini sekarang kosong. Semua styling global sudah dipindahkan ke src/index.css */
+</file>
+
+<file path="src/App.jsx">
+// src/App.jsx
+import React, { useState } from 'react';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+
+// Import Komponen Global
+import ShadcnNavbar from './components/Navbar';
+import FooterReplica from './components/Footer';
+import ContactDrawer from './components/ContactDrawer';
+
+// Import Pages
+import HeroShowcase from './pages/Intro';
+import LandingView from './pages/Landing';
+import SearchView from './pages/Search';
+import AboutView from './pages/About';
+import GalleryView from './pages/Gallery';
+import SignInView from './pages/SignIn';
+import KosDetailView from './pages/Detail';
+
+// Komponen Pembungkus untuk Layout Otomatis (Navbar & Footer)
+const Layout = ({ children, isMobileMenuOpen, setIsMobileMenuOpen, setIsContactOpen }) => {
+  const location = useLocation();
+  // Menyembunyikan navbar/footer di halaman tertentu (misal: SignIn atau Intro)
+  const hideLayout = location.pathname === '/intro' || location.pathname === '/signin';
+
+  // Scroll to top otomatis saat pindah page
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  return (
+    <>
+      {!hideLayout && (
+        <div className="fixed top-0 w-full z-50">
+          <ShadcnNavbar 
+            isMobileMenuOpen={isMobileMenuOpen} 
+            setIsMobileMenuOpen={setIsMobileMenuOpen} 
+            onOpenContact={() => setIsContactOpen(true)} 
+          />
+        </div>
+      )}
+      
+      {/* Render Halaman di sini */}
+      {children}
+
+      {!hideLayout && (
+        <FooterReplica onOpenContact={() => setIsContactOpen(true)} />
+      )}
+    </>
+  );
+};
+
+export default function App() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
+  return (
+    <HashRouter>
+      <Layout 
+        isMobileMenuOpen={isMobileMenuOpen} 
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
+        setIsContactOpen={setIsContactOpen}
+      >
+        <Routes>
+          {/* Ini adalah daftar URL Anda! */}
+          <Route path="/intro" element={<HeroShowcase />} />
+          <Route path="/" element={<LandingView />} />
+          <Route path="/search" element={<SearchView />} />
+          <Route path="/about" element={<AboutView />} />
+          <Route path="/gallery" element={<GalleryView />} />
+          <Route path="/signin" element={<SignInView />} />
+          
+          {/* Rute Dinamis untuk ID Kost */}
+          <Route path="/detail/:kosId" element={<KosDetailView />} />
+        </Routes>
+
+        {/* Modal Global */}
+        <ContactDrawer isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      </Layout>
+    </HashRouter>
+  );
+}
+</file>
+
+<file path="src/assets/react.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+</file>
+
+<file path="src/assets/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
+</file>
+
+<file path="src/components/ChatDrawer.jsx">
+// src/components/ChatDrawer.jsx
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Send, User } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+export default function ChatDrawer({ isOpen, onClose, kosName }) {
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+  
+  // State untuk menyimpan daftar pesan
+  const [messages, setMessages] = useState([]);
+
+  // Set pesan awal otomatis dari pemilik saat laci chat dibuka
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      setMessages([
+        {
+          id: 1,
+          text: `Halo! Terima kasih sudah tertarik dengan ${kosName || 'properti kami'}. Ada yang bisa saya bantu?`,
+          sender: 'owner',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+      ]);
+    }
+  }, [isOpen, kosName, messages.length]);
+
+  // Efek auto-scroll ke pesan paling bawah setiap ada pesan baru
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isTyping]);
+
+  // Kunci scroll body website saat chat terbuka
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'auto';
+  }, [isOpen]);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    // 1. Tambahkan pesan user ke state
+    const newUserMsg = {
+      id: Date.now(),
+      text: input,
+      sender: 'user',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    setMessages((prev) => [...prev, newUserMsg]);
+    setInput('');
+    
+    // 2. Munculkan animasi "Pemilik sedang mengetik..."
+    setIsTyping(true);
+
+    // 3. Simulasi balasan otomatis dari pemilik setelah 1.5 detik
+    setTimeout(() => {
+      setIsTyping(false);
+      setMessages((prev) => [...prev, {
+        id: Date.now() + 1,
+        text: "Baik, pesan Anda sudah kami terima. Kami akan segera mengecek ketersediaan kamar dan menghubungi Anda kembali secepatnya. Mohon ditunggu ya!",
+        sender: 'owner',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+    }, 1500);
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          {/* Backdrop Blur Gelap */}
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={onClose} 
+            className="absolute inset-0 bg-[#241812]/40 backdrop-blur-sm cursor-pointer"
+          />
+          
+          {/* Panel Chat dari Kanan */}
+          <motion.div
+            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'tween', duration: 0.4, ease: 'easeOut' }}
+            className="relative w-full max-w-[450px] h-[100vh] bg-[#f5efe9] shadow-2xl flex flex-col"
+          >
+            {/* Header Chat */}
+            <div className="bg-white p-[24px] shadow-sm flex items-center justify-between border-b border-slate-100 z-10">
+              <div className="flex items-center gap-[16px]">
+                <div className="relative">
+                  <div className="w-[48px] h-[48px] bg-slate-100 rounded-full flex items-center justify-center border border-slate-200">
+                    <User className="w-[24px] h-[24px] text-slate-400" />
+                  </div>
+                  <span className="absolute bottom-0 right-0 w-[14px] h-[14px] bg-green-500 border-2 border-white rounded-full"></span>
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#241812] leading-tight">Pemilik Kos</h3>
+                  <p className="text-xs text-green-600 font-medium">Online</p>
+                </div>
+              </div>
+              <button onClick={onClose} className="p-[8px] bg-slate-50 hover:bg-slate-100 rounded-full text-slate-500 hover:text-[#241812] transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Area Balon Pesan (Scrollable) */}
+            <div className="flex-1 overflow-y-auto p-[24px] flex flex-col gap-[16px]">
+              <div className="text-center mb-[16px]">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 bg-slate-200/50 px-[12px] py-[4px] rounded-full">
+                  Hari Ini
+                </span>
+              </div>
+
+              {messages.map((msg) => (
+                <div key={msg.id} className={`flex flex-col max-w-[80%] ${msg.sender === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
+                  <div className={`p-[16px] text-sm md:text-base shadow-sm ${msg.sender === 'user' ? 'bg-[#241812] text-white rounded-[20px] rounded-tr-[4px]' : 'bg-white text-slate-700 rounded-[20px] rounded-tl-[4px] border border-slate-100'}`}>
+                    {msg.text}
+                  </div>
+                  <span className="text-[10px] text-slate-400 mt-[4px] px-[4px] font-medium">{msg.time}</span>
+                </div>
+              ))}
+
+              {/* Indikator Animasi Mengetik */}
+              {isTyping && (
+                <div className="self-start bg-white border border-slate-100 rounded-[20px] rounded-tl-[4px] p-[16px] shadow-sm flex items-center gap-[4px]">
+                  <span className="w-[8px] h-[8px] bg-slate-300 rounded-full animate-bounce"></span>
+                  <span className="w-[8px] h-[8px] bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></span>
+                  <span className="w-[8px] h-[8px] bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></span>
+                </div>
+              )}
+              
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Form Text Area */}
+            <form onSubmit={handleSend} className="p-[20px] bg-white border-t border-slate-100 flex items-center gap-[12px] z-10">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ketik pesan Anda..."
+                className="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-sm py-[14px] px-[20px] rounded-full focus:outline-none focus:border-teal-500 focus:bg-white transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={!input.trim()}
+                className="w-[48px] h-[48px] bg-[#241812] text-white flex items-center justify-center rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-teal-700 transition-colors shadow-md shrink-0"
+              >
+                <Send className="w-[20px] h-[20px] ml-[2px]" />
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+</file>
+
+<file path="src/components/ContactDrawer.jsx">
+import React, { useEffect } from 'react';
+import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+export default function ContactDrawer({ isOpen, onClose }) {
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'auto';
+  }, [isOpen]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-[#241812]/60 backdrop-blur-sm cursor-pointer" />
+          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'tween', duration: 0.4, ease: 'easeInOut' }} className="relative w-full max-w-[600px] h-[100vh] bg-[#f5efe9] shadow-2xl flex flex-col p-[32px] md:p-[64px] overflow-y-auto">
+            <button onClick={onClose} className="absolute hidden md:flex items-center justify-center top-1/2 -left-[80px] -translate-y-1/2 text-white/70 hover:text-white transition-transform hover:scale-110"><X size={48} strokeWidth={1} /></button>
+            <button onClick={onClose} className="md:hidden absolute top-[24px] right-[24px] text-[#241812] hover:opacity-70 transition-opacity"><X size={32} strokeWidth={1.5} /></button>
+            <h2 className="font-playfair text-[4rem] md:text-[5rem] leading-none text-[#241812] mb-[48px] tracking-tight">contact <span className="italic">us</span></h2>
+            <form className="flex flex-col gap-[32px] flex-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
+                <div className="flex flex-col gap-[8px]"><label className="text-xs text-[#241812]/70 uppercase tracking-wider font-medium">First Name</label><input type="text" className="bg-transparent border-b border-[#241812]/20 py-[8px] focus:outline-none focus:border-[#241812] transition-colors text-[#241812]" /></div>
+                <div className="flex flex-col gap-[8px]"><label className="text-xs text-[#241812]/70 uppercase tracking-wider font-medium">Last Name</label><input type="text" className="bg-transparent border-b border-[#241812]/20 py-[8px] focus:outline-none focus:border-[#241812] transition-colors text-[#241812]" /></div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
+                <div className="flex flex-col gap-[8px]"><label className="text-xs text-[#241812]/70 uppercase tracking-wider font-medium">Email</label><input type="email" className="bg-transparent border-b border-[#241812]/20 py-[8px] focus:outline-none focus:border-[#241812] transition-colors text-[#241812]" /></div>
+                <div className="flex flex-col gap-[8px]"><label className="text-xs text-[#241812]/70 uppercase tracking-wider font-medium">Phone Number</label><input type="tel" defaultValue="+62 " className="bg-transparent border-b border-[#241812]/20 py-[8px] focus:outline-none focus:border-[#241812] transition-colors text-[#241812]" /></div>
+              </div>
+              <div className="flex flex-col gap-[8px] mt-[16px]"><label className="text-xs text-[#241812]/70 uppercase tracking-wider font-medium">Your Message</label><textarea rows="2" className="bg-transparent border-b border-[#241812]/20 py-[8px] focus:outline-none focus:border-[#241812] transition-colors text-[#241812] resize-none"></textarea></div>
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-[24px] mt-[32px] pt-[32px]">
+                <label className="flex items-center gap-[12px] cursor-pointer group"><input type="checkbox" className="w-[20px] h-[20px] rounded-full border border-[#241812]/40 appearance-none checked:bg-[#241812] cursor-pointer transition-colors" /><span className="text-sm text-[#241812]/80">You agree to our friendly Privacy Policy.</span></label>
+                <button type="button" className="bg-[#241812] text-[#f5efe9] px-[40px] py-[12px] rounded-[999px] font-medium hover:bg-[#3a2a22] transition-colors whitespace-nowrap">Submit</button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+</file>
+
+<file path="src/components/Footer.jsx">
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function FooterReplica({ onOpenContact }) {
+  const navigate = useNavigate();
+
+  return (
+    <footer className="bg-[#241812] text-[#eae0d5] pt-[64px] md:pt-[96px] overflow-hidden flex flex-col relative w-full shrink-0 font-sans z-30">
+      <div className="max-w-[1280px] w-full mx-auto px-[24px] lg:px-[48px] flex flex-col z-10 flex-1">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-[64px] md:mb-[96px] gap-[48px]">
+          <div className="font-playfair text-4xl md:text-6xl leading-[1.1] tracking-tight">kos mate,<br /><span className="italic">in motion</span></div>
+          <div className="grid grid-cols-3 gap-[32px] md:gap-[80px] text-sm md:text-base font-medium">
+            <div className="flex flex-col gap-[16px]">
+              <button onClick={() => navigate('/')} className="hover:text-white transition-colors text-left">Beranda</button>
+              <button onClick={() => navigate('/search')} className="hover:text-white transition-colors text-left">Cari Kost</button>
+              <button onClick={onOpenContact} className="hover:text-white transition-colors text-left">Contact</button>
+              <button onClick={() => navigate('/about')} className="hover:text-white transition-colors text-left">About</button>
+            </div>
+            <div className="flex flex-col gap-[16px]"><a href="#" className="hover:text-white transition-colors">Events</a><a href="#" className="hover:text-white transition-colors">Press</a><a href="#" className="hover:text-white transition-colors">Rewards</a><a href="#" className="hover:text-white transition-colors">FAQ</a><a href="#" className="hover:text-white transition-colors">Careers</a></div>
+            <div className="flex flex-col gap-[16px]"><a href="#" className="hover:text-white transition-colors">Instagram</a><a href="#" className="hover:text-white transition-colors">WhatsApp</a><a href="#" className="hover:text-white transition-colors">LinkedIn</a></div>
+          </div>
+        </div>
+        <div className="w-full h-[1px] bg-[#eae0d5] opacity-20 mb-[24px]"></div>
+        <div className="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-[#eae0d5]/60 gap-[16px]">
+          <div>© 2026 KosMate. All rights reserved.</div>
+          <div className="flex items-center gap-[24px]"><a href="#" className="hover:text-[#eae0d5] transition-colors">Privacy Policy</a><a href="#" className="hover:text-[#eae0d5] transition-colors">Terms of Service</a><a href="#" className="hover:text-[#eae0d5] transition-colors">Cookie Settings</a></div>
+        </div>
+      </div>
+      <div className="w-full mt-auto flex justify-center pointer-events-none select-none pb-[16px] md:pb-[32px]">
+        <span className="font-playfair text-[5rem] sm:text-[8rem] md:text-[12rem] lg:text-[16rem] xl:text-[20rem] leading-none text-[#eae0d5] tracking-tighter whitespace-nowrap">kos mate</span>
+      </div>
+    </footer>
+  );
+}
+</file>
+
+<file path="src/components/Navbar.jsx">
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, onOpenContact, darkTheme = false }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 50);
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNav = (path) => {
+    navigate(path);
+    setIsMobileMenuOpen(false);
+  };
+
+  const menuLinkClass = "font-sans text-[13px] font-light tracking-[0.2em] text-white/80 hover:text-white transition-opacity duration-300 whitespace-nowrap";
+
+  return (
+    <header className={`w-full fixed top-0 left-0 z-50 pointer-events-none transition-all duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${isScrolled ? 'bg-[#241812]/95 backdrop-blur-md shadow-lg' : 'bg-transparent before:absolute before:inset-0 before:bg-gradient-to-b before:from-black/60 before:to-transparent before:-z-10 before:h-[140px]'}`}>
+      
+      {/* MENGGUNAKAN GRID: grid-cols-2 untuk HP, grid-cols-3 untuk Desktop */}
+      <nav className="w-full h-[80px] md:h-[100px] px-[24px] lg:px-[56px] grid grid-cols-2 md:grid-cols-3 items-center pointer-events-auto box-border">
+        
+        {/* KOLOM 1: Logo di Kiri */}
+        <div className="justify-self-start cursor-pointer" onClick={() => handleNav('/')}>
+          <span className="font-playfair text-[28px] md:text-[32px] font-light text-white/90 whitespace-nowrap drop-shadow-sm tracking-tight">kos mate</span>
+        </div>
+        
+        {/* KOLOM 2: Menu di Tengah (Hanya muncul di Desktop) */}
+        <div className="hidden md:flex justify-self-center items-center gap-[32px] lg:gap-[56px]">
+          <button onClick={() => handleNav('/')} className={menuLinkClass}>Beranda</button>
+          <button onClick={() => handleNav('/search')} className={menuLinkClass}>Cari Kost</button>
+          <button onClick={onOpenContact} className={menuLinkClass}>Contact</button>
+          <button onClick={() => handleNav('/about')} className={menuLinkClass}>About</button>
+        </div>
+
+        {/* KOLOM 3: Tombol Masuk / Hamburger di Kanan */}
+        <div className="justify-self-end flex items-center">
+          <button 
+            onClick={() => handleNav('/signin')} 
+            className="hidden md:block font-sans text-[13px] font-light tracking-[0.2em] text-white/90 transition-all duration-300 border-b border-solid border-white/40 hover:border-white pb-[2px] whitespace-nowrap"
+          >
+            Masuk
+          </button>
+
+          <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden p-[8px] text-white hover:bg-white/10 rounded-full transition-colors ml-[16px]">
+            <Menu className="h-[26px] w-[26px]" strokeWidth={1.5} />
+          </button>
+        </div>
+
+      </nav>
+      
+      {/* DRAWER MENU MOBILE */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[100] flex justify-end pointer-events-auto">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in" onClick={() => setIsMobileMenuOpen(false)}></div>
+          <div className="relative w-[80%] h-full max-w-[400px] bg-[#fdfcf9] p-[32px] shadow-2xl animate-in slide-in-from-right flex flex-col font-sans">
+            <button onClick={() => setIsMobileMenuOpen(false)} className="absolute right-[24px] top-[24px] text-slate-400 hover:text-slate-800 transition-colors">
+              <X className="h-[28px] w-[28px]" strokeWidth={1.5} />
+            </button>
+            <div className="flex flex-col space-y-[32px] mt-[64px]">
+              <button onClick={() => handleNav('/')} className="text-left font-normal text-xl text-slate-800 tracking-[0.05em] border-b border-solid border-slate-100 pb-[16px]">Beranda</button>
+              <button onClick={() => handleNav('/search')} className="text-left font-normal text-xl text-slate-800 tracking-[0.05em] border-b border-solid border-slate-100 pb-[16px]">Cari Kost</button>
+              <button onClick={() => { setIsMobileMenuOpen(false); onOpenContact(); }} className="text-left font-normal text-xl text-slate-800 tracking-[0.05em] border-b border-solid border-slate-100 pb-[16px]">Contact</button>
+              <button onClick={() => handleNav('/about')} className="text-left font-normal text-xl text-slate-800 tracking-[0.05em] border-b border-solid border-slate-100 pb-[16px]">About</button>
+              
+              <button onClick={() => handleNav('/signin')} className="bg-[#115e59] hover:bg-[#0f4c48] transition-colors text-white h-[56px] px-[24px] text-lg font-normal tracking-[0.1em] mt-[32px]">Masuk</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+</file>
+
+<file path="src/components/PromoSection.jsx">
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Sparkles, ShieldCheck, Star, MapPin, ArrowRight } from 'lucide-react';
+import RevealOnScroll from './RevealOnScroll';
+
+export default function PromoSection({ kosData }) {
+  const navigate = useNavigate();
+  const [timeLeft, setTimeLeft] = useState(86400);
+
+  useEffect(() => {
+    const timer = setInterval(() => setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0)), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (sec) => `${Math.floor(sec / 3600).toString().padStart(2, '0')}:${Math.floor((sec % 3600) / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`;
+  const promoItems = kosData.filter((k) => k.isPromo);
+
+  if (promoItems.length === 0) return null;
+
+  return (
+    <div className="mb-[80px] pt-[48px] border-t border-slate-200/60">
+      <RevealOnScroll direction="up">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-[16px] mb-[40px]">
+          <div className="flex items-center gap-[16px]">
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-[#241812] tracking-tight">Flash Promos</h2>
+            <div className="bg-red-50 text-red-600 border border-red-200 px-[16px] py-[8px] rounded-[8px] flex items-center gap-[8px] shadow-sm">
+              <span className="w-[8px] h-[8px] bg-red-500 rounded-full animate-pulse shrink-0"></span>
+              <span className="text-sm md:text-base font-bold tracking-widest">{formatTime(timeLeft)}</span>
+            </div>
+          </div>
+          <p className="text-sm md:text-base text-slate-500 italic">Diskon spesial berakhir besok!</p>
+        </div>
+      </RevealOnScroll>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[32px]">
+        {promoItems.map((kos, index) => (
+          <RevealOnScroll key={`promo-${kos.id}`} delay={index * 100} direction="up" className="h-full">
+            <div onClick={() => navigate(`/detail/${kos.id}`)} className="bg-white/80 backdrop-blur-md rounded-[24px] overflow-hidden border border-red-100 shadow-[0_8px_30px_rgba(239,68,68,0.06)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.12)] hover:-translate-y-[8px] transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
+              <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full pointer-events-none z-0"></div>
+              
+              <div className="relative h-[220px] overflow-hidden shrink-0 bg-slate-100">
+                <img src={kos.image} alt={kos.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute top-[16px] left-[16px] flex flex-col gap-[8px] items-start z-10">
+                  <div className="bg-red-500/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-md"><Sparkles className="w-[14px] h-[14px] text-white shrink-0" /><span className="text-xs font-bold text-white whitespace-nowrap">-{kos.discount}% OFF</span></div>
+                  {kos.verified && <div className="bg-white/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-sm"><ShieldCheck className="w-[16px] h-[16px] text-teal-600 shrink-0" /><span className="text-xs font-bold text-teal-900 whitespace-nowrap">Terverifikasi</span></div>}
+                </div>
+                <div className="absolute bottom-[16px] left-[16px] bg-[#241812]/90 backdrop-blur-sm text-white text-xs font-bold h-[28px] flex items-center px-[12px] rounded-[8px] shadow-sm whitespace-nowrap z-10">{kos.type}</div>
+              </div>
+              
+              <div className="p-[24px] flex flex-col flex-1 relative z-10">
+                <div className="flex items-start gap-[8px] text-slate-500 text-sm mb-[12px]"><MapPin className="w-[16px] h-[16px] mt-[2px] shrink-0 text-teal-600" /><span className="line-clamp-1 leading-relaxed">{kos.campus}</span></div>
+                <h3 className="font-playfair font-bold text-xl text-[#241812] mb-[8px] line-clamp-1 group-hover:text-red-600 transition-colors tracking-tight">{kos.name}</h3>
+                <div className="text-sm text-slate-500 mb-[24px] line-clamp-1 flex-1 font-light">{kos.facilities.join(" • ")}</div>
+                <div className="flex justify-between items-center pt-[20px] border-t border-red-100/50 mt-auto">
+                  <div>
+                    <p className="text-[10px] text-red-500 mb-[4px] font-bold uppercase tracking-wider">Harga Promo</p>
+                    <div className="flex flex-col"><p className="text-xs text-slate-400 line-through mb-[2px]">Rp {kos.price}</p><p className="font-extrabold text-red-600 text-lg">Rp {kos.discountedPrice}<span className="text-xs text-red-400 font-normal">/bln</span></p></div>
+                  </div>
+                  <button className="bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white w-[40px] h-[40px] flex items-center justify-center rounded-[12px] transition-all duration-300 shrink-0 mt-auto"><ArrowRight className="w-[20px] h-[20px] group-hover:translate-x-[2px] transition-transform" /></button>
+                </div>
+              </div>
+            </div>
+          </RevealOnScroll>
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/RevealOnScroll.jsx">
+import React, { useState, useEffect, useRef } from 'react';
+
+export default function RevealOnScroll({ children, className = "", direction = "up", delay = 0 }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(ref.current);
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  let baseTransform = "translate-y-[40px]";
+  if (direction === "left") baseTransform = "-translate-x-[40px]";
+  if (direction === "right") baseTransform = "translate-x-[40px]";
+  if (direction === "none") baseTransform = "scale-95";
+
+  return (
+    <div 
+      ref={ref} 
+      className={`transition-all duration-1000 ease-out ${isVisible ? "opacity-100 translate-x-0 translate-y-0 scale-100" : `opacity-0 ${baseTransform}`} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/SlideshowGallery.jsx">
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { locationSlides } from '../data/dummyData';
+
+export default function SlideshowGallery() {
+  const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+
+  const nextSlide = (e) => { e.stopPropagation(); setCurrent((prev) => (prev + 1) % locationSlides.length); };
+  const prevSlide = (e) => { e.stopPropagation(); setCurrent((prev) => (prev - 1 + locationSlides.length) % locationSlides.length); };
+
+  return (
+    <div className="relative w-full h-[100vh] overflow-hidden bg-black shrink-0 group select-none cursor-pointer" onClick={() => navigate('/gallery')}>
+      {locationSlides.map((slide, i) => (
+        <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
+          <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] ease-out" style={{ backgroundImage: `url(${slide.img})`, transform: i === current ? 'scale(1.1)' : 'scale(1)' }}></div>
+          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white pointer-events-none">
+            <div className="font-playfair text-center flex flex-col items-center px-[24px]">
+              <span className={`text-2xl md:text-4xl tracking-[0.2em] md:tracking-[0.3em] uppercase font-light drop-shadow-lg opacity-90 translate-y-[10px] md:translate-y-[20px] transition-all duration-1000 delay-300 ${i === current ? 'opacity-100 translate-y-0' : 'opacity-0'}`}>{slide.text[0]}</span>
+              <span className={`text-5xl md:text-7xl lg:text-8xl tracking-tight font-extrabold drop-shadow-2xl transition-all duration-1000 delay-500 ${i === current ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[20px]'}`}>{slide.text[1]}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+      <button className="absolute left-[16px] md:left-[48px] top-1/2 -translate-y-1/2 z-30 w-[48px] h-[48px] md:w-[64px] md:h-[64px] rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all duration-300 md:opacity-0 md:group-hover:opacity-100 hover:scale-110" onClick={prevSlide}><ChevronLeft className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
+      <button className="absolute right-[16px] md:right-[48px] top-1/2 -translate-y-1/2 z-30 w-[48px] h-[48px] md:w-[64px] md:h-[64px] rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all duration-300 md:opacity-0 md:group-hover:opacity-100 hover:scale-110" onClick={nextSlide}><ChevronRight className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
+      <div className="absolute bottom-[32px] md:bottom-[48px] left-1/2 -translate-x-1/2 z-20 text-white/90 font-medium tracking-widest text-xs md:text-sm px-[24px] py-[8px] border border-white/20 rounded-full backdrop-blur-md pointer-events-none">0{current + 1} / 0{locationSlides.length}</div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/data/dummyData.jsx">
+// src/data/dummyData.jsx
+import React from 'react';
+import { 
+  Home, Search, ShieldCheck, Star, CreditCard, Eye, 
+  MapPin, Smartphone, Lock, Sparkles, Wifi, Coffee 
+} from 'lucide-react';
+
+// 1. Data Kampus
+export const campuses = ['Semua', 'UGM', 'UI', 'ITB', 'UB', 'Undip', 'ITS'];
+
+// 2. Data Master Kost
+const baseKosData = [
+  { id: 1, name: "KosMate Eksklusif UGM", campus: "UGM Yogyakarta, Sleman", price: "1.500.000", rating: 4.8, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 2, name: "Kos Mawar UI Depok", campus: "UI Depok, Beji", price: "1.200.000", rating: 4.5, type: "Putri", verified: true, facilities: ["Kipas", "WiFi", "Dapur Bersama"], image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 3, name: "Griya ITB Bandung", campus: "ITB Bandung, Coblong", price: "1.800.000", rating: 4.9, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Water Heater", "Parkir Mobil"], image: "https://images.unsplash.com/photo-1598928506311-c55dd1821430?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 4, name: "Kos Brawijaya Indah", campus: "UB Malang, Lowokwaru", price: "900.000", rating: 4.3, type: "Putri", verified: false, facilities: ["WiFi", "Kamar Mandi Luar", "Akses 24 Jam"], image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 5, name: "Paviliun Undip Tembalang", campus: "Undip Semarang, Tembalang", price: "1.400.000", rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Smart TV", "Dapur"], image: "https://images.unsplash.com/photo-1505691938895-1758d7bef511?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 6, name: "Kos Sukolilo ITS", campus: "ITS Surabaya, Sukolilo", price: "1.100.000", rating: 4.2, type: "Putra", verified: false, facilities: ["Kipas", "Kamar Mandi Dalam", "Parkir Motor"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 7, name: "D'Paragon Pogung", campus: "UGM Yogyakarta, Sleman", price: "2.100.000", rating: 4.9, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kulkas", "Laundry"], image: "https://images.unsplash.com/photo-1497368942940-2e061ddf5948?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 8, name: "Kos Kutek UI", campus: "UI Depok, Kukusan", price: "1.050.000", rating: 4.4, type: "Putri", verified: true, facilities: ["AC", "Kamar Mandi Luar", "Akses Kunci 24 Jam"], image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 9, name: "Asrama Cisitu ITB", campus: "ITB Bandung, Cisitu", price: "1.350.000", rating: 4.5, type: "Putra", verified: false, facilities: ["WiFi", "Water Heater", "Balkon"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/Xt149mwy-540x720.jpg" },
+  { id: 10, name: "Suhat Executive", campus: "UB Malang, Soekarno Hatta", price: "2.500.000", rating: 5.0, type: "Campur", verified: true, facilities: ["AC", "Kolam Renang", "Gym", "WiFi"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/pZNwDuDA.-540x720.jpg" },
+  { id: 11, name: "Kos Tirto Agung", campus: "Undip Semarang, Pedalangan", price: "850.000", rating: 4.1, type: "Putra", verified: false, facilities: ["Kipas", "Parkir Luas", "Kantin"], image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
+  { id: 12, name: "Griya Keputih ITS", campus: "ITS Surabaya, Keputih", price: "1.450.000", rating: 4.7, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Dapur Bersama", "CCTV"], image: "https://static.mamikos.com/uploads/cache/data/style/2025-01-09/91mvnVdb-540x720.jpg" },
+  { id: 13, name: "Kos Seturan Nyaman", campus: "UGM Yogyakarta, Seturan", price: "1.750.000", rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "Smart TV", "Kamar Mandi Dalam"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-08-04/DlYvk8D4-540x720.jpg" },
+  { id: 14, name: "Pondok Cina Minimalis", campus: "UI Depok, Pondok Cina", price: "1.600.000", rating: 4.8, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Ruang Belajar"], image: "https://images.unsplash.com/photo-1540518614846-1536a65249a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" }
+];
+
+// 3. Logika Generator Promo (Tereksekusi otomatis saat file di-import)
+export const kosData = (() => {
+  const shuffledIndices = [...Array(baseKosData.length).keys()].sort(() => 0.5 - Math.random());
+  const promoIndices = shuffledIndices.slice(0, 4);
+  const discountOptions = [10, 15, 13, 20, 25, 12];
+
+  return baseKosData.map((kos, index) => {
+    if (promoIndices.includes(index)) {
+      const discount = discountOptions[Math.floor(Math.random() * discountOptions.length)];
+      const originalPrice = parseInt(kos.price.replace(/\./g, ''), 10);
+      const discountedPrice = originalPrice - (originalPrice * discount / 100);
+      return {
+        ...kos,
+        isPromo: true,
+        discount,
+        discountedPrice: discountedPrice.toLocaleString('id-ID').replace(/,/g, '.')
+      };
+    }
+    return { ...kos, isPromo: false };
+  });
+})();
+
+// 4. Kumpulan Gambar untuk Halaman Galeri Full (Bento Box)
+export const galleryImagesPool = [
+  ...baseKosData.map(k => k.image),
+  "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1502672260266-1c1b5594b281?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1505691938895-1758d7bef511?auto=format&fit=crop&w=1920&q=80"
+].sort(() => 0.5 - Math.random());
+
+// 5. Data Tim (Halaman About)
+export const teamMembers = [
+  { id: 1, name: "Akmal W", role: "Ketua Kelompok", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80", bio: "Visioner di balik KosMate dengan 10 tahun pengalaman di industri proptech. Mengutamakan kenyamanan pengguna di atas segalanya." },
+  { id: 2, name: "Sekarayu A", role: "Anggota #2", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80", bio: "Arsitek di balik antarmuka mewah dan pengalaman pengguna yang seamless yang membedakan KosMate dari yang lain." },
+  { id: 3, name: "Elisya A", role: "Anggota #3", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80", bio: "Pakar infrastruktur cloud yang memastikan platform KosMate berjalan sangat cepat, stabil, dan aman sepanjang waktu." },
+  { id: 4, name: "Fawwaz S", role: "Anggota #4", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80", bio: "Ahli strategi pemasaran yang membawa KosMate ke seluruh penjuru nusantara dengan kampanye yang menginspirasi." },
+  { id: 5, name: "Devi I", role: "Anggota #5", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", bio: "Pengembang tangal yang menerjemahkan bahasa desain visual ke dalam baris kode pixel-perfect dengan performa tinggi." }
+];
+
+// 6. Data Fitur (Landing Page)
+export const features = [
+  { title: "Smart Search & Filter", description: "Filter lengkap (lokasi, harga, fasilitas) bantu kamu temukan kos idaman tanpa ribet.", icon: <Search className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
+  { title: "Informasi Transparan", description: "Foto asli, deskripsi kamar, rincian harga lengkap. No hidden fee!", icon: <Home className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
+  { title: "Verified Kost", description: "Setiap properti dicek keasliannya. Label 'Verified' menjamin keamanan dan bebas penipuan.", icon: <ShieldCheck className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
+  { title: "Review & Rating Asli", description: "Ulasan jujur dari penghuni sebelumnya untuk gambaran realistis kondisi kos sebenarnya.", icon: <Star className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
+  { title: "Booking & Bayar Online", description: "Reservasi kamar dan bayar aman dari mana saja. Cocok buat kamu yang belum bisa survei.", icon: <CreditCard className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
+  { title: "Virtual Tour 360°", description: "Lihat kondisi kamar secara menyeluruh lewat layar HP kamu sebelum deal.", icon: <Eye className="w-[32px] h-[32px] text-teal-500 shrink-0" /> }
+];
+
+// 7. Data Langkah Penggunaan (Landing Page)
+export const steps = [
+  { step: "01", title: "Cari Kos Sesuai Lokasi", description: "Gunakan fitur pencarian untuk menemukan kos di dekat kampus atau kantor.", icon: <MapPin className="w-[40px] h-[40px] text-teal-600 shrink-0" /> },
+  { step: "02", title: "Bandingkan Pilihan", description: "Cek fasilitas, baca review asli, dan bandingkan harga antar kos dengan mudah.", icon: <Search className="w-[40px] h-[40px] text-teal-600 shrink-0" /> },
+  { step: "03", title: "Pesan & Hubungi Pemilik", description: "Booking langsung via aplikasi dengan pembayaran aman tanpa perantara.", icon: <Smartphone className="w-[40px] h-[40px] text-teal-600 shrink-0" /> }
+];
+
+// 8. Data Slideshow Lokasi
+export const locationSlides = [
+  { img: "https://ui.kompas.id/wp-content/uploads/2020/09/kampus-ui-shutterstock-featured-default.jpg", text: ["DEPOK,", "UNIVERSITAS INDONESIA"] },
+  { img: "https://uisi.ac.id/assets/upload/article/1280x572/69a541e6e8cfc4697562707faa0795c8.jpg", text: ["BANDUNG,", "INSTITUT TEKNOLOGI BANDUNG"] },
+  { img: "https://cdn.antaranews.com/cache/1200x800/2021/06/09/IMG_20210609_235450.jpg", text: ["YOGYAKARTA,", "UNIVERSITAS GADJAH MADA"] },
+  { img: "https://prasetya.ub.ac.id/wp-content/uploads/2022/01/Unibraw-Rektorat-Pagi-scaled.jpg", text: ["MALANG,", "UNIVERSITAS BRAWIJAYA"] },
+  { img: "https://www.its.ac.id/wp-content/uploads/2020/12/slider-1-1.jpg", text: ["SURABAYA,", "INSTITUT TEKNOLOGI SEP NOPEMBER"] },
+];
+
+// 9. Fungsi Helper Detail Kost (Menggabungkan Gambar Acak & Deskripsi)
+export const getRichKosData = (kos) => {
+  const interiorPool = [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1502672260266-1c1b5594b281?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1505691938895-1758d7bef511?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1512918580421-6c84b423dd71?auto=format&fit=crop&w=1920&q=80",
+  ];
+  
+  const shuffledInteriors = interiorPool.filter(img => img !== kos.image).sort(() => 0.5 - Math.random()).slice(0, 4);
+
+  return {
+    ...kos,
+    gallery: [kos.image, ...shuffledInteriors],
+    description: `Rasakan pengalaman menetap yang tak tertandingi di ${kos.name}. Dirancang khusus untuk mengutamakan privasi dan kenyamanan, properti ini menawarkan perpaduan sempurna antara estetika modern dan fungsionalitas.\n\nSetiap sudut ruangan didesain dengan saksama menggunakan material premium, pencahayaan alami yang optimal, serta sirkulasi udara yang menyegarkan. Berlokasi strategis hanya beberapa langkah dari ${kos.campus}, properti ini membebaskan Anda dari stres kemacetan harian. Nikmati akses eksklusif ke berbagai fasilitas kelas atas yang dikurasi khusus untuk mendukung gaya hidup produktif sekaligus memberikan relaksasi maksimal.`,
+    uniqueFeatures: [
+      { title: "Smart Door Lock", desc: "Akses kamar menggunakan PIN & RFID khusus.", icon: <Lock className="w-[20px] h-[20px] text-[#241812]" /> },
+      { title: "Weekly Cleaning", desc: "Layanan pembersihan kamar gratis setiap minggunya.", icon: <Sparkles className="w-[20px] h-[20px] text-[#241812]" /> },
+      { title: "High-Speed WiFi", desc: "Koneksi internet dedikasi hingga 100Mbps.", icon: <Wifi className="w-[20px] h-[20px] text-[#241812]" /> },
+      { title: "Premium Lounge", desc: "Area komunal mewah untuk bekerja atau bersantai.", icon: <Coffee className="w-[20px] h-[20px] text-[#241812]" /> }
+    ],
+    reviewsList: [
+      { id: 1, name: "Joko Wi", date: "Oktober 2025", rating: 5, text: "Sangat nyaman dan aman. Penjaganya super ramah, fasilitas selalu bersih dan wangi. Worth the price!" },
+      { id: 2, name: "Aldi Burger", date: "Agustus 2025", rating: kos.rating >= 4.5 ? 5 : 4, text: "Desain interior kamarnya sangat estetik. Cocok banget buat mahasiswa/pekerja karena suasananya tenang banget." },
+      { id: 3, name: "Pak Basu", date: "Juli 2025", rating: 5, text: "Lokasi paling strategis! Gampang cari makan dan akses ke kampus benar-benar tinggal jalan kaki saja." }
+    ]
+  };
+};
+</file>
+
+<file path="src/index.css">
+/* ==========================================================================
+   1. TAILWIND DIRECTIVES
+   ========================================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   2. BASE RESETS (Aman, tidak merusak class Tailwind)
+   ========================================================================== */
+@layer base {
+  /* Membersihkan gaya tombol bawaan browser secara total */
+  button, 
+  [type='button'], 
+  [type='reset'], 
+  [type='submit'] {
+    -webkit-appearance: none;
+    background-color: transparent;
+    background-image: none;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Membersihkan garis bawah pada link */
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  /* Reset Body & Scrollbar agar mulus */
+  html, body {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    background-color: #115e59; /* Warna dasar Teal */
+  }
+  
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+}
+
+/* ==========================================================================
+   3. CUSTOM UTILITIES & BUG FIXES
+   ========================================================================== */
+/* Memaksa font Playfair aktif */
+.font-playfair { 
+  font-family: 'Playfair Display', serif !important; 
+}
+
+/* Memperbaiki wadah utama Vite agar tidak bocor */
+#root {
+  max-width: 100vw !important;
+  min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  width: 100%;
+}
+
+/* FIX BAYANGAN HITAM: Menghapus shadow penyebab glitch saat animasi GPU berjalan */
+.shadow-2xl, 
+.shadow-\[0_-30px_60px_rgba\(0\,0\,0\,0\.9\)\] {
+  box-shadow: none !important;
+}
+</file>
+
+<file path="src/main.jsx">
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+</file>
+
+<file path="src/pages/About.jsx">
+import React from 'react';
+import { teamMembers } from '../data/dummyData';
+import RevealOnScroll from '../components/RevealOnScroll';
+
+export default function About() {
+  return (
+    <div className="w-full overflow-x-hidden bg-[#faf9f7] font-sans text-slate-800 flex flex-col">
+      <div className="bg-[#241812] pt-[160px] pb-[80px] md:pb-[120px] rounded-b-[40px] md:rounded-b-[64px] relative z-10 shrink-0 shadow-2xl">
+        <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] text-center">
+          <RevealOnScroll direction="up">
+            <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#eae0d5] mb-[24px] tracking-tight">Kelompok <span className="italic text-teal-300">Visionary</span></h1>
+            <p className="text-base md:text-xl lg:text-2xl text-[#eae0d5]/70 max-w-[768px] mx-auto font-light leading-relaxed">Mengenal lebih dekat lima arsitek utama di balik revolusi pencarian tempat tinggal mewah dan nyaman bagi mahasiswa nusantara.</p>
+          </RevealOnScroll>
+        </div>
+      </div>
+      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] relative z-20 flex-1 -mt-[40px] md:-mt-[60px] pb-[120px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px] md:gap-[48px]">
+          {teamMembers.map((member, index) => (
+            <RevealOnScroll key={member.id} delay={index * 100} direction="up" className={`h-full ${index === 3 ? 'lg:col-start-1 lg:ml-auto' : ''} ${index === 4 ? 'lg:col-start-2 lg:mr-auto' : ''}`}>
+              <div className="bg-white rounded-[32px] p-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col h-full group hover:shadow-[0_30px_80px_rgba(0,0,0,0.08)] hover:-translate-y-[8px] transition-all duration-500">
+                <div className="w-[120px] h-[120px] rounded-[24px] overflow-hidden mb-[24px] bg-slate-100 shadow-inner">
+                  <img src={member.image} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                </div>
+                <h3 className="font-playfair font-bold text-2xl text-[#241812] mb-[4px] tracking-tight">{member.name}</h3>
+                <p className="text-xs uppercase tracking-wider font-bold text-teal-600 mb-[24px]">{member.role}</p>
+                <p className="text-slate-600 text-sm md:text-base leading-relaxed font-light flex-1">{member.bio}</p>
+              </div>
+            </RevealOnScroll>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/pages/Detail.jsx">
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ChevronLeft, MapPin, ShieldCheck, Star, Sparkles, Camera } from 'lucide-react';
+import { kosData, getRichKosData } from '../data/dummyData';
+import RevealOnScroll from '../components/RevealOnScroll';
+import ChatDrawer from '../components/ChatDrawer'; // Import ChatDrawer di sini
+
+export default function Detail() {
+  const { kosId } = useParams();
+  const navigate = useNavigate();
+  
+  // State untuk mengontrol Laci Chat DM
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  
+  // Mengambil data kos berdasarkan ID di URL, fallback ke data pertama jika tidak ada
+  const baseKos = kosData.find(k => k.id === parseInt(kosId)) || kosData[0];
+  const kos = getRichKosData(baseKos);
+
+  return (
+    <div className="w-full overflow-x-hidden bg-[#faf9f7] font-sans text-slate-800 flex flex-col animate-in fade-in duration-700">
+      <button onClick={() => navigate('/search')} className="fixed top-[32px] left-[24px] md:left-[48px] z-50 bg-white/80 hover:bg-white backdrop-blur-md px-[20px] py-[12px] rounded-[999px] flex items-center gap-[8px] text-[#241812] font-medium shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all hover:-translate-x-[4px]">
+        <ChevronLeft className="w-[20px] h-[20px]" /> <span className="hidden md:inline">Kembali</span>
+      </button>
+
+      {/* Luxury Dark Header Section with Photo Grid */}
+      <div className="bg-[#241812] pt-[120px] pb-[80px] md:pb-[120px] rounded-b-[40px] md:rounded-b-[64px] relative z-10 shrink-0">
+        <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px]">
+          <RevealOnScroll direction="up">
+            <div className="flex flex-wrap items-center gap-[12px] mb-[16px]">
+              {kos.isPromo && <div className="bg-red-500 text-white border border-red-600 h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] text-xs font-bold"><Sparkles className="w-[14px] h-[14px]" /> Diskon {kos.discount}%</div>}
+              {kos.verified && <div className="bg-teal-900/50 text-teal-300 border border-teal-700/50 h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] text-xs font-bold"><ShieldCheck className="w-[16px] h-[16px]" /> Terverifikasi</div>}
+              <div className="bg-orange-900/50 text-orange-400 border border-orange-700/50 h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] text-xs font-bold"><Star className="w-[14px] h-[14px] fill-orange-400" /> {kos.rating}</div>
+              <div className="bg-white/10 text-white border border-white/20 h-[32px] px-[12px] rounded-[8px] flex items-center text-xs font-bold">{kos.type}</div>
+            </div>
+            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#eae0d5] mb-[16px] tracking-tight">{kos.name}</h1>
+            <div className="flex items-center gap-[8px] text-[#eae0d5]/70 text-sm md:text-base"><MapPin className="w-[18px] h-[18px] text-teal-400" /> {kos.campus}</div>
+          </RevealOnScroll>
+
+          <RevealOnScroll direction="up" delay={200}>
+            <div className="relative w-full h-[40vh] md:h-[60vh] flex gap-[8px] md:gap-[12px] rounded-[24px] md:rounded-[32px] overflow-hidden mt-[48px] shadow-2xl">
+              <div className="w-full md:w-1/2 h-full relative cursor-pointer group overflow-hidden bg-black">
+                <img src={kos.gallery[0]} alt={kos.name} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+              </div>
+              <div className="hidden md:grid w-1/2 h-full grid-cols-2 grid-rows-2 gap-[8px] md:gap-[12px]">
+                {kos.gallery.slice(1, 5).map((img, idx) => (
+                  <div key={idx} className="w-full h-full relative cursor-pointer group overflow-hidden bg-black">
+                    <img src={img} alt={`Interior ${idx+1}`} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                  </div>
+                ))}
+              </div>
+              <button className="absolute bottom-[24px] right-[24px] bg-white/90 backdrop-blur-md hover:bg-white text-[#241812] px-[20px] py-[12px] rounded-[16px] text-sm font-bold flex items-center gap-[8px] transition-all shadow-lg hover:shadow-xl hover:-translate-y-[2px]">
+                <Camera className="w-[18px] h-[18px]" /> Lihat Semua Foto
+              </button>
+            </div>
+          </RevealOnScroll>
+        </div>
+      </div>
+
+      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] relative z-20 flex-1 -mt-[40px] md:-mt-[60px] pb-[120px]">
+        <div className="flex flex-col lg:flex-row gap-[48px] items-start">
+          <div className="w-full lg:w-2/3 bg-white p-[32px] md:p-[48px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-slate-100">
+            <RevealOnScroll direction="up" delay={100}>
+              <h2 className="text-xl font-bold text-[#241812] mb-[16px]">Tentang Properti Ini</h2>
+              <p className="text-slate-600 text-base md:text-lg leading-relaxed whitespace-pre-line font-light mb-[48px]">{kos.description}</p>
+            </RevealOnScroll>
+
+            <RevealOnScroll direction="up" delay={200}>
+              <h2 className="text-xl font-bold text-[#241812] mb-[24px]">Fasilitas Eksklusif</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-[24px] mb-[48px]">
+                {kos.uniqueFeatures.map((feat, i) => (
+                  <div key={i} className="flex items-start gap-[16px]"><div className="w-[48px] h-[48px] bg-[#f5efe9] rounded-[12px] flex items-center justify-center shrink-0">{feat.icon}</div><div><h4 className="font-bold text-[#241812] text-base mb-[4px]">{feat.title}</h4><p className="text-slate-500 text-sm">{feat.desc}</p></div></div>
+                ))}
+              </div>
+            </RevealOnScroll>
+
+            <RevealOnScroll direction="up" delay={300}>
+              <div className="pt-[48px] border-t border-slate-100">
+                <h2 className="text-xl font-bold text-[#241812] mb-[32px] flex items-center gap-[12px]">Ulasan Penghuni <span className="bg-[#241812] text-white text-xs px-[12px] py-[4px] rounded-full">{kos.rating} / 5.0</span></h2>
+                <div className="flex flex-col gap-[24px]">
+                  {kos.reviewsList.map((review) => (
+                    <div key={review.id} className="bg-[#faf9f7] p-[24px] rounded-[24px]">
+                      <div className="flex justify-between items-start mb-[12px]"><div><div className="font-bold text-[#241812]">{review.name}</div><div className="text-xs text-slate-400">{review.date}</div></div><div className="flex gap-[2px]">{[...Array(5)].map((_, i) => (<Star key={i} className={`w-[14px] h-[14px] ${i < review.rating ? 'fill-orange-500 text-orange-500' : 'fill-slate-200 text-slate-200'}`} />))}</div></div>
+                      <p className="text-slate-600 text-sm md:text-base leading-relaxed">"{review.text}"</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          <div className="w-full lg:w-1/3 lg:sticky lg:top-[120px]">
+            <RevealOnScroll direction="up" delay={200}>
+              <div className="bg-white p-[32px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-100">
+                <div className="mb-[24px]">
+                  {kos.isPromo ? (
+                    <><p className="text-xs text-red-500 uppercase tracking-wider font-bold mb-[4px]">Sewa Bulanan Promo</p><div className="flex items-center gap-[12px] mb-[4px]"><span className="text-lg text-slate-400 line-through">Rp {kos.price}</span><span className="bg-red-100 text-red-600 px-[8px] py-[4px] rounded-[6px] text-[10px] font-bold">Hemat {kos.discount}%</span></div><div className="flex items-end gap-[8px]"><span className="text-4xl font-extrabold text-red-600">Rp {kos.discountedPrice}</span><span className="text-sm text-slate-500 mb-[4px]">/bulan</span></div></>
+                  ) : (
+                    <><p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-[4px]">Sewa Bulanan Mulai</p><div className="flex items-end gap-[8px]"><span className="text-4xl font-extrabold text-[#241812]">Rp {kos.price}</span><span className="text-sm text-slate-500 mb-[4px]">/bulan</span></div></>
+                  )}
+                </div>
+                <div className="bg-[#faf9f7] rounded-[16px] p-[16px] mb-[32px]">
+                  <div className="flex justify-between items-center pb-[16px] border-b border-slate-200 mb-[16px]"><span className="text-slate-500 text-sm">Uang Muka (Booking)</span><span className="font-bold text-[#241812]">Rp 500.000</span></div>
+                  <div className="flex justify-between items-center"><span className="text-slate-500 text-sm">Biaya Admin</span><span className="font-bold text-teal-600">Gratis</span></div>
+                </div>
+                <button className="w-full h-[56px] bg-[#241812] hover:bg-[#3a2a22] text-white font-bold rounded-[16px] mb-[16px] transition-colors shadow-lg">Ajukan Sewa</button>
+                
+                {/* Tombol dimodifikasi untuk men-trigger ChatDrawer */}
+                <button 
+                  onClick={() => setIsChatOpen(true)} 
+                  className="w-full h-[56px] bg-white border border-[#241812]/20 hover:border-[#241812] text-[#241812] font-bold rounded-[16px] transition-colors"
+                >
+                  Tanya Pemilik via DM
+                </button>
+                
+                <p className="text-center text-xs text-slate-400 mt-[24px] px-[16px]">Pembayaran 100% aman menggunakan KosMate Secure Pay.</p>
+              </div>
+            </RevealOnScroll>
+          </div>
+        </div>
+      </div>
+
+      {/* Komponen ChatDrawer dipanggil di sini */}
+      <ChatDrawer 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+        kosName={kos.name} 
+      />
+    </div>
+  );
+}
+</file>
+
+<file path="src/pages/Gallery.jsx">
+import React, { useState, useRef } from 'react';
+import { useInView } from 'framer-motion';
+import { galleryImagesPool } from '../data/dummyData';
+import RevealOnScroll from '../components/RevealOnScroll';
+
+const AnimatedImage = ({ src, className }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "100px" });
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div ref={ref} className={`relative w-full h-full rounded-[16px] md:rounded-[24px] overflow-hidden bg-slate-100 shadow-sm hover:shadow-xl hover:scale-[1.02] hover:z-10 transition-all duration-500 cursor-pointer ${className || ''}`}>
+      <img src={src} alt="KosMate Gallery" loading="lazy" onLoad={() => setIsLoaded(true)} className={`w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${isInView && isLoaded ? 'opacity-100' : 'opacity-0'}`} />
+      <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300"></div>
+    </div>
+  );
+};
+
+export default function Gallery() {
+  return (
+    <div className="w-full overflow-x-hidden bg-[#faf9f7] font-sans text-slate-800 flex flex-col">
+      <div className="bg-[#241812] pt-[160px] pb-[80px] md:pb-[120px] rounded-b-[40px] md:rounded-b-[64px] relative z-10 shrink-0 shadow-2xl">
+        <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] text-center">
+          <RevealOnScroll direction="up">
+            <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#eae0d5] mb-[24px] tracking-tight">Curated <span className="italic text-teal-300">Spaces</span></h1>
+            <p className="text-base md:text-xl lg:text-2xl text-[#eae0d5]/70 max-w-[768px] mx-auto font-light leading-relaxed">Jelajahi koleksi visual eksklusif dari berbagai properti premium yang tersedia di seluruh nusantara.</p>
+          </RevealOnScroll>
+        </div>
+      </div>
+
+      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] relative z-20 flex-1 -mt-[40px] md:-mt-[60px] pb-[120px]">
+        <div className="bg-white rounded-[32px] p-[16px] md:p-[32px] lg:p-[48px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-slate-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[160px] md:auto-rows-[240px] gap-[12px] md:gap-[20px] grid-flow-dense">
+            {galleryImagesPool.map((src, i) => {
+              let spanClass = "col-span-1 row-span-1";
+              if (i % 7 === 0) spanClass = "col-span-2 row-span-2";
+              else if (i % 5 === 0) spanClass = "col-span-2 row-span-1";
+              else if (i % 4 === 0) spanClass = "col-span-1 row-span-2";
+              return <AnimatedImage key={i} src={src} className={spanClass} />;
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/pages/Intro.jsx">
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Loader2, Star, Sparkles } from 'lucide-react';
+
+const sectionsData = [
+  { title: 'KOSMATE', line1: 'Smart Way to Find Your Stay,', line2: 'No drama, no zonk!', badge: 'Platform Akomodasi Eksklusif' },
+  { title: 'VERIFIED', line1: '100% Aman & Terpercaya,', line2: 'Setiap properti diverifikasi untukmu.', badge: 'Keamanan Terjamin' },
+  { title: 'SEAMLESS', line1: 'Booking Online Tanpa Drama,', line2: 'Cari, cek, bayar dalam satu aplikasi.', badge: 'Transaksi Mudah' }
+];
+
+export default function Intro() {
+  const navigate = useNavigate();
+  const containerRef = useRef(null);
+  const videoRef = useRef(null);
+  const requestRef = useRef(null);
+  const targetProgress = useRef(0);
+  const smoothProgress = useRef(0);
+  
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const [videoSrc, setVideoSrc] = useState(null);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+
+  useEffect(() => {
+    const loadVideo = async () => {
+      try {
+        const response = await fetch('/background.mp4'); 
+        if (!response.ok) throw new Error("Fallback");
+        const blob = await response.blob();
+        setVideoSrc(URL.createObjectURL(blob));
+        setIsVideoReady(true);
+      } catch (error) {
+        setVideoSrc('https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-building-exterior-with-balconies-4062-medium.mp4');
+        setIsVideoReady(true);
+      }
+    };
+    loadVideo();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const localScroll = Math.max(0, window.scrollY - absoluteTop);
+      const maxScroll = containerRef.current.offsetHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? Math.min(localScroll / maxScroll, 1) : 0;
+      setScrollProgress(progress);
+      targetProgress.current = progress; 
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); 
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!videoRef.current || !isVideoReady) return;
+    videoRef.current.pause();
+    const animate = () => {
+      smoothProgress.current += (targetProgress.current - smoothProgress.current) * 0.08; 
+      if (videoRef.current && videoDuration > 0 && videoRef.current.readyState >= 2) {
+        let newTime = smoothProgress.current * videoDuration;
+        newTime = Math.max(0.1, Math.min(newTime, videoDuration - 0.1));
+        try { videoRef.current.currentTime = newTime; } catch (e) {}
+      }
+      requestRef.current = requestAnimationFrame(animate);
+    };
+    requestRef.current = requestAnimationFrame(animate);
+    return () => { if (requestRef.current) cancelAnimationFrame(requestRef.current); };
+  }, [videoDuration, isVideoReady]);
+
+  const isAtEnd = scrollProgress >= 0.90;
+
+  return (
+    <div ref={containerRef} className="relative w-full bg-slate-900 text-white">
+      <div className="fixed inset-0 w-full h-[100vh] overflow-hidden bg-slate-900 flex items-center justify-center z-0 pointer-events-none">
+        {!isVideoReady && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-900 text-teal-400">
+            <Loader2 className="w-[48px] h-[48px] animate-spin mb-[16px]" />
+            <p className="font-semibold tracking-wider text-sm md:text-base">Menyiapkan Pengalaman Visual...</p>
+          </div>
+        )}
+        <div className="absolute inset-0 origin-center transition-transform duration-100 ease-out" style={{ transform: `scale(${1 + scrollProgress * 0.4}) translateY(${scrollProgress * 5}%)` }}>
+          {videoSrc && <video ref={videoRef} src={videoSrc} className="w-full h-full object-cover scale-105" muted playsInline preload="auto" onLoadedMetadata={(e) => { if (e.target.duration && !isNaN(e.target.duration)) setVideoDuration(e.target.duration); }} />}
+          <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-slate-900/40"></div>
+        </div>
+        <div className={`absolute bottom-[40px] left-[32px] md:left-[64px] z-10 flex flex-col items-start gap-[12px] transition-opacity duration-500 ${isAtEnd ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="w-[192px] h-[4px] bg-white/20 rounded-[999px] overflow-hidden backdrop-blur-sm shrink-0">
+            <div className="h-full bg-teal-400 transition-all duration-100 ease-out" style={{ width: `${scrollProgress * 100}%` }} />
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 w-full">
+        {sectionsData.map((sec, idx) => {
+          const distance = Math.abs(scrollProgress - (idx * (1 / 3)));
+          const opacity = 1 - Math.min(distance * 3, 1);
+          const scale = 1 - Math.min(distance * 0.1, 0.1);
+          return (
+            <div key={idx} className="h-[100vh] w-full flex flex-col items-center justify-center px-[16px] pointer-events-none">
+              <div className="flex flex-col items-center max-w-[896px] origin-center" style={{ opacity: Math.max(0, opacity), transform: `scale(${scale})`, transition: 'opacity 0.1s, transform 0.1s' }}>
+                <div className="inline-flex items-center gap-[8px] px-[16px] py-[8px] rounded-[999px] bg-teal-500/20 text-teal-300 font-medium text-sm md:text-lg mb-[16px] md:mb-[24px] border border-teal-500/30 backdrop-blur-md shrink-0">
+                  <Star className="w-[16px] h-[16px] fill-teal-400 shrink-0" /> <span className="whitespace-nowrap">{sec.badge}</span>
+                </div>
+                <h1 className="font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-300 mb-[16px] drop-shadow-2xl text-center text-4xl md:text-7xl leading-[0.95]">{sec.title}</h1>
+                <div className="font-medium text-center space-y-[4px] md:space-y-[8px] drop-shadow-lg text-lg md:text-3xl leading-tight text-teal-50"><p>{sec.line1}</p><p className="text-slate-300/90">{sec.line2}</p></div>
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="h-[100vh] w-full flex flex-col items-center justify-center px-[16px]">
+          <div className="flex flex-col items-center origin-center text-center" style={{ opacity: Math.max(0, 1 - Math.abs(scrollProgress - 1) * 3), transform: `scale(${1 - Math.min(Math.abs(scrollProgress - 1) * 0.1, 0.1)})`, transition: 'opacity 0.1s, transform 0.1s' }}>
+            <h2 className="text-3xl md:text-6xl font-extrabold text-white mb-[32px] leading-[1.1] tracking-tight">Siap Menemukan <br/> Tempat Nyamanmu?</h2>
+            <button onClick={() => navigate('/home')} className="group bg-white hover:bg-teal-50 text-slate-900 px-[32px] py-[16px] md:px-[48px] md:py-[24px] rounded-[999px] font-extrabold text-lg md:text-2xl transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(20,184,166,0.4)] flex items-center justify-center gap-[16px] hover:-translate-y-[4px] shrink-0 pointer-events-auto">
+              <span className="whitespace-nowrap">Mulai Perjalanan</span> 
+              <Sparkles className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-teal-500 group-hover:rotate-12 group-hover:scale-110 transition-all shrink-0" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/pages/Landing.jsx">
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate, useAnimationFrame } from 'framer-motion';
+import { Search, Home, ShieldCheck, Star, CreditCard, Eye, MapPin, Smartphone } from 'lucide-react';
+
+// IMPORT KOMPONEN EKSTERNAL (Membersihkan Penumpukan Kode)
+import RevealOnScroll from '../components/RevealOnScroll';
+import SlideshowGallery from '../components/SlideshowGallery';
+
+// ======================================================================
+// DATA LOKAL (Ikon dibersihkan dari warna bawaan agar hover effect bekerja)
+// ======================================================================
+const features = [
+  { title: "Smart Search", description: "Filter presisi membantu Anda menemukan properti idaman tanpa membuang waktu.", icon: <Search className="w-[28px] h-[28px] stroke-[1.5]" /> },
+  { title: "Transparansi Total", description: "Visual asli, deskripsi akurat, dan rincian harga final. Tanpa biaya tersembunyi.", icon: <Home className="w-[28px] h-[28px] stroke-[1.5]" /> },
+  { title: "Kurasi Ketat", description: "Setiap properti melewati tahap verifikasi untuk menjamin standar kualitas & keamanan.", icon: <ShieldCheck className="w-[28px] h-[28px] stroke-[1.5]" /> },
+  { title: "Ulasan Autentik", description: "Kumpulan perspektif nyata dari penghuni sebelumnya untuk referensi Anda.", icon: <Star className="w-[28px] h-[28px] stroke-[1.5]" /> },
+  { title: "Transaksi Seamless", description: "Sistem reservasi dan pembayaran digital yang terenkripsi penuh.", icon: <CreditCard className="w-[28px] h-[28px] stroke-[1.5]" /> },
+  { title: "Immersive Tour", description: "Eksplorasi ruang secara menyeluruh melalui teknologi virtual 360°.", icon: <Eye className="w-[28px] h-[28px] stroke-[1.5]" /> }
+];
+
+const steps = [
+  { step: "01", title: "Cari Lokasi", description: "Gunakan fitur pencarian untuk menemukan kos.", icon: <MapPin className="w-[40px] h-[40px] shrink-0" /> },
+  { step: "02", title: "Bandingkan", description: "Cek fasilitas dan bandingkan harga antar kos.", icon: <Search className="w-[40px] h-[40px] shrink-0" /> },
+  { step: "03", title: "Reservasi", description: "Booking langsung via aplikasi tanpa perantara.", icon: <Smartphone className="w-[40px] h-[40px] shrink-0" /> }
+];
+
+// ======================================================================
+// KOMPONEN LOKAL: INFINITE GRID BACKGROUND
+// ======================================================================
+const GridPattern = ({ offsetX, offsetY }) => (
+  <svg className="w-full h-full">
+    <defs>
+      <motion.pattern id="grid-pattern" width="54" height="54" patternUnits="userSpaceOnUse" x={offsetX} y={offsetY}>
+        <path d="M 54 0 L 0 0 0 54" fill="none" stroke="rgba(255,255,255,1)" strokeWidth="1" />
+      </motion.pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+  </svg>
+);
+
+const InteractiveGridSection = ({ children, className, id, refProp, style }) => {
+  const mouseX = useMotionValue(-1000);
+  const mouseY = useMotionValue(-1000);
+  const gridOffsetX = useMotionValue(0);
+  const gridOffsetY = useMotionValue(0);
+
+  const handleMouseMove = (e) => {
+    const { left, top } = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - left);
+    mouseY.set(e.clientY - top);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(-1000);
+    mouseY.set(-1000);
+  };
+
+  // Animasi infinite scroll grid
+  useAnimationFrame(() => {
+    gridOffsetX.set((gridOffsetX.get() + 0.4) % 54);
+    gridOffsetY.set((gridOffsetY.get() + 0.4) % 54);
+  });
+
+  const maskImage = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, black, transparent)`;
+
+  return (
+    <motion.section
+      id={id}
+      ref={refProp}
+      style={style}
+      className={`relative ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03]">
+          <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
+        </div>
+        <motion.div
+          className="absolute inset-0 opacity-[0.25]"
+          style={{ maskImage, WebkitMaskImage: maskImage }}
+        >
+          <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
+        </motion.div>
+      </div>
+      <div className="relative z-10 w-full h-full flex flex-col items-center">
+        {children}
+      </div>
+    </motion.section>
+  );
+};
+
+// ======================================================================
+// HALAMAN UTAMA: LANDING
+// ======================================================================
+export default function Landing() {
+  const navigate = useNavigate();
+  const section2Ref = useRef(null);
+
+  // Animasi Stacking Card (Diukur dari ujung atas layar agar tidak ada black glitch)
+  const { scrollYProgress } = useScroll({
+    target: section2Ref,
+    offset: ['start end', 'start start'],
+  });
+
+  const scale1 = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, -5]);
+
+  const scale2 = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [5, 0]);
+
+  return (
+    <div className="w-full overflow-x-hidden font-sans animate-in fade-in duration-700 flex flex-col bg-black">
+      
+      <main className="relative bg-[#06060e]">
+        
+        {/* SECTION 1: HERO */}
+        <motion.section 
+          style={{ scale: scale1, rotate: rotate1 }} 
+          className="sticky top-0 h-screen w-full overflow-hidden bg-[#1a2e2b] flex flex-col z-0 origin-center shadow-2xl"
+        >
+          <img src="https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=2126&q=80" alt="City Background" className="absolute top-0 left-0 w-full h-full object-cover opacity-40 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a2e2b]/95 via-[#1a2e2b]/60 to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a2e2b]/95 via-[#1a2e2b]/20 to-transparent pointer-events-none"></div>
+          
+          <div className="relative z-10 w-full h-full max-w-[1280px] mx-auto px-[24px] lg:px-[56px] text-left flex flex-col justify-center">
+            <div className="max-w-[896px]">
+              <RevealOnScroll direction="left" delay={100}>
+                <h1 className="font-playfair text-white leading-[1.1] mb-[24px] drop-shadow-2xl tracking-tight text-5xl md:text-7xl lg:text-8xl mt-[80px]">
+                  Cari kost idaman,<br/><span className="italic font-normal text-teal-100">gampang banget.</span>
+                </h1>
+              </RevealOnScroll>
+              <RevealOnScroll direction="left" delay={300}>
+                <p className="text-base md:text-xl lg:text-2xl text-teal-50/90 mb-[48px] max-w-[672px] drop-shadow-md font-light leading-relaxed">
+                  Temukan ribuan pilihan kost terbaik, nyaman & terjangkau di seluruh Indonesia.
+                </p>
+              </RevealOnScroll>
+              <RevealOnScroll direction="up" delay={500}>
+                <button onClick={() => navigate('/search')} className="bg-white text-[#241812] hover:bg-[#241812] hover:text-white font-sans tracking-[0.1em] text-sm uppercase h-[56px] md:h-[64px] rounded-full px-[40px] md:px-[56px] transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center shrink-0 w-max cursor-pointer">
+                  Mulai Pencarian
+                </button>
+              </RevealOnScroll>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* SECTION 2: KENAPA HARUS KOSMATE */}
+        <InteractiveGridSection 
+          refProp={section2Ref}
+          style={{ scale: scale2, rotate: rotate2 }}
+          className="z-10 w-full min-h-screen bg-[#241812] flex flex-col pt-[100px] pb-[160px] md:pt-[160px] md:pb-[200px] shadow-[0_-20px_50px_rgba(0,0,0,0.8)] origin-center"
+        >
+          <div className="relative z-10 max-w-[1280px] w-full mx-auto px-[24px] lg:px-[56px] flex flex-col gap-[80px] md:gap-[120px]">
+            <RevealOnScroll direction="up">
+              <div className="flex flex-col lg:flex-row gap-[32px] lg:gap-[64px] items-start lg:items-end border-b border-white/10 pb-[48px]">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-[#eae0d5] tracking-tight leading-[1.1] lg:w-1/2">
+                  Standar baru <br/> <span className="italic text-teal-300">mencari hunian.</span>
+                </h2>
+                <p className="text-[#eae0d5]/60 text-lg md:text-xl font-light leading-relaxed lg:w-1/2">
+                  Kami membuang semua kerumitan dan ketidakpastian. Menghadirkan pengalaman kurasi properti yang transparan, aman, dan berestetika tinggi.
+                </p>
+              </div>
+            </RevealOnScroll>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[64px] gap-y-[80px]">
+              {features.map((feature, index) => (
+                <RevealOnScroll key={index} delay={index * 100} direction="up">
+                  <div className="flex flex-col items-start group cursor-pointer pointer-events-auto">
+                    <div className="w-[64px] h-[64px] rounded-full border border-white/20 flex items-center justify-center mb-[24px] text-[#eae0d5] group-hover:bg-[#eae0d5] group-hover:text-[#241812] group-hover:border-[#eae0d5] transition-all duration-500 shrink-0 shadow-lg">
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-playfair text-[#eae0d5] mb-[16px] tracking-tight group-hover:text-teal-300 transition-colors duration-300">{feature.title}</h3>
+                    <p className="text-[#eae0d5]/60 leading-relaxed font-light text-base">{feature.description}</p>
+                  </div>
+                </RevealOnScroll>
+              ))}
+            </div>
+          </div>
+        </InteractiveGridSection>
+
+      </main>
+
+      {/* SECTION 3: SLIDESHOW GALLERY */}
+      <section className="relative z-20 w-full shrink-0 shadow-[0_-30px_60px_rgba(0,0,0,0.8),0_30px_60px_rgba(0,0,0,0.8)] bg-black">
+        <SlideshowGallery onNavigate={navigate} />
+      </section>
+
+      {/* SECTION 4: CARA KERJA */}
+      <InteractiveGridSection id="carakerja" className="z-10 min-h-[100vh] flex flex-col justify-center py-[120px] md:py-[160px] bg-[#241812] text-white w-full shrink-0 border-t border-white/5">
+        <div className="max-w-[1280px] w-full mx-auto px-[24px] lg:px-[56px] relative z-10 flex flex-col gap-[80px] md:gap-[120px]">
+          
+          <RevealOnScroll direction="up">
+            <div className="flex flex-col lg:flex-row gap-[32px] lg:gap-[64px] items-start lg:items-end border-b border-white/10 pb-[48px]">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-[#eae0d5] tracking-tight leading-[1.1] lg:w-1/2">
+                Kemudahan dalam <br/> <span className="italic text-teal-300">tiga langkah.</span>
+              </h2>
+              <p className="text-[#eae0d5]/60 text-lg md:text-xl font-light leading-relaxed lg:w-1/2">
+                Tidak perlu lagi menghabiskan akhir pekan untuk survei. Sistem pintar kami menyederhanakan segalanya.
+              </p>
+            </div>
+          </RevealOnScroll>
+
+          <div className="flex flex-col md:flex-row justify-center items-start gap-[48px] md:gap-[32px] w-full">
+            {steps.map((step, index) => (
+              <RevealOnScroll key={index} delay={index * 200} direction={index === 0 ? "left" : index === 2 ? "right" : "up"} className="flex-1 w-full">
+                <div className="flex-1 flex flex-col items-center text-center relative w-full pointer-events-auto">
+                  {index < steps.length - 1 && (
+                    <div className="hidden md:block absolute top-[48px] left-[60%] w-[80%] h-[1px] bg-white/10"></div>
+                  )}
+                  <div className="w-[96px] h-[96px] rounded-full bg-[#241812] border border-white/20 flex items-center justify-center mb-[32px] z-10 relative shrink-0 text-[#eae0d5] hover:bg-white hover:text-[#241812] transition-colors duration-500 group cursor-pointer shadow-lg">
+                    <div className="absolute -top-[12px] -right-[12px] w-[32px] h-[32px] rounded-full bg-teal-800 text-white font-sans font-medium flex items-center justify-center text-xs shrink-0 shadow-sm border-[4px] border-[#241812]">
+                      {step.step}
+                    </div>
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-playfair text-[#eae0d5] mb-[16px] tracking-tight">{step.title}</h3>
+                  <p className="text-base text-[#eae0d5]/60 px-[16px] font-light leading-relaxed">{step.description}</p>
+                </div>
+              </RevealOnScroll>
+            ))}
+          </div>
+          
+        </div>
+      </InteractiveGridSection>
+
+    </div>
+  );
+}
+</file>
+
+<file path="src/pages/Search.jsx">
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Filter, ChevronDown, MapPin, Tag, ArrowRight, ShieldCheck, Star, Sparkles } from 'lucide-react';
+import { kosData, campuses } from '../data/dummyData';
+import RevealOnScroll from '../components/RevealOnScroll';
+
+// Komponen Promo di dalam Search Page
+const PromoSection = ({ kosData, onNavigate }) => {
+  const [timeLeft, setTimeLeft] = useState(86400);
+  useEffect(() => {
+    const timer = setInterval(() => setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0)), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (sec) => `${Math.floor(sec / 3600).toString().padStart(2, '0')}:${Math.floor((sec % 3600) / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`;
+  const promoItems = kosData.filter((k) => k.isPromo);
+
+  return (
+    <div className="mb-[80px] pt-[48px] border-t border-slate-200/60">
+      <RevealOnScroll direction="up">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-[16px] mb-[40px]">
+          <div className="flex items-center gap-[16px]">
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-[#241812] tracking-tight">Flash Promos</h2>
+            <div className="bg-red-50 text-red-600 border border-red-200 px-[16px] py-[8px] rounded-[8px] flex items-center gap-[8px] shadow-sm">
+              <span className="w-[8px] h-[8px] bg-red-500 rounded-full animate-pulse shrink-0"></span>
+              <span className="text-sm md:text-base font-bold tracking-widest">{formatTime(timeLeft)}</span>
+            </div>
+          </div>
+        </div>
+      </RevealOnScroll>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[32px]">
+        {promoItems.map((kos, index) => (
+          <RevealOnScroll key={`promo-${kos.id}`} delay={index * 100} direction="up" className="h-full">
+            <div onClick={() => onNavigate(`/detail/${kos.id}`)} className="bg-white/80 backdrop-blur-md rounded-[24px] overflow-hidden border border-red-100 shadow-[0_8px_30px_rgba(239,68,68,0.06)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.12)] hover:-translate-y-[8px] transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
+              <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full pointer-events-none z-0"></div>
+              <div className="relative h-[220px] overflow-hidden shrink-0 bg-slate-100">
+                <img src={kos.image} alt={kos.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute top-[16px] left-[16px] flex flex-col gap-[8px] items-start z-10">
+                  <div className="bg-red-500/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-md">
+                    <Sparkles className="w-[14px] h-[14px] text-white shrink-0" /><span className="text-xs font-bold text-white whitespace-nowrap">-{kos.discount}% OFF</span>
+                  </div>
+                </div>
+                <div className="absolute bottom-[16px] left-[16px] bg-[#241812]/90 backdrop-blur-sm text-white text-xs font-bold h-[28px] flex items-center px-[12px] rounded-[8px] shadow-sm whitespace-nowrap z-10">{kos.type}</div>
+              </div>
+              <div className="p-[24px] flex flex-col flex-1 relative z-10">
+                <div className="flex items-start gap-[8px] text-slate-500 text-sm mb-[12px]"><MapPin className="w-[16px] h-[16px] mt-[2px] shrink-0 text-teal-600" /><span className="line-clamp-1 leading-relaxed">{kos.campus}</span></div>
+                <h3 className="font-playfair font-bold text-xl text-[#241812] mb-[8px] line-clamp-1 group-hover:text-red-600 transition-colors tracking-tight">{kos.name}</h3>
+                <div className="text-sm text-slate-500 mb-[24px] line-clamp-1 flex-1 font-light">{kos.facilities.join(" • ")}</div>
+                <div className="flex justify-between items-center pt-[20px] border-t border-red-100/50 mt-auto">
+                  <div>
+                    <p className="text-[10px] text-red-500 mb-[4px] font-bold uppercase tracking-wider">Harga Promo</p>
+                    <div className="flex flex-col">
+                      <p className="text-xs text-slate-400 line-through mb-[2px]">Rp {kos.price}</p>
+                      <p className="font-extrabold text-red-600 text-lg">Rp {kos.discountedPrice}<span className="text-xs text-red-400 font-normal">/bln</span></p>
+                    </div>
+                  </div>
+                  <button className="bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white w-[40px] h-[40px] flex items-center justify-center rounded-[12px] transition-all duration-300 shrink-0 mt-auto"><ArrowRight className="w-[20px] h-[20px] group-hover:translate-x-[2px] transition-transform" /></button>
+                </div>
+              </div>
+            </div>
+          </RevealOnScroll>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default function SearchPage() {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCampus, setActiveCampus] = useState('Semua');
+
+  const filteredKos = kosData.filter(kos => {
+    const matchCampus = activeCampus === 'Semua' || kos.campus.includes(activeCampus);
+    const matchSearch = kos.name.toLowerCase().includes(searchQuery.toLowerCase()) || kos.campus.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchCampus && matchSearch;
+  });
+
+  return (
+    <div className="w-full overflow-x-hidden bg-slate-50 font-sans text-slate-800 flex flex-col">
+      <section className="relative w-full h-[450px] md:h-[500px] rounded-b-[40px] md:rounded-b-[64px] overflow-hidden bg-[#241812] z-10 flex flex-col justify-center items-center px-[16px] shrink-0 pt-[80px] shadow-2xl">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80" alt="Interior Background" className="absolute top-0 left-0 w-full h-full object-cover opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 via-teal-900/70 to-teal-900/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#241812]/80 via-transparent to-transparent"></div>
+        <div className="w-full max-w-[896px] mx-auto text-center relative z-20">
+          <RevealOnScroll direction="up" delay={100}><h1 className="font-playfair text-4xl md:text-6xl font-extrabold text-white mb-[24px] drop-shadow-xl tracking-tight">Temukan <span className="italic text-teal-200">Kost Idamanmu</span></h1></RevealOnScroll>
+          <RevealOnScroll direction="up" delay={300}>
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-[8px] md:p-[12px] rounded-[24px] md:rounded-[999px] flex flex-col md:flex-row items-center gap-[8px] shadow-2xl shrink-0">
+              <div className="bg-white/90 md:bg-white h-[48px] md:h-[64px] rounded-[16px] md:rounded-[999px] flex items-center px-[20px] flex-1 w-full shadow-inner overflow-hidden shrink-0 transition-all focus-within:bg-white">
+                <Search className="w-[20px] h-[20px] text-teal-700 mr-[12px] shrink-0" />
+                <input type="text" placeholder="Ketik nama kota, area, atau kampus..." className="bg-transparent border-none outline-none w-full text-slate-800 placeholder-slate-500 text-sm md:text-lg font-medium whitespace-nowrap" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+              </div>
+              <button className="w-full md:w-auto h-[48px] md:h-[64px] bg-orange-500 hover:bg-orange-600 text-white font-bold px-[40px] rounded-[16px] md:rounded-[999px] transition-all shadow-[0_4px_20px_rgba(249,115,22,0.4)] flex items-center justify-center shrink-0 whitespace-nowrap text-base md:text-lg">Cari Sekarang</button>
+            </div>
+          </RevealOnScroll>
+          <RevealOnScroll direction="up" delay={500}>
+            <div className="flex flex-wrap items-center justify-center gap-[12px] mt-[32px]">
+              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 h-[40px] px-[20px] rounded-[999px] text-sm font-medium flex items-center justify-center gap-[8px] transition-all shadow-lg shrink-0 whitespace-nowrap"><MapPin className="w-[16px] h-[16px] text-teal-300 shrink-0" /> Lokasi <ChevronDown className="w-[16px] h-[16px] text-white/70 shrink-0" /></button>
+              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 h-[40px] px-[20px] rounded-[999px] text-sm font-medium flex items-center justify-center gap-[8px] transition-all shadow-lg shrink-0 whitespace-nowrap"><Tag className="w-[16px] h-[16px] text-teal-300 shrink-0" /> Harga <ChevronDown className="w-[16px] h-[16px] text-white/70 shrink-0" /></button>
+              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 h-[40px] px-[20px] rounded-[999px] text-sm font-medium flex items-center justify-center gap-[8px] transition-all shadow-lg shrink-0 whitespace-nowrap"><Filter className="w-[16px] h-[16px] text-teal-300 shrink-0" /> Fasilitas <ChevronDown className="w-[16px] h-[16px] text-white/70 shrink-0" /></button>
+            </div>
+          </RevealOnScroll>
+        </div>
+      </section>
+
+      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[32px] py-[48px] flex-1 relative z-20">
+        <RevealOnScroll direction="up" delay={100}>
+          <div className="flex items-center gap-[12px] overflow-x-auto pb-[16px] scrollbar-hide mb-[32px]">
+            <span className="text-sm font-bold text-slate-700 mr-[8px] hidden sm:block shrink-0 whitespace-nowrap">Kampus Populer:</span>
+            {campuses.map(campus => (
+              <button key={campus} onClick={() => setActiveCampus(campus)} className={`h-[40px] px-[24px] rounded-[999px] text-sm font-bold whitespace-nowrap transition-all shadow-sm border shrink-0 ${activeCampus === campus ? 'bg-teal-800 text-white border-teal-800 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-teal-500 hover:text-teal-700'}`}>{campus}</button>
+            ))}
+          </div>
+        </RevealOnScroll>
+
+        <PromoSection kosData={kosData} onNavigate={navigate} />
+
+        <RevealOnScroll direction="up" delay={200}>
+          <div className="flex justify-between items-end mb-[32px]">
+            <div>
+              <h2 className="text-3xl font-playfair font-bold text-[#241812] tracking-tight">Kost Tersedia</h2>
+              <p className="text-base text-slate-500 mt-[4px]">Menampilkan {filteredKos.length} tempat istirahat terbaik untukmu</p>
+            </div>
+          </div>
+        </RevealOnScroll>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px]">
+          {filteredKos.map((kos, index) => (
+            <RevealOnScroll key={kos.id} delay={(index % 8) * 100} direction="up" className="h-full">
+              <div onClick={() => navigate(`/detail/${kos.id}`)} className="bg-white rounded-[24px] overflow-hidden border border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-[8px] transition-all duration-300 group cursor-pointer flex flex-col h-full">
+                <div className="relative h-[220px] overflow-hidden shrink-0 bg-slate-100">
+                  <img src={kos.image} alt={kos.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <div className="absolute top-[16px] left-[16px] flex flex-col gap-[8px] items-start z-10">
+                    {kos.isPromo && <div className="bg-red-500/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-md"><Sparkles className="w-[14px] h-[14px] text-white shrink-0" /><span className="text-xs font-bold text-white whitespace-nowrap">-{kos.discount}% OFF</span></div>}
+                    {kos.verified && <div className="bg-white/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-sm"><ShieldCheck className="w-[16px] h-[16px] text-teal-600 shrink-0" /><span className="text-xs font-bold text-teal-900 whitespace-nowrap">Terverifikasi</span></div>}
+                  </div>
+                  <div className="absolute top-[16px] right-[16px] bg-white/95 backdrop-blur-sm h-[32px] px-[10px] rounded-[8px] flex items-center gap-[4px] shadow-sm z-10"><Star className="w-[14px] h-[14px] fill-orange-500 text-orange-500 shrink-0" /><span className="text-xs font-bold text-slate-800">{kos.rating}</span></div>
+                  <div className="absolute bottom-[16px] left-[16px] bg-[#241812]/90 backdrop-blur-sm text-white text-xs font-bold h-[28px] flex items-center px-[12px] rounded-[8px] shadow-sm whitespace-nowrap z-10">{kos.type}</div>
+                </div>
+                
+                <div className="p-[24px] flex flex-col flex-1 relative z-10">
+                  <div className="flex items-start gap-[8px] text-slate-500 text-sm mb-[12px]"><MapPin className="w-[16px] h-[16px] mt-[2px] shrink-0 text-teal-600" /><span className="line-clamp-1 leading-relaxed">{kos.campus}</span></div>
+                  <h3 className={`font-playfair font-bold text-xl mb-[8px] line-clamp-1 transition-colors tracking-tight ${kos.isPromo ? 'text-[#241812] group-hover:text-red-600' : 'text-[#241812] group-hover:text-teal-700'}`}>{kos.name}</h3>
+                  <div className="text-sm text-slate-500 mb-[24px] line-clamp-1 flex-1 font-light">{kos.facilities.join(" • ")}</div>
+                  <div className={`flex justify-between items-center pt-[20px] border-t mt-auto ${kos.isPromo ? 'border-red-100/50' : 'border-slate-100'}`}>
+                    {kos.isPromo ? (
+                      <div><p className="text-[10px] text-red-500 mb-[4px] font-bold uppercase tracking-wider">Harga Promo</p><div className="flex flex-col"><p className="text-xs text-slate-400 line-through mb-[2px]">Rp {kos.price}</p><p className="font-extrabold text-red-600 text-lg">Rp {kos.discountedPrice}<span className="text-xs text-red-400 font-normal">/bln</span></p></div></div>
+                    ) : (
+                      <div><p className="text-xs text-slate-400 mb-[4px] uppercase tracking-wider">MULAI DARI</p><p className="font-extrabold text-orange-500 text-lg">Rp {kos.price}<span className="text-xs text-slate-400 font-normal">/bln</span></p></div>
+                    )}
+                    <button className={`w-[40px] h-[40px] flex items-center justify-center rounded-[12px] transition-all duration-300 shrink-0 mt-auto ${kos.isPromo ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' : 'bg-slate-50 text-slate-600 group-hover:bg-teal-800 group-hover:text-white'}`}><ArrowRight className="w-[20px] h-[20px] group-hover:translate-x-[2px] transition-transform" /></button>
+                  </div>
+                </div>
+              </div>
+            </RevealOnScroll>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/pages/SignIn.jsx">
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
+
+export default function SignIn() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-[100vh] w-full flex bg-[#faf9f7] font-sans text-[#241812] fixed inset-0 z-[100]">
+      {/* Gambar Kiri */}
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-[#241812]">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80" alt="Luxury Interior" className="w-full h-full object-cover opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#241812]/90 via-[#241812]/20 to-transparent"></div>
+        <div className="absolute bottom-[15%] left-[10%] pr-[10%]">
+          <h1 className="font-playfair text-5xl text-[#eae0d5] mb-[16px] leading-[1.1] tracking-tight">Temukan ruang<br/><span className="italic text-teal-300">kenyamananmu.</span></h1>
+          <p className="text-[#eae0d5]/80 text-lg font-light max-w-[400px]">Masuk untuk menyimpan properti favorit dan mengelola jadwal kunjungan Anda dengan mudah.</p>
+        </div>
+      </div>
+
+      {/* Form Kanan */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-[32px] sm:px-[64px] py-[48px] relative overflow-y-auto">
+        <button onClick={() => navigate(-1)} className="absolute top-[32px] left-[32px] sm:left-[64px] flex items-center gap-[8px] text-slate-500 hover:text-[#241812] transition-colors font-medium text-sm">
+          <ChevronLeft className="w-[18px] h-[18px]" /> Kembali
+        </button>
+        <div className="w-full max-w-[400px] mx-auto mt-[40px]">
+          <div className="mb-[48px]">
+            <h2 className="font-playfair text-4xl font-bold text-[#241812] mb-[8px] tracking-tight">Selamat Datang</h2>
+            <p className="text-slate-500 text-sm">Silakan masukkan kredensial akun Anda.</p>
+          </div>
+          <form className="flex flex-col gap-[24px]">
+            <div className="flex flex-col gap-[8px]"><label className="text-xs uppercase tracking-wider font-bold text-[#241812]/70">Email</label><input type="email" placeholder="nama@email.com" className="w-full border-b border-slate-300 py-[12px] bg-transparent focus:outline-none focus:border-[#241812] transition-colors placeholder:text-slate-300 text-[#241812] font-medium" /></div>
+            <div className="flex flex-col gap-[8px]"><label className="text-xs uppercase tracking-wider font-bold text-[#241812]/70">Password</label><input type="password" placeholder="••••••••" className="w-full border-b border-slate-300 py-[12px] bg-transparent focus:outline-none focus:border-[#241812] transition-colors placeholder:text-slate-300 text-[#241812] font-medium" /></div>
+            <div className="flex items-center justify-between mt-[8px]">
+              <label className="flex items-center gap-[8px] cursor-pointer group"><input type="checkbox" className="w-[16px] h-[16px] rounded-[4px] border border-slate-300 appearance-none checked:bg-[#241812] cursor-pointer transition-colors" /><span className="text-sm text-slate-600">Ingat saya</span></label>
+              <a href="#" className="text-sm font-medium text-[#241812] hover:underline">Lupa password?</a>
+            </div>
+            <button type="button" className="w-full bg-[#241812] text-[#eae0d5] py-[16px] rounded-[999px] font-bold hover:bg-[#3a2a22] transition-all mt-[16px] shadow-lg hover:shadow-xl hover:-translate-y-[2px]">Masuk</button>
+            <div className="relative flex items-center justify-center mt-[24px] mb-[8px]"><div className="absolute w-full border-t border-slate-200"></div><span className="bg-[#faf9f7] px-[16px] text-xs text-slate-400 relative z-10 uppercase tracking-wider font-bold">Atau masuk dengan</span></div>
+            <button type="button" className="w-full bg-white border border-slate-200 text-[#241812] py-[16px] rounded-[999px] font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-[12px]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              Google
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="tailwind.config.js">
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  corePlugins: {
+    preflight: false, 
+  },
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+</file>
+
+<file path="vite.config.js">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+</file>
+
+</files>
