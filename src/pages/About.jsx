@@ -13,7 +13,7 @@ export default function About() {
             Di Balik Layar KosMate
           </p>
           <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl font-normal text-[#241812] mb-[40px] tracking-tight leading-[1.1]">
-            Mendefinisikan ulang <br/> <span className="italic text-teal-900">cara Anda menetap.</span>
+            Muka dibalik<br/> <span className="italic text-teal-900">Lahirnya KosMate.</span>
           </h1>
           <p className="text-base md:text-xl text-[#241812]/60 max-w-[700px] mx-auto font-light leading-relaxed">
             Kami membuang segala kerumitan dalam mencari hunian. KosMate adalah wujud dedikasi kami untuk transparansi, kenyamanan, dan estetika tanpa kompromi.

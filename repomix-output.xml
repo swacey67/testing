@@ -43,6 +43,7 @@ The content is organized as follows:
 .gitignore
 eslint.config.js
 index.html
+jsconfig.json
 package.json
 postcss.config.js
 public/background.mp4
@@ -61,13 +62,13 @@ src/components/Navbar.jsx
 src/components/PromoSection.jsx
 src/components/RevealOnScroll.jsx
 src/components/SlideshowGallery.jsx
+src/components/ui/animated-dropdown.jsx
 src/data/dummyData.jsx
 src/index.css
 src/main.jsx
 src/pages/About.jsx
 src/pages/Detail.jsx
 src/pages/Gallery.jsx
-src/pages/Intro.jsx
 src/pages/Landing.jsx
 src/pages/Search.jsx
 src/pages/SignIn.jsx
@@ -77,6 +78,96 @@ vite.config.js
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path="src/components/ui/animated-dropdown.jsx">
+// src/components/ui/animated-dropdown.jsx
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+function useClickOutside(ref, handler) {
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) handler();
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [ref, handler]);
+}
+
+export default function AnimatedDropdown({
+  options = [],
+  value,
+  onChange,
+  placeholder = 'Select Option',
+  className,
+  buttonClassName,
+  menuClassName,
+  itemClassName,
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef(null);
+
+  useClickOutside(wrapperRef, () => setIsOpen(false));
+
+  return (
+    <div ref={wrapperRef} className={cn('relative inline-block text-left w-full z-50', className)}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          'flex items-center justify-between w-full px-[16px] py-[12px] rounded-[12px] text-sm font-medium transition-colors focus:outline-none outline-none',
+          buttonClassName || 'bg-white border border-slate-200 text-[#241812] hover:border-teal-500'
+        )}
+      >
+        <span className="truncate">{value || placeholder}</span>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+          <ChevronDown className="h-[16px] w-[16px] opacity-70" />
+        </motion.div>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className={cn(
+              'absolute left-0 mt-[8px] w-full z-[100] overflow-hidden rounded-[12px] shadow-xl',
+              menuClassName || 'bg-white border border-slate-200'
+            )}
+          >
+            <div className="max-h-[250px] overflow-y-auto scrollbar-hide py-[8px]">
+              {options.map((item, index) => (
+                <motion.button
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.03 }}
+                  onClick={() => { onChange(item); setIsOpen(false); }}
+                  className={cn(
+                    'w-full text-left px-[16px] py-[10px] text-sm transition-colors',
+                    value === item 
+                      ? 'bg-teal-50 text-teal-700 font-bold' 
+                      : itemClassName || 'text-slate-700 hover:bg-slate-50'
+                  )}
+                >
+                  {item}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+</file>
 
 <file path=".gitignore">
 # Logs
@@ -158,39 +249,13 @@ export default defineConfig([
 </html>
 </file>
 
-<file path="package.json">
+<file path="jsconfig.json">
 {
-  "name": "cosmait-web",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "framer-motion": "^12.38.0",
-    "lucide-react": "^1.7.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-icons": "^5.6.0",
-    "react-router-dom": "^7.14.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^4.7.0",
-    "autoprefixer": "^10.4.27",
-    "eslint": "^9.39.4",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
-    "postcss": "^8.5.9",
-    "tailwindcss": "^3.4.19",
-    "vite": "^5.4.21"
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
 </file>
@@ -269,7 +334,6 @@ import FooterReplica from './components/Footer';
 import ContactDrawer from './components/ContactDrawer';
 
 // Import Pages
-import HeroShowcase from './pages/Intro';
 import LandingView from './pages/Landing';
 import SearchView from './pages/Search';
 import AboutView from './pages/About';
@@ -281,7 +345,7 @@ import KosDetailView from './pages/Detail';
 const Layout = ({ children, isMobileMenuOpen, setIsMobileMenuOpen, setIsContactOpen }) => {
   const location = useLocation();
   // Menyembunyikan navbar/footer di halaman tertentu (misal: SignIn atau Intro)
-  const hideLayout = location.pathname === '/intro' || location.pathname === '/signin';
+  const hideLayout = location.pathname === '/signin';
 
   // Scroll to top otomatis saat pindah page
   React.useEffect(() => {
@@ -323,7 +387,6 @@ export default function App() {
       >
         <Routes>
           {/* Ini adalah daftar URL Anda! */}
-          <Route path="/intro" element={<HeroShowcase />} />
           <Route path="/" element={<LandingView />} />
           <Route path="/search" element={<SearchView />} />
           <Route path="/about" element={<AboutView />} />
@@ -594,12 +657,15 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, onOpenContact, darkTheme = false }) {
+export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, onOpenContact }) {
   const navigate = useNavigate();
   const location = useLocation();
   
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // KECERDASAN TEMA: Deteksi apakah URL saat ini adalah halaman berlatar terang ( About Page )
+  const isLightPage = location.pathname.startsWith('/about');
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -625,48 +691,66 @@ export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, on
     setIsMobileMenuOpen(false);
   };
 
-  const menuLinkClass = "font-sans text-[13px] font-light tracking-[0.2em] text-white/80 hover:text-white transition-opacity duration-300 whitespace-nowrap";
+  // LOGIKA WARNA DINAMIS
+  const useDarkText = isLightPage && !isScrolled;
+
+  // Warna Logo & Menu Utama
+  const logoColor = useDarkText ? 'text-[#241812]' : 'text-white/90';
+  const menuLinkColor = useDarkText ? 'text-[#241812]/80 hover:text-[#241812]' : 'text-white/80 hover:text-white';
+  const iconHover = useDarkText ? 'hover:bg-[#241812]/10 text-[#241812]' : 'hover:bg-white/10 text-white';
+  
+  // Warna & Gaya Tombol "Masuk" yang Dirombak (Luxury Style)
+  // Menampilkan warna emas mewah (#D4AF37) sebagai aksen
+  const useLoginDarkTheme = isLightPage && !isScrolled;
+  const loginBtnColor = useLoginDarkTheme ? 'text-[#241812]' : 'text-[#D4AF37]';
+  const loginBtnBorder = useLoginDarkTheme ? 'border border-[#241812]/50' : 'border border-[#D4AF37]/50';
+  const loginBtnHover = useLoginDarkTheme 
+    ? 'hover:text-white hover:border-[#D4AF37] hover:bg-[#D4AF37]' 
+    : 'hover:text-white hover:border-white hover:bg-white/10';
+
+  // Background gradient bayangan di atas disesuaikan dengan warna halaman
+  const bgGradient = isLightPage ? 'before:from-[#faf9f7]/90' : 'before:from-black/60';
 
   return (
-    <header className={`w-full fixed top-0 left-0 z-50 pointer-events-none transition-all duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${isScrolled ? 'bg-[#241812]/95 backdrop-blur-md shadow-lg' : 'bg-transparent before:absolute before:inset-0 before:bg-gradient-to-b before:from-black/60 before:to-transparent before:-z-10 before:h-[140px]'}`}>
+    <header className={`w-full fixed top-0 left-0 z-50 pointer-events-none transition-all duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${isScrolled ? 'bg-[#241812]/95 backdrop-blur-md shadow-lg' : `bg-transparent before:absolute before:inset-0 before:bg-gradient-to-b ${bgGradient} before:to-transparent before:-z-10 before:h-[140px]`}`}>
       
-      {/* MENGGUNAKAN GRID: grid-cols-2 untuk HP, grid-cols-3 untuk Desktop */}
       <nav className="w-full h-[80px] md:h-[100px] px-[24px] lg:px-[56px] grid grid-cols-2 md:grid-cols-3 items-center pointer-events-auto box-border">
         
-        {/* KOLOM 1: Logo di Kiri */}
+        {/* LOGO - Menggunakan font Crimson Pro */}
         <div className="justify-self-start cursor-pointer" onClick={() => handleNav('/')}>
-          <span className="font-playfair text-[28px] md:text-[32px] font-light text-white/90 whitespace-nowrap drop-shadow-sm tracking-tight">kos mate</span>
+          <span className={`font-crimson text-[28px] md:text-[32px] font-light ${logoColor} whitespace-nowrap drop-shadow-sm tracking-tight transition-colors duration-300`}>kos mate</span>
         </div>
         
-        {/* KOLOM 2: Menu di Tengah (Hanya muncul di Desktop) */}
+        {/* MENU TENGAH - Menggunakan font Forum */}
         <div className="hidden md:flex justify-self-center items-center gap-[32px] lg:gap-[56px]">
-          <button onClick={() => handleNav('/')} className={menuLinkClass}>Beranda</button>
-          <button onClick={() => handleNav('/search')} className={menuLinkClass}>Cari Kost</button>
-          <button onClick={onOpenContact} className={menuLinkClass}>Contact</button>
-          <button onClick={() => handleNav('/about')} className={menuLinkClass}>About</button>
+          <button onClick={() => handleNav('/')} className={`font-forum text-[13px] font-light tracking-[0.2em] transition-colors duration-300 whitespace-nowrap ${menuLinkColor}`}>Beranda</button>
+          <button onClick={() => handleNav('/search')} className={`font-forum text-[13px] font-light tracking-[0.2em] transition-colors duration-300 whitespace-nowrap ${menuLinkColor}`}>Cari Kost</button>
+          <button onClick={onOpenContact} className={`font-forum text-[13px] font-light tracking-[0.2em] transition-colors duration-300 whitespace-nowrap ${menuLinkColor}`}>Contact</button>
+          <button onClick={() => handleNav('/about')} className={`font-forum text-[13px] font-light tracking-[0.2em] transition-colors duration-300 whitespace-nowrap ${menuLinkColor}`}>About</button>
         </div>
 
-        {/* KOLOM 3: Tombol Masuk / Hamburger di Kanan */}
+        {/* TOMBOL MASUK & HAMBURGER */}
         <div className="justify-self-end flex items-center">
+          {/* Tombol "Masuk" yang Dirombak - Menjadi tombol penuh yang mewah */}
           <button 
             onClick={() => handleNav('/signin')} 
-            className="hidden md:block font-sans text-[13px] font-light tracking-[0.2em] text-white/90 transition-all duration-300 border-b border-solid border-white/40 hover:border-white pb-[2px] whitespace-nowrap"
+            className={`hidden md:flex items-center justify-center font-forum text-xs font-bold tracking-[0.1em] h-[48px] px-[24px] rounded-full transition-all duration-300 whitespace-nowrap shadow-sm hover:shadow-lg hover:-translate-y-[2px] ${loginBtnColor} ${loginBtnBorder} ${loginBtnHover}`}
           >
             Masuk
           </button>
 
-          <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden p-[8px] text-white hover:bg-white/10 rounded-full transition-colors ml-[16px]">
+          <button onClick={() => setIsMobileMenuOpen(true)} className={`md:hidden p-[8px] rounded-full transition-colors ml-[16px] ${iconHover}`}>
             <Menu className="h-[26px] w-[26px]" strokeWidth={1.5} />
           </button>
         </div>
 
       </nav>
       
-      {/* DRAWER MENU MOBILE */}
+      {/* DRAWER MENU MOBILE (Font sudah terupdate ke Forum secara default via config) */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] flex justify-end pointer-events-auto">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in" onClick={() => setIsMobileMenuOpen(false)}></div>
-          <div className="relative w-[80%] h-full max-w-[400px] bg-[#fdfcf9] p-[32px] shadow-2xl animate-in slide-in-from-right flex flex-col font-sans">
+          <div className="relative w-[80%] h-full max-w-[400px] bg-[#fdfcf9] p-[32px] shadow-2xl animate-in slide-in-from-right flex flex-col font-forum">
             <button onClick={() => setIsMobileMenuOpen(false)} className="absolute right-[24px] top-[24px] text-slate-400 hover:text-slate-800 transition-colors">
               <X className="h-[28px] w-[28px]" strokeWidth={1.5} />
             </button>
@@ -676,7 +760,7 @@ export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, on
               <button onClick={() => { setIsMobileMenuOpen(false); onOpenContact(); }} className="text-left font-normal text-xl text-slate-800 tracking-[0.05em] border-b border-solid border-slate-100 pb-[16px]">Contact</button>
               <button onClick={() => handleNav('/about')} className="text-left font-normal text-xl text-slate-800 tracking-[0.05em] border-b border-solid border-slate-100 pb-[16px]">About</button>
               
-              <button onClick={() => handleNav('/signin')} className="bg-[#115e59] hover:bg-[#0f4c48] transition-colors text-white h-[56px] px-[24px] text-lg font-normal tracking-[0.1em] mt-[32px]">Masuk</button>
+              <button onClick={() => handleNav('/signin')} className="bg-teal-800 hover:bg-teal-900 transition-colors text-white h-[56px] px-[24px] text-lg font-normal tracking-[0.1em] mt-[32px] rounded-lg">Masuk</button>
             </div>
           </div>
         </div>
@@ -839,28 +923,34 @@ import {
   MapPin, Smartphone, Lock, Sparkles, Wifi, Coffee 
 } from 'lucide-react';
 
-// 1. Data Kampus
 export const campuses = ['Semua', 'UGM', 'UI', 'ITB', 'UB', 'Undip', 'ITS'];
 
-// 2. Data Master Kost
+export const facultiesByCampus = {
+  'UGM': ['FEB UGM', 'Fakultas Teknik', 'Fakultas Hukum', 'Fisipol'],
+  'UI': ['Fasilkom', 'FEB UI', 'Fakultas Teknik', 'FIB'],
+  'ITB': ['STEI', 'SBM', 'FTMD', 'FSRD'],
+  'UB': ['FEB UB', 'FILKOM', 'Fakultas Hukum'],
+  'Undip': ['FEB Undip', 'FSM', 'Fakultas Teknik'],
+  'ITS': ['FTEIC', 'FT-IRS', 'FTSPK']
+};
+
 const baseKosData = [
-  { id: 1, name: "KosMate Eksklusif UGM", campus: "UGM Yogyakarta, Sleman", price: "1.500.000", rating: 4.8, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 2, name: "Kos Mawar UI Depok", campus: "UI Depok, Beji", price: "1.200.000", rating: 4.5, type: "Putri", verified: true, facilities: ["Kipas", "WiFi", "Dapur Bersama"], image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 3, name: "Griya ITB Bandung", campus: "ITB Bandung, Coblong", price: "1.800.000", rating: 4.9, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Water Heater", "Parkir Mobil"], image: "https://images.unsplash.com/photo-1598928506311-c55dd1821430?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 4, name: "Kos Brawijaya Indah", campus: "UB Malang, Lowokwaru", price: "900.000", rating: 4.3, type: "Putri", verified: false, facilities: ["WiFi", "Kamar Mandi Luar", "Akses 24 Jam"], image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 5, name: "Paviliun Undip Tembalang", campus: "Undip Semarang, Tembalang", price: "1.400.000", rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Smart TV", "Dapur"], image: "https://images.unsplash.com/photo-1505691938895-1758d7bef511?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 6, name: "Kos Sukolilo ITS", campus: "ITS Surabaya, Sukolilo", price: "1.100.000", rating: 4.2, type: "Putra", verified: false, facilities: ["Kipas", "Kamar Mandi Dalam", "Parkir Motor"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 7, name: "D'Paragon Pogung", campus: "UGM Yogyakarta, Sleman", price: "2.100.000", rating: 4.9, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kulkas", "Laundry"], image: "https://images.unsplash.com/photo-1497368942940-2e061ddf5948?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 8, name: "Kos Kutek UI", campus: "UI Depok, Kukusan", price: "1.050.000", rating: 4.4, type: "Putri", verified: true, facilities: ["AC", "Kamar Mandi Luar", "Akses Kunci 24 Jam"], image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 9, name: "Asrama Cisitu ITB", campus: "ITB Bandung, Cisitu", price: "1.350.000", rating: 4.5, type: "Putra", verified: false, facilities: ["WiFi", "Water Heater", "Balkon"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/Xt149mwy-540x720.jpg" },
-  { id: 10, name: "Suhat Executive", campus: "UB Malang, Soekarno Hatta", price: "2.500.000", rating: 5.0, type: "Campur", verified: true, facilities: ["AC", "Kolam Renang", "Gym", "WiFi"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/pZNwDuDA.-540x720.jpg" },
-  { id: 11, name: "Kos Tirto Agung", campus: "Undip Semarang, Pedalangan", price: "850.000", rating: 4.1, type: "Putra", verified: false, facilities: ["Kipas", "Parkir Luas", "Kantin"], image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 12, name: "Griya Keputih ITS", campus: "ITS Surabaya, Keputih", price: "1.450.000", rating: 4.7, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Dapur Bersama", "CCTV"], image: "https://static.mamikos.com/uploads/cache/data/style/2025-01-09/91mvnVdb-540x720.jpg" },
-  { id: 13, name: "Kos Seturan Nyaman", campus: "UGM Yogyakarta, Seturan", price: "1.750.000", rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "Smart TV", "Kamar Mandi Dalam"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-08-04/DlYvk8D4-540x720.jpg" },
-  { id: 14, name: "Pondok Cina Minimalis", campus: "UI Depok, Pondok Cina", price: "1.600.000", rating: 4.8, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Ruang Belajar"], image: "https://images.unsplash.com/photo-1540518614846-1536a65249a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" }
+  { id: 1, name: "KosMate Eksklusif UGM", campus: "UGM Yogyakarta, Sleman", price: "1.500.000", priceNum: 1500000, rating: 4.8, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], distances: { "FEB UGM": 300, "Fakultas Hukum": 850, "Fisipol": 700 }, image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "2 Hari yang lalu", roomsAvailable: 2, additionalFees: "Kamar berdua: +Rp 500.000/bulan. Listrik: Token prabayar (tanggungan penyewa)." },
+  { id: 2, name: "Kos Mawar UI Depok", campus: "UI Depok, Beji", price: "1.200.000", priceNum: 1200000, rating: 4.5, type: "Putri", verified: true, facilities: ["Kipas", "WiFi", "Dapur Bersama"], distances: { "Fasilkom": 400, "FEB UI": 900 }, image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "1 Minggu yang lalu", roomsAvailable: 1, additionalFees: "Kamar berdua: Tidak diizinkan. Parkir Mobil: +Rp 150.000/bulan." },
+  { id: 3, name: "Griya ITB Bandung", campus: "ITB Bandung, Coblong", price: "1.800.000", priceNum: 1800000, rating: 4.9, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Water Heater", "Parkir Mobil"], distances: { "STEI": 250, "SBM": 600 }, image: "https://images.unsplash.com/photo-1598928506311-c55dd1821430?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "Hari ini", roomsAvailable: 4, additionalFees: "Sudah termasuk air dan listrik (pemakaian wajar). Bawa alat elektronik daya besar: +Rp 50.000/item." },
+  { id: 4, name: "Kos Brawijaya Indah", campus: "UB Malang, Lowokwaru", price: "900.000", priceNum: 900000, rating: 4.3, type: "Putri", verified: false, facilities: ["WiFi", "Kamar Mandi Luar", "Akses 24 Jam"], distances: { "FEB UB": 500, "FILKOM": 800 }, image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "3 Hari yang lalu", roomsAvailable: 0, additionalFees: "Kamar berdua: +Rp 300.000/bulan. Laundry: Bayar sesuai timbangan." },
+  { id: 5, name: "Paviliun Undip Tembalang", campus: "Undip Semarang, Tembalang", price: "1.400.000", priceNum: 1400000, rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Smart TV", "Dapur Bersama"], distances: { "FEB Undip": 350, "FSM": 700 }, image: "https://images.unsplash.com/photo-1505691938895-1758d7bef511?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "2 Minggu yang lalu", roomsAvailable: 3, additionalFees: "Listrik prabayar. Tambahan orang menginap (tamu): Rp 50.000/hari." },
+  { id: 6, name: "Kos Sukolilo ITS", campus: "ITS Surabaya, Sukolilo", price: "1.100.000", priceNum: 1100000, rating: 4.2, type: "Putra", verified: false, facilities: ["Kipas", "Kamar Mandi Dalam", "Parkir Motor"], distances: { "FTEIC": 450, "FT-IRS": 900 }, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "5 Jam yang lalu", roomsAvailable: 1, additionalFees: "Air dan listrik sudah termasuk. Kamar berdua: +Rp 400.000/bulan." },
+  { id: 7, name: "D'Paragon Pogung", campus: "UGM Yogyakarta, Sleman", price: "2.100.000", priceNum: 2100000, rating: 4.9, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam", "Laundry"], distances: { "FEB UGM": 1200, "Fakultas Teknik": 600 }, image: "https://images.unsplash.com/photo-1497368942940-2e061ddf5948?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "Kemarin", roomsAvailable: 5, additionalFees: "Harga all-in (Air, Listrik, Laundry bulanan terbatas). Bawa hewan peliharaan: Deposit +Rp 500.000." },
+  { id: 8, name: "Kos Kutek UI", campus: "UI Depok, Kukusan", price: "1.050.000", priceNum: 1050000, rating: 4.4, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Luar"], distances: { "Fakultas Teknik": 300, "FEB UI": 1500 }, image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "1 Bulan yang lalu", roomsAvailable: 2, additionalFees: "Kamar berdua: +Rp 350.000. Tamu pria dilarang masuk area kamar." },
+  { id: 9, name: "Asrama Cisitu ITB", campus: "ITB Bandung, Cisitu", price: "1.350.000", priceNum: 1350000, rating: 4.5, type: "Putra", verified: false, facilities: ["WiFi", "Water Heater", "Kamar Mandi Dalam"], distances: { "FTMD": 500, "FSRD": 900 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/Xt149mwy-540x720.jpg", lastUpdate: "Hari ini", roomsAvailable: 1, additionalFees: "Listrik token. Iuran kebersihan lingkungan: Rp 20.000/bulan." },
+  { id: 10, name: "Suhat Executive", campus: "UB Malang, Soekarno Hatta", price: "2.500.000", priceNum: 2500000, rating: 5.0, type: "Campur", verified: true, facilities: ["AC", "Kamar Mandi Dalam", "Gym", "WiFi"], distances: { "FEB UB": 1500, "Fakultas Hukum": 1800 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/pZNwDuDA.-540x720.jpg", lastUpdate: "Baru saja", roomsAvailable: 2, additionalFees: "Harga all-in. Fasilitas gym dan kolam renang gratis untuk penyewa. Kamar berdua: +Rp 800.000." },
+  { id: 11, name: "Kos Tirto Agung", campus: "Undip Semarang, Pedalangan", price: "850.000", priceNum: 850000, rating: 4.1, type: "Putra", verified: false, facilities: ["Kipas", "WiFi"], distances: { "Fakultas Teknik": 600, "FEB Undip": 1200 }, image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "3 Minggu yang lalu", roomsAvailable: 0, additionalFees: "Listrik bayar patungan bulanan. Tidak ada parkir mobil." },
+  { id: 12, name: "Griya Keputih ITS", campus: "ITS Surabaya, Keputih", price: "1.450.000", priceNum: 1450000, rating: 4.7, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Dapur Bersama", "Kamar Mandi Dalam"], distances: { "FTSPK": 400, "FTEIC": 1100 }, image: "https://static.mamikos.com/uploads/cache/data/style/2025-01-09/91mvnVdb-540x720.jpg", lastUpdate: "4 Hari yang lalu", roomsAvailable: 3, additionalFees: "Kamar berdua: +Rp 500.000. Jam malam berlaku." },
+  { id: 13, name: "Kos Seturan Nyaman", campus: "UGM Yogyakarta, Seturan", price: "1.750.000", priceNum: 1750000, rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "Smart TV", "Kamar Mandi Dalam", "WiFi"], distances: { "FEB UGM": 2500, "Fisipol": 2800 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-08-04/DlYvk8D4-540x720.jpg", lastUpdate: "1 Hari yang lalu", roomsAvailable: 2, additionalFees: "Listrik token. Parkir mobil terbatas, harap konfirmasi. Kamar berdua: +Rp 450.000." },
+  { id: 14, name: "Pondok Cina Minimalis", campus: "UI Depok, Pondok Cina", price: "1.600.000", priceNum: 1600000, rating: 4.8, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], distances: { "FIB": 500, "Fasilkom": 800 }, image: "https://images.unsplash.com/photo-1540518614846-1536a65249a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "2 Hari yang lalu", roomsAvailable: 1, additionalFees: "Harga all-in (termasuk cuci gosok 10kg/bulan). Kamar berdua: +Rp 600.000." }
 ];
 
-// 3. Logika Generator Promo (Tereksekusi otomatis saat file di-import)
 export const kosData = (() => {
   const shuffledIndices = [...Array(baseKosData.length).keys()].sort(() => 0.5 - Math.random());
   const promoIndices = shuffledIndices.slice(0, 4);
@@ -869,32 +959,27 @@ export const kosData = (() => {
   return baseKosData.map((kos, index) => {
     if (promoIndices.includes(index)) {
       const discount = discountOptions[Math.floor(Math.random() * discountOptions.length)];
-      const originalPrice = parseInt(kos.price.replace(/\./g, ''), 10);
-      const discountedPrice = originalPrice - (originalPrice * discount / 100);
+      const discountedPriceNum = kos.priceNum - (kos.priceNum * discount / 100);
       return {
         ...kos,
         isPromo: true,
         discount,
-        discountedPrice: discountedPrice.toLocaleString('id-ID').replace(/,/g, '.')
+        discountedPriceNum: discountedPriceNum,
+        discountedPrice: discountedPriceNum.toLocaleString('id-ID').replace(/,/g, '.')
       };
     }
-    return { ...kos, isPromo: false };
+    return { ...kos, isPromo: false, discountedPriceNum: kos.priceNum };
   });
 })();
 
-// 4. Kumpulan Gambar untuk Halaman Galeri Full (Bento Box)
 export const galleryImagesPool = [
   ...baseKosData.map(k => k.image),
   "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1502672260266-1c1b5594b281?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1505691938895-1758d7bef511?auto=format&fit=crop&w=1920&q=80"
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80"
 ].sort(() => 0.5 - Math.random());
 
-// 5. Data Tim (Halaman About)
 export const teamMembers = [
   { id: 1, name: "Akmal W", role: "Ketua Kelompok", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80", bio: "Visioner di balik KosMate dengan 10 tahun pengalaman di industri proptech. Mengutamakan kenyamanan pengguna di atas segalanya." },
   { id: 2, name: "Sekarayu A", role: "Anggota #2", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80", bio: "Arsitek di balik antarmuka mewah dan pengalaman pengguna yang seamless yang membedakan KosMate dari yang lain." },
@@ -903,41 +988,27 @@ export const teamMembers = [
   { id: 5, name: "Devi I", role: "Anggota #5", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", bio: "Pengembang tangal yang menerjemahkan bahasa desain visual ke dalam baris kode pixel-perfect dengan performa tinggi." }
 ];
 
-// 6. Data Fitur (Landing Page)
 export const features = [
   { title: "Smart Search & Filter", description: "Filter lengkap (lokasi, harga, fasilitas) bantu kamu temukan kos idaman tanpa ribet.", icon: <Search className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Informasi Transparan", description: "Foto asli, deskripsi kamar, rincian harga lengkap. No hidden fee!", icon: <Home className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Verified Kost", description: "Setiap properti dicek keasliannya. Label 'Verified' menjamin keamanan dan bebas penipuan.", icon: <ShieldCheck className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Review & Rating Asli", description: "Ulasan jujur dari penghuni sebelumnya untuk gambaran realistis kondisi kos sebenarnya.", icon: <Star className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Booking & Bayar Online", description: "Reservasi kamar dan bayar aman dari mana saja. Cocok buat kamu yang belum bisa survei.", icon: <CreditCard className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Virtual Tour 360°", description: "Lihat kondisi kamar secara menyeluruh lewat layar HP kamu sebelum deal.", icon: <Eye className="w-[32px] h-[32px] text-teal-500 shrink-0" /> }
+  { title: "Informasi Transparan", description: "Foto asli, deskripsi kamar, rincian harga lengkap. No hidden fee!", icon: <Home className="w-[32px] h-[32px] text-teal-500 shrink-0" /> }
 ];
 
-// 7. Data Langkah Penggunaan (Landing Page)
 export const steps = [
   { step: "01", title: "Cari Kos Sesuai Lokasi", description: "Gunakan fitur pencarian untuk menemukan kos di dekat kampus atau kantor.", icon: <MapPin className="w-[40px] h-[40px] text-teal-600 shrink-0" /> },
-  { step: "02", title: "Bandingkan Pilihan", description: "Cek fasilitas, baca review asli, dan bandingkan harga antar kos dengan mudah.", icon: <Search className="w-[40px] h-[40px] text-teal-600 shrink-0" /> },
-  { step: "03", title: "Pesan & Hubungi Pemilik", description: "Booking langsung via aplikasi dengan pembayaran aman tanpa perantara.", icon: <Smartphone className="w-[40px] h-[40px] text-teal-600 shrink-0" /> }
+  { step: "02", title: "Bandingkan Pilihan", description: "Cek fasilitas, baca review asli, dan bandingkan harga antar kos dengan mudah.", icon: <Search className="w-[40px] h-[40px] text-teal-600 shrink-0" /> }
 ];
 
-// 8. Data Slideshow Lokasi
 export const locationSlides = [
-  { img: "https://ui.kompas.id/wp-content/uploads/2020/09/kampus-ui-shutterstock-featured-default.jpg", text: ["DEPOK,", "UNIVERSITAS INDONESIA"] },
-  { img: "https://uisi.ac.id/assets/upload/article/1280x572/69a541e6e8cfc4697562707faa0795c8.jpg", text: ["BANDUNG,", "INSTITUT TEKNOLOGI BANDUNG"] },
-  { img: "https://cdn.antaranews.com/cache/1200x800/2021/06/09/IMG_20210609_235450.jpg", text: ["YOGYAKARTA,", "UNIVERSITAS GADJAH MADA"] },
-  { img: "https://prasetya.ub.ac.id/wp-content/uploads/2022/01/Unibraw-Rektorat-Pagi-scaled.jpg", text: ["MALANG,", "UNIVERSITAS BRAWIJAYA"] },
-  { img: "https://www.its.ac.id/wp-content/uploads/2020/12/slider-1-1.jpg", text: ["SURABAYA,", "INSTITUT TEKNOLOGI SEP NOPEMBER"] },
+  { img: "https://images.unsplash.com/photo-1540518614846-1536a65249a5?w=1920&q=80", text: ["DEPOK,", "UNIVERSITAS INDONESIA"] },
+  { img: "https://images.unsplash.com/photo-1501877011929-e8ad5b41d24c?w=1920&q=80", text: ["YOGYAKARTA,", "UNIVERSITAS GADJAH MADA"] }
 ];
 
-// 9. Fungsi Helper Detail Kost (Menggabungkan Gambar Acak & Deskripsi)
 export const getRichKosData = (kos) => {
   const interiorPool = [
     "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80",
     "https://images.unsplash.com/photo-1502672260266-1c1b5594b281?auto=format&fit=crop&w=1920&q=80",
     "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1505691938895-1758d7bef511?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1512918580421-6c84b423dd71?auto=format&fit=crop&w=1920&q=80",
+    "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80"
   ];
   
   const shuffledInteriors = interiorPool.filter(img => img !== kos.image).sort(() => 0.5 - Math.random()).slice(0, 4);
@@ -945,17 +1016,27 @@ export const getRichKosData = (kos) => {
   return {
     ...kos,
     gallery: [kos.image, ...shuffledInteriors],
-    description: `Rasakan pengalaman menetap yang tak tertandingi di ${kos.name}. Dirancang khusus untuk mengutamakan privasi dan kenyamanan, properti ini menawarkan perpaduan sempurna antara estetika modern dan fungsionalitas.\n\nSetiap sudut ruangan didesain dengan saksama menggunakan material premium, pencahayaan alami yang optimal, serta sirkulasi udara yang menyegarkan. Berlokasi strategis hanya beberapa langkah dari ${kos.campus}, properti ini membebaskan Anda dari stres kemacetan harian. Nikmati akses eksklusif ke berbagai fasilitas kelas atas yang dikurasi khusus untuk mendukung gaya hidup produktif sekaligus memberikan relaksasi maksimal.`,
+    description: `Rasakan pengalaman menetap yang tak tertandingi di ${kos.name}. Dirancang khusus untuk mengutamakan privasi dan kenyamanan, properti ini menawarkan perpaduan sempurna antara estetika modern dan fungsionalitas.\n\nBerlokasi strategis hanya beberapa langkah dari ${kos.campus}, properti ini membebaskan Anda dari stres kemacetan harian.`,
     uniqueFeatures: [
       { title: "Smart Door Lock", desc: "Akses kamar menggunakan PIN & RFID khusus.", icon: <Lock className="w-[20px] h-[20px] text-[#241812]" /> },
       { title: "Weekly Cleaning", desc: "Layanan pembersihan kamar gratis setiap minggunya.", icon: <Sparkles className="w-[20px] h-[20px] text-[#241812]" /> },
-      { title: "High-Speed WiFi", desc: "Koneksi internet dedikasi hingga 100Mbps.", icon: <Wifi className="w-[20px] h-[20px] text-[#241812]" /> },
-      { title: "Premium Lounge", desc: "Area komunal mewah untuk bekerja atau bersantai.", icon: <Coffee className="w-[20px] h-[20px] text-[#241812]" /> }
+      { title: "High-Speed WiFi", desc: "Koneksi internet dedikasi hingga 100Mbps.", icon: <Wifi className="w-[20px] h-[20px] text-[#241812]" /> }
+    ],
+    rules: [
+      "Tamu menginap wajib lapor pemilik/penjaga kos.",
+      "Dilarang membawa hewan peliharaan (anjing/kucing).",
+      "Dilarang merokok di dalam kamar tidur.",
+      "Akses pintu utama/pagar ditutup pukul 23:00 WIB (kecuali shift malam)."
+    ],
+    terms: [
+      "Penyewa wajib melampirkan KTP dan Kartu Tanda Mahasiswa / ID Card Pegawai yang masih berlaku saat pengajuan sewa.",
+      "Uang Muka (Booking) tidak dapat dikembalikan apabila penyewa membatalkan sewa sepihak.",
+      "Pembayaran sewa bulanan wajib dilunasi paling lambat tanggal 5 setiap bulannya.",
+      "Minimal masa sewa adalah 3 bulan. Pemutusan sewa di bawah 3 bulan akan dikenakan penalti sebesar 50% dari harga sewa satu bulan."
     ],
     reviewsList: [
-      { id: 1, name: "Joko Wi", date: "Oktober 2025", rating: 5, text: "Sangat nyaman dan aman. Penjaganya super ramah, fasilitas selalu bersih dan wangi. Worth the price!" },
-      { id: 2, name: "Aldi Burger", date: "Agustus 2025", rating: kos.rating >= 4.5 ? 5 : 4, text: "Desain interior kamarnya sangat estetik. Cocok banget buat mahasiswa/pekerja karena suasananya tenang banget." },
-      { id: 3, name: "Pak Basu", date: "Juli 2025", rating: 5, text: "Lokasi paling strategis! Gampang cari makan dan akses ke kampus benar-benar tinggal jalan kaki saja." }
+      { id: 1, name: "Joko Wi", date: "Oktober 2025", rating: 5, text: "Sangat nyaman dan aman. Worth the price!" },
+      { id: 2, name: "Aldi Burger", date: "Agustus 2025", rating: kos.rating >= 4.5 ? 5 : 4, text: "Desain interior kamarnya sangat estetik. Cocok banget." }
     ]
   };
 };
@@ -1053,120 +1134,414 @@ import RevealOnScroll from '../components/RevealOnScroll';
 
 export default function About() {
   return (
-    <div className="w-full overflow-x-hidden bg-[#faf9f7] font-sans text-slate-800 flex flex-col">
-      <div className="bg-[#241812] pt-[160px] pb-[80px] md:pb-[120px] rounded-b-[40px] md:rounded-b-[64px] relative z-10 shrink-0 shadow-2xl">
-        <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] text-center">
-          <RevealOnScroll direction="up">
-            <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#eae0d5] mb-[24px] tracking-tight">Kelompok <span className="italic text-teal-300">Visionary</span></h1>
-            <p className="text-base md:text-xl lg:text-2xl text-[#eae0d5]/70 max-w-[768px] mx-auto font-light leading-relaxed">Mengenal lebih dekat lima arsitek utama di balik revolusi pencarian tempat tinggal mewah dan nyaman bagi mahasiswa nusantara.</p>
-          </RevealOnScroll>
-        </div>
+    <div className="w-full overflow-x-hidden bg-[#faf9f7] font-sans text-[#241812] flex flex-col">
+      
+      {/* HERO SECTION: Elegan & Penuh White Space */}
+      <div className="relative w-full pt-[180px] pb-[100px] px-[24px] lg:px-[56px] flex flex-col items-center justify-center text-center">
+        <RevealOnScroll direction="up">
+          <p className="text-teal-800 uppercase tracking-[0.3em] text-xs md:text-sm font-bold mb-[32px]">
+            Di Balik Layar KosMate
+          </p>
+          <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl font-normal text-[#241812] mb-[40px] tracking-tight leading-[1.1]">
+            Muka dibalik<br/> <span className="italic text-teal-900">cara Anda menetap.</span>
+          </h1>
+          <p className="text-base md:text-xl text-[#241812]/60 max-w-[700px] mx-auto font-light leading-relaxed">
+            Kami membuang segala kerumitan dalam mencari hunian. KosMate adalah wujud dedikasi kami untuk transparansi, kenyamanan, dan estetika tanpa kompromi.
+          </p>
+        </RevealOnScroll>
       </div>
-      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] relative z-20 flex-1 -mt-[40px] md:-mt-[60px] pb-[120px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px] md:gap-[48px]">
+
+      {/* TEAM SECTION: Gaya Editorial / Majalah Mewah */}
+      <div className="max-w-[1280px] w-full mx-auto px-[24px] lg:px-[56px] py-[120px] border-t border-[#241812]/10">
+        <RevealOnScroll direction="up">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-[100px] gap-[32px]">
+            <h2 className="font-playfair text-4xl md:text-6xl text-[#241812] leading-[1.1]">
+              The <span className="italic text-teal-800">Visionaries.</span>
+            </h2>
+            <p className="text-[#241812]/60 font-light max-w-[400px] md:text-right">
+              Kelompok 6.
+            </p>
+          </div>
+        </RevealOnScroll>
+
+        {/* Grid dibuat jauh lebih longgar (gap-y sangat besar) agar tidak bertabrakan */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[48px] gap-y-[120px]">
           {teamMembers.map((member, index) => (
-            <RevealOnScroll key={member.id} delay={index * 100} direction="up" className={`h-full ${index === 3 ? 'lg:col-start-1 lg:ml-auto' : ''} ${index === 4 ? 'lg:col-start-2 lg:mr-auto' : ''}`}>
-              <div className="bg-white rounded-[32px] p-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col h-full group hover:shadow-[0_30px_80px_rgba(0,0,0,0.08)] hover:-translate-y-[8px] transition-all duration-500">
-                <div className="w-[120px] h-[120px] rounded-[24px] overflow-hidden mb-[24px] bg-slate-100 shadow-inner">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                </div>
-                <h3 className="font-playfair font-bold text-2xl text-[#241812] mb-[4px] tracking-tight">{member.name}</h3>
-                <p className="text-xs uppercase tracking-wider font-bold text-teal-600 mb-[24px]">{member.role}</p>
-                <p className="text-slate-600 text-sm md:text-base leading-relaxed font-light flex-1">{member.bio}</p>
+            <RevealOnScroll key={member.id} delay={(index % 3) * 150} direction="up" className="flex flex-col group cursor-pointer">
+              
+              {/* Foto dengan rasio portrait 3:4, efek grayscale -> warna */}
+              <div className="w-full aspect-[3/4] overflow-hidden mb-[32px] bg-[#ebebeb] rounded-[8px]">
+                <img 
+                  src={member.image} 
+                  alt={member.name} 
+                  className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" 
+                />
               </div>
+              
+              {/* Informasi Tim dengan Tipografi Renggang */}
+              <div className="flex flex-col flex-1">
+                <h3 className="font-playfair text-2xl md:text-3xl text-[#241812] mb-[8px] tracking-tight">
+                  {member.name}
+                </h3>
+                <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-teal-800 mb-[24px] pb-[24px] border-b border-[#241812]/10">
+                  {member.role}
+                </p>
+                <p className="text-[#241812]/60 text-sm leading-relaxed font-light flex-1">
+                  {member.bio}
+                </p>
+              </div>
+              
             </RevealOnScroll>
           ))}
         </div>
       </div>
+      
     </div>
   );
 }
 </file>
 
 <file path="src/pages/Detail.jsx">
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, MapPin, ShieldCheck, Star, Sparkles, Camera } from 'lucide-react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+
+// INI YANG SEBELUMNYA KURANG: ChevronRight sekarang sudah masuk ke daftar import!
+import { 
+  ChevronLeft, ChevronRight, MapPin, ShieldCheck, Star, 
+  Sparkles, Camera, Coffee, ShoppingBag, Landmark, Map, 
+  Share, Heart, ArrowDown, CheckCircle2, X, 
+  Calendar as CalendarIcon, ArrowRight, Clock, 
+  BedDouble, AlertCircle, FileText, Bus, Navigation 
+} from 'lucide-react';
+
 import { kosData, getRichKosData } from '../data/dummyData';
 import RevealOnScroll from '../components/RevealOnScroll';
-import ChatDrawer from '../components/ChatDrawer'; // Import ChatDrawer di sini
+import ChatDrawer from '../components/ChatDrawer';
 
+// ======================================================================
+// KOMPONEN: FULLSCREEN GALLERY MODAL
+// ======================================================================
+const GalleryModal = ({ isOpen, onClose, images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  if (!isOpen) return null;
+
+  const nextImg = (e) => { e.stopPropagation(); setCurrentIndex((prev) => (prev + 1) % images.length); };
+  const prevImg = (e) => { e.stopPropagation(); setCurrentIndex((prev) => (prev - 1 + images.length) % images.length); };
+
+  return (
+    <div className="fixed inset-0 z-[300] flex flex-col bg-black/95 backdrop-blur-md">
+      <div className="flex justify-between items-center p-[24px] text-white">
+        <span className="font-bold tracking-widest text-sm uppercase">Foto {currentIndex + 1} / {images.length}</span>
+        <button onClick={onClose} className="p-[8px] bg-white/10 hover:bg-white/20 rounded-full transition-colors"><X className="w-[24px] h-[24px]" /></button>
+      </div>
+      
+      <div className="flex-1 relative flex items-center justify-center overflow-hidden px-[16px]">
+        <button onClick={prevImg} className="absolute left-[24px] md:left-[48px] z-10 w-[48px] h-[48px] md:w-[64px] md:h-[64px] bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"><ChevronLeft className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
+        <motion.img key={currentIndex} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} src={images[currentIndex]} alt="Kos Gallery" className="max-w-full max-h-full object-contain rounded-[16px] shadow-2xl" />
+        <button onClick={nextImg} className="absolute right-[24px] md:right-[48px] z-10 w-[48px] h-[48px] md:w-[64px] md:h-[64px] bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"><ChevronRight className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
+      </div>
+      
+      <div className="p-[24px] flex justify-center gap-[12px] overflow-x-auto">
+        {images.map((img, idx) => (
+          <div key={idx} onClick={() => setCurrentIndex(idx)} className={`w-[60px] h-[60px] rounded-[8px] cursor-pointer overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-teal-500 scale-110 opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}>
+            <img src={img} alt="Thumb" className="w-full h-full object-cover" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ======================================================================
+// KOMPONEN: MULTI-STEP BOOKING MODAL
+// ======================================================================
+const BookingModal = ({ isOpen, onClose, kos }) => {
+  const [step, setStep] = useState(1);
+  const [startDate, setStartDate] = useState('');
+  const [paymentOption, setPaymentOption] = useState('full');
+  
+  useEffect(() => {
+    if (isOpen) { setStep(1); setStartDate(''); setPaymentOption('full'); }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const handleNext = () => { if (startDate) setStep(2); };
+
+  const baseSewa = kos.isPromo ? kos.discountedPriceNum : kos.priceNum;
+  const deposit = 500000;
+  const totalTagihan = paymentOption === 'dp' ? deposit : (baseSewa + deposit);
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center px-[24px]">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-[#241812]/80 backdrop-blur-sm cursor-pointer" />
+      <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="relative w-full max-w-[500px] bg-white rounded-[32px] p-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] overflow-y-auto scrollbar-hide">
+        <button onClick={onClose} className="absolute top-[24px] right-[24px] text-slate-400 hover:text-[#241812] transition-colors z-10"><X className="w-[24px] h-[24px]" /></button>
+
+        <AnimatePresence mode="wait">
+          {step === 1 && (
+            <motion.div key="step-1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="flex flex-col w-full">
+              <h2 className="font-playfair text-3xl font-bold text-[#241812] mb-[8px] tracking-tight">Pengajuan Sewa</h2>
+              <p className="text-slate-500 mb-[24px] text-sm">Silakan lengkapi detail pengajuan untuk <strong>{kos.name}</strong>.</p>
+
+              <div className="mb-[24px]">
+                <label className="text-xs uppercase tracking-widest font-bold text-[#241812]/70 mb-[12px] block">Mulai Ngekos</label>
+                <div className="flex items-center w-full bg-slate-50 border border-slate-200 rounded-[16px] focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-100 transition-all overflow-hidden">
+                  <div className="pl-[16px] pr-[12px] border-r border-slate-200 h-[56px] flex items-center bg-white">
+                    <CalendarIcon className="h-[20px] w-[20px] text-teal-600" />
+                  </div>
+                  <input 
+                    type="date" 
+                    value={startDate} 
+                    onChange={(e) => setStartDate(e.target.value)} 
+                    className="w-full h-[56px] bg-transparent text-[#241812] text-sm px-[16px] outline-none" 
+                  />
+                </div>
+              </div>
+
+              <div className="mb-[32px]">
+                <label className="text-xs uppercase tracking-widest font-bold text-[#241812]/70 mb-[12px] block">Skema Pembayaran Awal</label>
+                <div className="grid grid-cols-2 gap-[12px]">
+                  <div onClick={() => setPaymentOption('dp')} className={`border-[2px] rounded-[16px] p-[16px] cursor-pointer transition-all ${paymentOption === 'dp' ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-white hover:border-teal-300'}`}>
+                    <div className="flex justify-between items-start mb-[4px]"><p className="font-bold text-[#241812]">Bayar DP</p><div className={`w-[16px] h-[16px] rounded-full border-[2px] flex items-center justify-center ${paymentOption === 'dp' ? 'border-teal-600' : 'border-slate-300'}`}>{paymentOption === 'dp' && <div className="w-[8px] h-[8px] bg-teal-600 rounded-full"></div>}</div></div>
+                    <p className="text-xs text-slate-500">Amankan kamar dengan DP saja.</p>
+                  </div>
+                  <div onClick={() => setPaymentOption('full')} className={`border-[2px] rounded-[16px] p-[16px] cursor-pointer transition-all ${paymentOption === 'full' ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-white hover:border-teal-300'}`}>
+                    <div className="flex justify-between items-start mb-[4px]"><p className="font-bold text-[#241812]">Bayar Lunas</p><div className={`w-[16px] h-[16px] rounded-full border-[2px] flex items-center justify-center ${paymentOption === 'full' ? 'border-teal-600' : 'border-slate-300'}`}>{paymentOption === 'full' && <div className="w-[8px] h-[8px] bg-teal-600 rounded-full"></div>}</div></div>
+                    <p className="text-xs text-slate-500">DP + Harga sewa 1 bulan.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-[#faf9f7] p-[20px] rounded-[20px] border border-slate-100 mb-[32px]">
+                <h4 className="font-bold text-[#241812] mb-[16px] text-sm border-b border-slate-200 pb-[12px]">Ringkasan Tagihan Pertama</h4>
+                <div className="flex justify-between items-center mb-[12px]"><span className="text-slate-500 text-sm">Deposit (Uang Muka)</span><span className="font-bold text-[#241812]">Rp 500.000</span></div>
+                {paymentOption === 'full' && (
+                  <div className="flex justify-between items-center mb-[12px]"><span className="text-slate-500 text-sm">Sewa Bulan Pertama</span><span className="font-bold text-[#241812]">Rp {baseSewa.toLocaleString('id-ID').replace(/,/g, '.')}</span></div>
+                )}
+                <div className="flex justify-between items-center pt-[12px] border-t border-slate-200 mt-[4px]"><span className="font-bold text-[#241812]">Total Tagihan</span><span className="font-bold text-teal-700 text-xl">Rp {totalTagihan.toLocaleString('id-ID').replace(/,/g, '.')}</span></div>
+              </div>
+
+              <button onClick={handleNext} disabled={!startDate} className="w-full h-[56px] bg-[#241812] text-white rounded-[16px] font-bold shadow-lg hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-[8px]">
+                Konfirmasi & Ajukan <ArrowRight className="w-[18px] h-[18px]" />
+              </button>
+            </motion.div>
+          )}
+
+          {step === 2 && (
+            <motion.div key="step-2" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="flex flex-col items-center text-center w-full">
+              <div className="w-[80px] h-[80px] bg-teal-50 border border-teal-100 rounded-full flex items-center justify-center mb-[24px]"><CheckCircle2 className="w-[40px] h-[40px] text-teal-600" /></div>
+              <h2 className="font-playfair text-3xl font-bold text-[#241812] mb-[12px] tracking-tight">Pengajuan Berhasil!</h2>
+              <p className="text-slate-600 mb-[32px] leading-relaxed text-sm">Permintaan sewa Anda untuk <strong>{kos.name}</strong> mulai tanggal <strong>{new Date(startDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> telah diteruskan ke pemilik.</p>
+              
+              <div className="w-full bg-slate-50 p-[16px] rounded-[16px] border border-slate-100 mb-[32px]">
+                <div className="flex justify-between text-sm mb-[8px]"><span className="text-slate-500">ID Booking</span><span className="font-bold text-[#241812]">#KM-{Math.floor(Math.random() * 90000) + 10000}</span></div>
+                <div className="flex justify-between text-sm"><span className="text-slate-500">Status</span><span className="font-bold text-orange-600 bg-orange-100 px-[8px] py-[2px] rounded">Menunggu Verifikasi</span></div>
+              </div>
+
+              <button onClick={() => { onClose(); navigate('/'); }} className="w-full h-[56px] bg-teal-700 text-white rounded-[16px] font-bold shadow-[0_10px_20px_rgba(15,118,110,0.2)] hover:bg-teal-800 hover:-translate-y-[2px] transition-all">
+                Menuju Dashboard
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </motion.div>
+    </div>
+  );
+};
+
+// ======================================================================
+// HALAMAN DETAIL UTAMA
+// ======================================================================
 export default function Detail() {
   const { kosId } = useParams();
   const navigate = useNavigate();
   
-  // State untuk mengontrol Laci Chat DM
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeLocationTab, setActiveLocationTab] = useState('terdekat');
   
-  // Mengambil data kos berdasarkan ID di URL, fallback ke data pertama jika tidak ada
   const baseKos = kosData.find(k => k.id === parseInt(kosId)) || kosData[0];
   const kos = getRichKosData(baseKos);
 
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > window.innerHeight * 0.8);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const nearbyPlaces = [
+    { icon: <Coffee className="w-[20px] h-[20px] text-slate-600" />, name: "Rumah Makan & Cafe Madem", dist: "150 m" },
+    { icon: <ShoppingBag className="w-[20px] h-[20px] text-slate-600" />, name: "Minimarket Circle K", dist: "250 m" },
+    { icon: <Landmark className="w-[20px] h-[20px] text-slate-600" />, name: `Area Kampus ${kos.campus.split(',')[0]}`, dist: "450 m" },
+    { icon: <Map className="w-[20px] h-[20px] text-slate-600" />, name: "ATM Center & Apotek", dist: "500 m" }
+  ];
+
+  const transportPlaces = [
+    { icon: <Bus className="w-[20px] h-[20px] text-slate-600" />, name: "Halte Trans Metro", dist: "200 m" },
+    { icon: <Navigation className="w-[20px] h-[20px] text-slate-600" />, name: "Pangkalan Ojek Online", dist: "50 m" },
+    { icon: <MapPin className="w-[20px] h-[20px] text-slate-600" />, name: "Stasiun KRL/Kereta", dist: "1.5 km" },
+  ];
+
+  const currentTabPlaces = activeLocationTab === 'terdekat' ? nearbyPlaces : transportPlaces;
+
   return (
-    <div className="w-full overflow-x-hidden bg-[#faf9f7] font-sans text-slate-800 flex flex-col animate-in fade-in duration-700">
-      <button onClick={() => navigate('/search')} className="fixed top-[32px] left-[24px] md:left-[48px] z-50 bg-white/80 hover:bg-white backdrop-blur-md px-[20px] py-[12px] rounded-[999px] flex items-center gap-[8px] text-[#241812] font-medium shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all hover:-translate-x-[4px]">
-        <ChevronLeft className="w-[20px] h-[20px]" /> <span className="hidden md:inline">Kembali</span>
-      </button>
+    <div className="w-full overflow-x-hidden bg-black font-sans text-[#241812] flex flex-col">
+      <AnimatePresence>
+        {isBookingOpen && <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} kos={kos} />}
+        {isGalleryOpen && <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} images={kos.gallery} />}
+      </AnimatePresence>
 
-      {/* Luxury Dark Header Section with Photo Grid */}
-      <div className="bg-[#241812] pt-[120px] pb-[80px] md:pb-[120px] rounded-b-[40px] md:rounded-b-[64px] relative z-10 shrink-0">
-        <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px]">
-          <RevealOnScroll direction="up">
-            <div className="flex flex-wrap items-center gap-[12px] mb-[16px]">
-              {kos.isPromo && <div className="bg-red-500 text-white border border-red-600 h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] text-xs font-bold"><Sparkles className="w-[14px] h-[14px]" /> Diskon {kos.discount}%</div>}
-              {kos.verified && <div className="bg-teal-900/50 text-teal-300 border border-teal-700/50 h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] text-xs font-bold"><ShieldCheck className="w-[16px] h-[16px]" /> Terverifikasi</div>}
-              <div className="bg-orange-900/50 text-orange-400 border border-orange-700/50 h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] text-xs font-bold"><Star className="w-[14px] h-[14px] fill-orange-400" /> {kos.rating}</div>
-              <div className="bg-white/10 text-white border border-white/20 h-[32px] px-[12px] rounded-[8px] flex items-center text-xs font-bold">{kos.type}</div>
-            </div>
-            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#eae0d5] mb-[16px] tracking-tight">{kos.name}</h1>
-            <div className="flex items-center gap-[8px] text-[#eae0d5]/70 text-sm md:text-base"><MapPin className="w-[18px] h-[18px] text-teal-400" /> {kos.campus}</div>
-          </RevealOnScroll>
-
-          <RevealOnScroll direction="up" delay={200}>
-            <div className="relative w-full h-[40vh] md:h-[60vh] flex gap-[8px] md:gap-[12px] rounded-[24px] md:rounded-[32px] overflow-hidden mt-[48px] shadow-2xl">
-              <div className="w-full md:w-1/2 h-full relative cursor-pointer group overflow-hidden bg-black">
-                <img src={kos.gallery[0]} alt={kos.name} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
-              </div>
-              <div className="hidden md:grid w-1/2 h-full grid-cols-2 grid-rows-2 gap-[8px] md:gap-[12px]">
-                {kos.gallery.slice(1, 5).map((img, idx) => (
-                  <div key={idx} className="w-full h-full relative cursor-pointer group overflow-hidden bg-black">
-                    <img src={img} alt={`Interior ${idx+1}`} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
-                  </div>
-                ))}
-              </div>
-              <button className="absolute bottom-[24px] right-[24px] bg-white/90 backdrop-blur-md hover:bg-white text-[#241812] px-[20px] py-[12px] rounded-[16px] text-sm font-bold flex items-center gap-[8px] transition-all shadow-lg hover:shadow-xl hover:-translate-y-[2px]">
-                <Camera className="w-[18px] h-[18px]" /> Lihat Semua Foto
-              </button>
-            </div>
-          </RevealOnScroll>
+      <div className={`fixed top-0 w-full h-[80px] z-40 flex items-center justify-between px-[24px] lg:px-[56px] transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-b border-slate-200 shadow-sm' : 'bg-gradient-to-b from-black/60 to-transparent'}`}>
+        <button onClick={() => navigate('/search')} className={`flex items-center gap-[8px] font-bold transition-colors ${isScrolled ? 'text-[#241812] hover:text-teal-700' : 'text-white hover:text-white/70'}`}><ChevronLeft className="w-[20px] h-[20px]" /> <span className="hidden md:inline">Kembali</span></button>
+        <div className="flex items-center gap-[16px]">
+          <button className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-[#241812]' : 'text-white hover:text-white/70'}`}><Share className="w-[18px] h-[18px]" /> <span className="hidden md:inline">Bagikan</span></button>
+          <button onClick={() => setIsSaved(!isSaved)} className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-red-500' : 'text-white hover:text-red-400'}`}><Heart className={`w-[18px] h-[18px] ${isSaved ? 'fill-red-500 text-red-500' : ''}`} /> <span className="hidden md:inline">Simpan</span></button>
         </div>
       </div>
 
-      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[48px] relative z-20 flex-1 -mt-[40px] md:-mt-[60px] pb-[120px]">
-        <div className="flex flex-col lg:flex-row gap-[48px] items-start">
-          <div className="w-full lg:w-2/3 bg-white p-[32px] md:p-[48px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-slate-100">
-            <RevealOnScroll direction="up" delay={100}>
-              <h2 className="text-xl font-bold text-[#241812] mb-[16px]">Tentang Properti Ini</h2>
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed whitespace-pre-line font-light mb-[48px]">{kos.description}</p>
+      <div ref={heroRef} className="relative w-full h-screen sticky top-0 overflow-hidden z-0">
+        <motion.img style={{ y: heroY, scale: heroScale }} src={kos.gallery[0]} alt={kos.name} className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <motion.div style={{ opacity: heroOpacity }} className="absolute inset-0 flex flex-col justify-end items-center text-center pb-[15vh] px-[24px]">
+          <div className="flex flex-wrap justify-center gap-[8px] mb-[24px]">
+            {kos.isPromo && <span className="bg-red-500 text-white px-[12px] py-[4px] rounded-full text-xs font-bold flex items-center gap-[4px] shadow-lg"><Sparkles className="w-[12px] h-[12px]"/> Promo -{kos.discount}%</span>}
+            {kos.verified && <span className="bg-teal-500 text-white px-[12px] py-[4px] rounded-full text-xs font-bold flex items-center gap-[4px] shadow-lg"><ShieldCheck className="w-[12px] h-[12px]"/> Terverifikasi</span>}
+            <span className="bg-white/20 backdrop-blur-md text-white border border-white/30 px-[12px] py-[4px] rounded-full text-xs font-bold">{kos.type}</span>
+          </div>
+          <h1 className="font-playfair text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-[16px] tracking-tight leading-[1.1] drop-shadow-2xl">{kos.name}</h1>
+          <p className="flex items-center gap-[8px] text-white/80 font-medium text-lg drop-shadow-md"><MapPin className="w-[20px] h-[20px] text-teal-400" /> {kos.campus}</p>
+          <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} className="absolute bottom-[40px] text-white/50 flex flex-col items-center gap-[8px]">
+            <span className="text-[10px] uppercase tracking-widest font-bold">Scroll untuk Eksplorasi</span>
+            <ArrowDown className="w-[16px] h-[16px]" />
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="relative z-10 w-full bg-[#faf9f7] rounded-t-[40px] md:rounded-t-[64px] shadow-[0_-20px_60px_rgba(0,0,0,0.5)] pt-[64px] pb-[120px] px-[24px] lg:px-[56px] -mt-[40px]">
+        <div className="max-w-[1280px] mx-auto flex flex-col lg:flex-row gap-[64px] items-start">
+          <div className="w-full lg:w-2/3">
+            
+            <RevealOnScroll direction="up">
+               <div className="flex flex-wrap gap-[16px] mb-[40px] pb-[24px] border-b border-slate-200">
+                 <div className="flex items-center gap-[8px] text-slate-500 text-sm"><Clock className="w-[16px] h-[16px]" /> Diperbarui {kos.lastUpdate}</div>
+                 <div className="w-[1px] h-[20px] bg-slate-300 hidden md:block"></div>
+                 <div className={`flex items-center gap-[8px] text-sm font-bold ${kos.roomsAvailable > 0 ? 'text-teal-700' : 'text-red-500'}`}><BedDouble className="w-[16px] h-[16px]" /> {kos.roomsAvailable > 0 ? `Sisa ${kos.roomsAvailable} Kamar Kosong` : 'Kamar Penuh'}</div>
+               </div>
             </RevealOnScroll>
 
-            <RevealOnScroll direction="up" delay={200}>
-              <h2 className="text-xl font-bold text-[#241812] mb-[24px]">Fasilitas Eksklusif</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-[24px] mb-[48px]">
-                {kos.uniqueFeatures.map((feat, i) => (
-                  <div key={i} className="flex items-start gap-[16px]"><div className="w-[48px] h-[48px] bg-[#f5efe9] rounded-[12px] flex items-center justify-center shrink-0">{feat.icon}</div><div><h4 className="font-bold text-[#241812] text-base mb-[4px]">{feat.title}</h4><p className="text-slate-500 text-sm">{feat.desc}</p></div></div>
-                ))}
+            <RevealOnScroll direction="up">
+              <div className="grid grid-cols-2 gap-[12px] md:gap-[16px] mb-[64px]">
+                <div onClick={() => setIsGalleryOpen(true)} className="h-[250px] md:h-[350px] rounded-[24px] overflow-hidden group relative cursor-pointer shadow-sm">
+                  <img src={kos.gallery[1]} alt="Interior 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                </div>
+                <div onClick={() => setIsGalleryOpen(true)} className="h-[250px] md:h-[350px] rounded-[24px] overflow-hidden group relative cursor-pointer shadow-sm">
+                  <img src={kos.gallery[2]} alt="Interior 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="bg-[#241812]/80 backdrop-blur-md text-white px-[20px] py-[10px] rounded-full text-sm font-bold flex items-center gap-[8px] shadow-xl pointer-events-auto hover:bg-[#241812] transition-colors">
+                      <Camera className="w-[16px] h-[16px]" /> Lihat Semua Foto
+                    </div>
+                  </div>
+                </div>
               </div>
             </RevealOnScroll>
 
-            <RevealOnScroll direction="up" delay={300}>
-              <div className="pt-[48px] border-t border-slate-100">
-                <h2 className="text-xl font-bold text-[#241812] mb-[32px] flex items-center gap-[12px]">Ulasan Penghuni <span className="bg-[#241812] text-white text-xs px-[12px] py-[4px] rounded-full">{kos.rating} / 5.0</span></h2>
-                <div className="flex flex-col gap-[24px]">
+            <RevealOnScroll direction="up">
+              <div className="pb-[48px] border-b border-slate-200">
+                <h2 className="font-playfair text-4xl font-bold text-[#241812] mb-[24px] tracking-tight">Esensi Ruang</h2>
+                <p className="text-slate-600 text-lg leading-relaxed font-light whitespace-pre-line">{kos.description}</p>
+              </div>
+            </RevealOnScroll>
+
+            <RevealOnScroll direction="up">
+              <div className="py-[48px] border-b border-slate-200">
+                <h2 className="font-playfair text-4xl font-bold text-[#241812] mb-[40px] tracking-tight">Fasilitas Hunian</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-[40px] gap-x-[32px]">
+                  {kos.uniqueFeatures.map((feat, i) => (
+                    <div key={i} className="flex items-start gap-[20px]">
+                      <div className="w-[56px] h-[56px] bg-white border border-slate-200 rounded-[16px] flex items-center justify-center shrink-0 shadow-sm text-teal-700">{feat.icon}</div>
+                      <div><h4 className="font-bold text-[#241812] text-lg mb-[4px]">{feat.title}</h4><p className="text-slate-500 text-sm leading-relaxed">{feat.desc}</p></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            <RevealOnScroll direction="up">
+              <div className="py-[48px] border-b border-slate-200">
+                <h2 className="font-playfair text-4xl font-bold text-[#241812] mb-[32px] tracking-tight">Hal yang perlu diketahui</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[40px]">
+                  <div>
+                    <h3 className="flex items-center gap-[8px] text-lg font-bold text-[#241812] mb-[20px]"><AlertCircle className="w-[20px] h-[20px] text-orange-600" /> Peraturan Kos</h3>
+                    <ul className="space-y-[12px]">{kos.rules.map((rule, idx) => (<li key={idx} className="flex items-start gap-[12px] text-slate-600 text-sm"><span className="w-[6px] h-[6px] rounded-full bg-slate-300 mt-[8px] shrink-0"></span>{rule}</li>))}</ul>
+                  </div>
+                  <div>
+                    <h3 className="flex items-center gap-[8px] text-lg font-bold text-[#241812] mb-[20px]"><FileText className="w-[20px] h-[20px] text-teal-700" /> Ketentuan Pengajuan</h3>
+                    <ul className="space-y-[12px]">{kos.terms.map((term, idx) => (<li key={idx} className="flex items-start gap-[12px] text-slate-600 text-sm"><span className="w-[6px] h-[6px] rounded-full bg-slate-300 mt-[8px] shrink-0"></span>{term}</li>))}</ul>
+                  </div>
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            <RevealOnScroll direction="up">
+              <div className="py-[48px] border-b border-slate-200">
+                <h2 className="font-playfair text-4xl font-bold text-[#241812] mb-[8px] tracking-tight">Lokasi dan lingkungan sekitar</h2>
+                <p className="flex items-center gap-[8px] text-slate-500 font-medium mb-[32px]"><MapPin className="w-[16px] h-[16px] text-teal-600" /> Kawasan {kos.campus}</p>
+                <div className="relative w-full h-[300px] bg-slate-200 rounded-[32px] overflow-hidden mb-[40px] group cursor-pointer border border-slate-200 shadow-inner">
+                  <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80" alt="Map Visualization" className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#241812]/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-colors duration-500"></div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                     <div className="w-[80px] h-[80px] bg-teal-500/20 rounded-full animate-ping absolute -inset-[25px]"></div>
+                     <div className="w-[30px] h-[30px] bg-teal-600 border-[4px] border-white rounded-full relative z-10 shadow-[0_10px_20px_rgba(15,118,110,0.5)]"></div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <button onClick={() => window.open('https://maps.google.com/?q=Universitas+Gadjah+Mada+Yogyakarta', '_blank')} className="bg-[#241812]/90 backdrop-blur-md text-white px-[28px] py-[12px] rounded-[16px] font-bold text-sm transition-all shadow-2xl pointer-events-auto hover:bg-[#241812] hover:scale-105 border border-white/10">Buka Peta Interaktif</button>
+                  </div>
+                </div>
+                <div className="flex gap-[12px] mb-[40px]">
+                  <button onClick={() => setActiveLocationTab('terdekat')} className={`px-[24px] py-[10px] rounded-full text-sm font-bold shadow-md transition-transform hover:-translate-y-[2px] ${activeLocationTab === 'terdekat' ? 'bg-[#241812] text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-[#241812] hover:text-[#241812]'}`}>Tempat Terdekat</button>
+                  <button onClick={() => setActiveLocationTab('transportasi')} className={`px-[24px] py-[10px] rounded-full text-sm font-bold shadow-md transition-transform hover:-translate-y-[2px] ${activeLocationTab === 'transportasi' ? 'bg-[#241812] text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-[#241812] hover:text-[#241812]'}`}>Transportasi</button>
+                </div>
+                <div className="flex flex-col gap-[24px] bg-white p-[32px] rounded-[32px] border border-slate-100 shadow-sm">
+                  {currentTabPlaces.map((item, i) => (
+                    <div key={i} className="flex items-center gap-[20px] group">
+                      <div className="w-[48px] h-[48px] bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center shrink-0 group-hover:bg-teal-50 group-hover:border-teal-200 transition-all duration-300">{item.icon}</div>
+                      <div className="flex-1 flex justify-between items-center border-b border-slate-100 pb-[16px] group-hover:border-slate-300 transition-colors"><p className="text-[#241812] font-bold text-lg">{item.name}</p><p className="text-slate-500 text-sm font-medium bg-slate-50 px-[12px] py-[4px] rounded-[8px]">{item.dist}</p></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            <RevealOnScroll direction="up">
+              <div className="py-[48px]">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-[40px] gap-[16px]">
+                  <h2 className="font-playfair text-4xl font-bold text-[#241812] tracking-tight">Suara Penghuni</h2>
+                  <span className="flex items-center gap-[8px] bg-orange-50 text-orange-700 text-base px-[16px] py-[6px] rounded-full font-bold shadow-sm border border-orange-100"><Star className="w-[16px] h-[16px] fill-orange-500" /> {kos.rating} / 5.0 Rata-rata</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
                   {kos.reviewsList.map((review) => (
-                    <div key={review.id} className="bg-[#faf9f7] p-[24px] rounded-[24px]">
-                      <div className="flex justify-between items-start mb-[12px]"><div><div className="font-bold text-[#241812]">{review.name}</div><div className="text-xs text-slate-400">{review.date}</div></div><div className="flex gap-[2px]">{[...Array(5)].map((_, i) => (<Star key={i} className={`w-[14px] h-[14px] ${i < review.rating ? 'fill-orange-500 text-orange-500' : 'fill-slate-200 text-slate-200'}`} />))}</div></div>
-                      <p className="text-slate-600 text-sm md:text-base leading-relaxed">"{review.text}"</p>
+                    <div key={review.id} className="bg-white p-[32px] rounded-[32px] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex items-center gap-[16px] mb-[20px]">
+                        <div className="w-[56px] h-[56px] bg-teal-50 border border-teal-100 text-teal-800 font-playfair font-bold text-2xl rounded-full flex items-center justify-center shadow-inner">{review.name.charAt(0)}</div>
+                        <div><div className="font-bold text-[#241812] text-lg">{review.name}</div><div className="text-sm text-slate-400">{review.date}</div></div>
+                      </div>
+                      <p className="text-slate-600 text-base leading-relaxed italic">"{review.text}"</p>
                     </div>
                   ))}
                 </div>
@@ -1176,41 +1551,47 @@ export default function Detail() {
 
           <div className="w-full lg:w-1/3 lg:sticky lg:top-[120px]">
             <RevealOnScroll direction="up" delay={200}>
-              <div className="bg-white p-[32px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-100">
+              <div className="bg-white p-[32px] rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.08)] border border-slate-100">
                 <div className="mb-[24px]">
                   {kos.isPromo ? (
-                    <><p className="text-xs text-red-500 uppercase tracking-wider font-bold mb-[4px]">Sewa Bulanan Promo</p><div className="flex items-center gap-[12px] mb-[4px]"><span className="text-lg text-slate-400 line-through">Rp {kos.price}</span><span className="bg-red-100 text-red-600 px-[8px] py-[4px] rounded-[6px] text-[10px] font-bold">Hemat {kos.discount}%</span></div><div className="flex items-end gap-[8px]"><span className="text-4xl font-extrabold text-red-600">Rp {kos.discountedPrice}</span><span className="text-sm text-slate-500 mb-[4px]">/bulan</span></div></>
+                    <><div className="flex items-center gap-[12px] mb-[8px]"><span className="text-lg text-slate-400 line-through decoration-red-500/50 decoration-2">Rp {kos.price}</span><span className="bg-red-50 text-red-600 border border-red-100 px-[8px] py-[4px] rounded-[6px] text-xs font-bold uppercase tracking-wider">Hemat {kos.discount}%</span></div><div className="flex items-end gap-[8px]"><span className="text-5xl font-playfair font-bold text-[#241812] tracking-tight">Rp {kos.discountedPrice}</span></div></>
                   ) : (
-                    <><p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-[4px]">Sewa Bulanan Mulai</p><div className="flex items-end gap-[8px]"><span className="text-4xl font-extrabold text-[#241812]">Rp {kos.price}</span><span className="text-sm text-slate-500 mb-[4px]">/bulan</span></div></>
+                    <div className="flex items-end gap-[8px]"><span className="text-5xl font-playfair font-bold text-[#241812] tracking-tight">Rp {kos.price}</span></div>
                   )}
+                  <span className="text-sm text-slate-500 mt-[8px] block font-medium">/bulan, sudah termasuk pajak</span>
                 </div>
-                <div className="bg-[#faf9f7] rounded-[16px] p-[16px] mb-[32px]">
-                  <div className="flex justify-between items-center pb-[16px] border-b border-slate-200 mb-[16px]"><span className="text-slate-500 text-sm">Uang Muka (Booking)</span><span className="font-bold text-[#241812]">Rp 500.000</span></div>
-                  <div className="flex justify-between items-center"><span className="text-slate-500 text-sm">Biaya Admin</span><span className="font-bold text-teal-600">Gratis</span></div>
+
+                <div className="bg-orange-50 border border-orange-100 rounded-[12px] p-[12px] mb-[24px] flex items-center gap-[12px]">
+                   <AlertCircle className="w-[20px] h-[20px] text-orange-600 shrink-0" />
+                   <p className="text-xs text-orange-800 font-medium">Jangan sampai kehabisan! Saat ini hanya tersisa <strong className="text-orange-600 text-sm">{kos.roomsAvailable} kamar</strong> untuk Anda.</p>
                 </div>
-                <button className="w-full h-[56px] bg-[#241812] hover:bg-[#3a2a22] text-white font-bold rounded-[16px] mb-[16px] transition-colors shadow-lg">Ajukan Sewa</button>
                 
-                {/* Tombol dimodifikasi untuk men-trigger ChatDrawer */}
-                <button 
-                  onClick={() => setIsChatOpen(true)} 
-                  className="w-full h-[56px] bg-white border border-[#241812]/20 hover:border-[#241812] text-[#241812] font-bold rounded-[16px] transition-colors"
-                >
+                <div className="bg-[#faf9f7] rounded-[24px] p-[24px] mb-[32px] border border-slate-100">
+                  <div className="flex justify-between items-start pb-[16px] border-b border-slate-200 mb-[16px]">
+                    <span className="text-slate-600 font-medium text-sm">Biaya Tambahan</span>
+                    <span className="text-[#241812] text-xs text-right max-w-[150px]">{kos.additionalFees}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-600 font-medium">Biaya Platform</span>
+                    <span className="font-bold text-teal-700 bg-teal-50 px-[10px] py-[4px] rounded-lg border border-teal-100 text-sm">Gratis</span>
+                  </div>
+                </div>
+
+                <button onClick={() => setIsBookingOpen(true)} disabled={kos.roomsAvailable === 0} className="w-full h-[64px] bg-teal-700 hover:bg-teal-800 text-white font-bold text-lg rounded-[20px] mb-[16px] transition-all shadow-[0_15px_30px_rgba(15,118,110,0.2)] hover:shadow-[0_20px_40px_rgba(15,118,110,0.3)] hover:-translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:-translate-y-0">
+                  {kos.roomsAvailable > 0 ? "Ajukan Sewa Sekarang" : "Kamar Penuh"}
+                </button>
+                
+                <button onClick={() => setIsChatOpen(true)} className="w-full h-[64px] bg-white border-2 border-slate-200 hover:border-[#241812] text-[#241812] font-bold text-lg rounded-[20px] transition-all hover:-translate-y-[2px]">
                   Tanya Pemilik via DM
                 </button>
                 
-                <p className="text-center text-xs text-slate-400 mt-[24px] px-[16px]">Pembayaran 100% aman menggunakan KosMate Secure Pay.</p>
+                <p className="text-center text-xs text-slate-400 mt-[24px] flex items-center justify-center gap-[6px] uppercase tracking-widest font-bold"><ShieldCheck className="w-[14px] h-[14px]" /> KosMate Secure Pay</p>
               </div>
             </RevealOnScroll>
           </div>
         </div>
       </div>
-
-      {/* Komponen ChatDrawer dipanggil di sini */}
-      <ChatDrawer 
-        isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)} 
-        kosName={kos.name} 
-      />
+      <ChatDrawer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} kosName={kos.name} />
     </div>
   );
 }
@@ -1257,134 +1638,6 @@ export default function Gallery() {
               else if (i % 4 === 0) spanClass = "col-span-1 row-span-2";
               return <AnimatedImage key={i} src={src} className={spanClass} />;
             })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="src/pages/Intro.jsx">
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Loader2, Star, Sparkles } from 'lucide-react';
-
-const sectionsData = [
-  { title: 'KOSMATE', line1: 'Smart Way to Find Your Stay,', line2: 'No drama, no zonk!', badge: 'Platform Akomodasi Eksklusif' },
-  { title: 'VERIFIED', line1: '100% Aman & Terpercaya,', line2: 'Setiap properti diverifikasi untukmu.', badge: 'Keamanan Terjamin' },
-  { title: 'SEAMLESS', line1: 'Booking Online Tanpa Drama,', line2: 'Cari, cek, bayar dalam satu aplikasi.', badge: 'Transaksi Mudah' }
-];
-
-export default function Intro() {
-  const navigate = useNavigate();
-  const containerRef = useRef(null);
-  const videoRef = useRef(null);
-  const requestRef = useRef(null);
-  const targetProgress = useRef(0);
-  const smoothProgress = useRef(0);
-  
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [videoDuration, setVideoDuration] = useState(0);
-  const [videoSrc, setVideoSrc] = useState(null);
-  const [isVideoReady, setIsVideoReady] = useState(false);
-
-  useEffect(() => {
-    const loadVideo = async () => {
-      try {
-        const response = await fetch('/background.mp4'); 
-        if (!response.ok) throw new Error("Fallback");
-        const blob = await response.blob();
-        setVideoSrc(URL.createObjectURL(blob));
-        setIsVideoReady(true);
-      } catch (error) {
-        setVideoSrc('https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-building-exterior-with-balconies-4062-medium.mp4');
-        setIsVideoReady(true);
-      }
-    };
-    loadVideo();
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const absoluteTop = window.scrollY + rect.top;
-      const localScroll = Math.max(0, window.scrollY - absoluteTop);
-      const maxScroll = containerRef.current.offsetHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? Math.min(localScroll / maxScroll, 1) : 0;
-      setScrollProgress(progress);
-      targetProgress.current = progress; 
-    };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!videoRef.current || !isVideoReady) return;
-    videoRef.current.pause();
-    const animate = () => {
-      smoothProgress.current += (targetProgress.current - smoothProgress.current) * 0.08; 
-      if (videoRef.current && videoDuration > 0 && videoRef.current.readyState >= 2) {
-        let newTime = smoothProgress.current * videoDuration;
-        newTime = Math.max(0.1, Math.min(newTime, videoDuration - 0.1));
-        try { videoRef.current.currentTime = newTime; } catch (e) {}
-      }
-      requestRef.current = requestAnimationFrame(animate);
-    };
-    requestRef.current = requestAnimationFrame(animate);
-    return () => { if (requestRef.current) cancelAnimationFrame(requestRef.current); };
-  }, [videoDuration, isVideoReady]);
-
-  const isAtEnd = scrollProgress >= 0.90;
-
-  return (
-    <div ref={containerRef} className="relative w-full bg-slate-900 text-white">
-      <div className="fixed inset-0 w-full h-[100vh] overflow-hidden bg-slate-900 flex items-center justify-center z-0 pointer-events-none">
-        {!isVideoReady && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-900 text-teal-400">
-            <Loader2 className="w-[48px] h-[48px] animate-spin mb-[16px]" />
-            <p className="font-semibold tracking-wider text-sm md:text-base">Menyiapkan Pengalaman Visual...</p>
-          </div>
-        )}
-        <div className="absolute inset-0 origin-center transition-transform duration-100 ease-out" style={{ transform: `scale(${1 + scrollProgress * 0.4}) translateY(${scrollProgress * 5}%)` }}>
-          {videoSrc && <video ref={videoRef} src={videoSrc} className="w-full h-full object-cover scale-105" muted playsInline preload="auto" onLoadedMetadata={(e) => { if (e.target.duration && !isNaN(e.target.duration)) setVideoDuration(e.target.duration); }} />}
-          <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-slate-900/40"></div>
-        </div>
-        <div className={`absolute bottom-[40px] left-[32px] md:left-[64px] z-10 flex flex-col items-start gap-[12px] transition-opacity duration-500 ${isAtEnd ? 'opacity-0' : 'opacity-100'}`}>
-          <div className="w-[192px] h-[4px] bg-white/20 rounded-[999px] overflow-hidden backdrop-blur-sm shrink-0">
-            <div className="h-full bg-teal-400 transition-all duration-100 ease-out" style={{ width: `${scrollProgress * 100}%` }} />
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 w-full">
-        {sectionsData.map((sec, idx) => {
-          const distance = Math.abs(scrollProgress - (idx * (1 / 3)));
-          const opacity = 1 - Math.min(distance * 3, 1);
-          const scale = 1 - Math.min(distance * 0.1, 0.1);
-          return (
-            <div key={idx} className="h-[100vh] w-full flex flex-col items-center justify-center px-[16px] pointer-events-none">
-              <div className="flex flex-col items-center max-w-[896px] origin-center" style={{ opacity: Math.max(0, opacity), transform: `scale(${scale})`, transition: 'opacity 0.1s, transform 0.1s' }}>
-                <div className="inline-flex items-center gap-[8px] px-[16px] py-[8px] rounded-[999px] bg-teal-500/20 text-teal-300 font-medium text-sm md:text-lg mb-[16px] md:mb-[24px] border border-teal-500/30 backdrop-blur-md shrink-0">
-                  <Star className="w-[16px] h-[16px] fill-teal-400 shrink-0" /> <span className="whitespace-nowrap">{sec.badge}</span>
-                </div>
-                <h1 className="font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-300 mb-[16px] drop-shadow-2xl text-center text-4xl md:text-7xl leading-[0.95]">{sec.title}</h1>
-                <div className="font-medium text-center space-y-[4px] md:space-y-[8px] drop-shadow-lg text-lg md:text-3xl leading-tight text-teal-50"><p>{sec.line1}</p><p className="text-slate-300/90">{sec.line2}</p></div>
-              </div>
-            </div>
-          );
-        })}
-
-        <div className="h-[100vh] w-full flex flex-col items-center justify-center px-[16px]">
-          <div className="flex flex-col items-center origin-center text-center" style={{ opacity: Math.max(0, 1 - Math.abs(scrollProgress - 1) * 3), transform: `scale(${1 - Math.min(Math.abs(scrollProgress - 1) * 0.1, 0.1)})`, transition: 'opacity 0.1s, transform 0.1s' }}>
-            <h2 className="text-3xl md:text-6xl font-extrabold text-white mb-[32px] leading-[1.1] tracking-tight">Siap Menemukan <br/> Tempat Nyamanmu?</h2>
-            <button onClick={() => navigate('/home')} className="group bg-white hover:bg-teal-50 text-slate-900 px-[32px] py-[16px] md:px-[48px] md:py-[24px] rounded-[999px] font-extrabold text-lg md:text-2xl transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(20,184,166,0.4)] flex items-center justify-center gap-[16px] hover:-translate-y-[4px] shrink-0 pointer-events-auto">
-              <span className="whitespace-nowrap">Mulai Perjalanan</span> 
-              <Sparkles className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-teal-500 group-hover:rotate-12 group-hover:scale-110 transition-all shrink-0" />
-            </button>
           </div>
         </div>
       </div>
@@ -1524,7 +1777,7 @@ export default function Landing() {
             <div className="max-w-[896px]">
               <RevealOnScroll direction="left" delay={100}>
                 <h1 className="font-playfair text-white leading-[1.1] mb-[24px] drop-shadow-2xl tracking-tight text-5xl md:text-7xl lg:text-8xl mt-[80px]">
-                  Cari kost idaman,<br/><span className="italic font-normal text-teal-100">gampang banget.</span>
+                  A smart way,<br/><span className="italic font-normal text-teal-100">To find your stay.</span>
                 </h1>
               </RevealOnScroll>
               <RevealOnScroll direction="left" delay={300}>
@@ -1626,166 +1879,306 @@ export default function Landing() {
 </file>
 
 <file path="src/pages/Search.jsx">
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, ChevronDown, MapPin, Tag, ArrowRight, ShieldCheck, Star, Sparkles } from 'lucide-react';
-import { kosData, campuses } from '../data/dummyData';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, MapPin, Sparkles, ShieldCheck, Star, ArrowRight, LayoutGrid, Compass, SlidersHorizontal, Navigation } from 'lucide-react';
+import { kosData, campuses, facultiesByCampus } from '../data/dummyData';
 import RevealOnScroll from '../components/RevealOnScroll';
+import AnimatedDropdown from '../components/ui/animated-dropdown';
 
-// Komponen Promo di dalam Search Page
+// ... (Komponen KosPreviewCard & PromoSection tetap ada untuk mode explore & promo biasa) ...
+const KosPreviewCard = ({ kos }) => {
+  if (!kos) return null;
+  return (
+    <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute bottom-[calc(100%+16px)] left-1/2 -translate-x-1/2 w-[280px] bg-white rounded-[16px] shadow-2xl overflow-hidden pointer-events-none z-50 border border-slate-100">
+      <div className="relative h-[140px] overflow-hidden bg-slate-100">
+        <img src={kos.image} alt={kos.name} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div className="absolute bottom-[12px] left-[12px] flex items-center gap-[4px]"><span className="bg-white/90 backdrop-blur-sm text-[#241812] text-[10px] font-bold px-[8px] py-[2px] rounded-[4px]">{kos.type}</span>{kos.isPromo && <span className="bg-red-500 text-white text-[10px] font-bold px-[8px] py-[2px] rounded-[4px] flex items-center gap-[2px]"><Sparkles className="w-[10px] h-[10px]" /> -{kos.discount}%</span>}</div>
+      </div>
+      <div className="p-[16px]">
+        <div className="flex items-start justify-between mb-[4px]"><h4 className="font-playfair font-bold text-lg text-[#241812] leading-tight truncate">{kos.name}</h4><div className="flex items-center gap-[2px] shrink-0 bg-orange-50 px-[6px] py-[2px] rounded-[4px]"><Star className="w-[12px] h-[12px] fill-orange-500 text-orange-500" /><span className="text-[10px] font-bold text-orange-700">{kos.rating}</span></div></div>
+        <div className="flex items-center gap-[4px] text-slate-500 text-xs mb-[12px]"><MapPin className="w-[12px] h-[12px] shrink-0 text-teal-600" /><span className="truncate">{kos.campus}</span></div>
+      </div>
+    </motion.div>
+  );
+};
+
 const PromoSection = ({ kosData, onNavigate }) => {
   const [timeLeft, setTimeLeft] = useState(86400);
-  useEffect(() => {
-    const timer = setInterval(() => setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0)), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
+  useEffect(() => { const timer = setInterval(() => setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0)), 1000); return () => clearInterval(timer); }, []);
   const formatTime = (sec) => `${Math.floor(sec / 3600).toString().padStart(2, '0')}:${Math.floor((sec % 3600) / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`;
   const promoItems = kosData.filter((k) => k.isPromo);
-
+  if (promoItems.length === 0) return null;
   return (
     <div className="mb-[80px] pt-[48px] border-t border-slate-200/60">
-      <RevealOnScroll direction="up">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-[16px] mb-[40px]">
-          <div className="flex items-center gap-[16px]">
-            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-[#241812] tracking-tight">Flash Promos</h2>
-            <div className="bg-red-50 text-red-600 border border-red-200 px-[16px] py-[8px] rounded-[8px] flex items-center gap-[8px] shadow-sm">
-              <span className="w-[8px] h-[8px] bg-red-500 rounded-full animate-pulse shrink-0"></span>
-              <span className="text-sm md:text-base font-bold tracking-widest">{formatTime(timeLeft)}</span>
-            </div>
-          </div>
-        </div>
-      </RevealOnScroll>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[32px]">
-        {promoItems.map((kos, index) => (
-          <RevealOnScroll key={`promo-${kos.id}`} delay={index * 100} direction="up" className="h-full">
-            <div onClick={() => onNavigate(`/detail/${kos.id}`)} className="bg-white/80 backdrop-blur-md rounded-[24px] overflow-hidden border border-red-100 shadow-[0_8px_30px_rgba(239,68,68,0.06)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.12)] hover:-translate-y-[8px] transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
-              <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full pointer-events-none z-0"></div>
-              <div className="relative h-[220px] overflow-hidden shrink-0 bg-slate-100">
-                <img src={kos.image} alt={kos.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute top-[16px] left-[16px] flex flex-col gap-[8px] items-start z-10">
-                  <div className="bg-red-500/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-md">
-                    <Sparkles className="w-[14px] h-[14px] text-white shrink-0" /><span className="text-xs font-bold text-white whitespace-nowrap">-{kos.discount}% OFF</span>
-                  </div>
-                </div>
-                <div className="absolute bottom-[16px] left-[16px] bg-[#241812]/90 backdrop-blur-sm text-white text-xs font-bold h-[28px] flex items-center px-[12px] rounded-[8px] shadow-sm whitespace-nowrap z-10">{kos.type}</div>
-              </div>
-              <div className="p-[24px] flex flex-col flex-1 relative z-10">
-                <div className="flex items-start gap-[8px] text-slate-500 text-sm mb-[12px]"><MapPin className="w-[16px] h-[16px] mt-[2px] shrink-0 text-teal-600" /><span className="line-clamp-1 leading-relaxed">{kos.campus}</span></div>
-                <h3 className="font-playfair font-bold text-xl text-[#241812] mb-[8px] line-clamp-1 group-hover:text-red-600 transition-colors tracking-tight">{kos.name}</h3>
-                <div className="text-sm text-slate-500 mb-[24px] line-clamp-1 flex-1 font-light">{kos.facilities.join(" • ")}</div>
-                <div className="flex justify-between items-center pt-[20px] border-t border-red-100/50 mt-auto">
-                  <div>
-                    <p className="text-[10px] text-red-500 mb-[4px] font-bold uppercase tracking-wider">Harga Promo</p>
-                    <div className="flex flex-col">
-                      <p className="text-xs text-slate-400 line-through mb-[2px]">Rp {kos.price}</p>
-                      <p className="font-extrabold text-red-600 text-lg">Rp {kos.discountedPrice}<span className="text-xs text-red-400 font-normal">/bln</span></p>
-                    </div>
-                  </div>
-                  <button className="bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white w-[40px] h-[40px] flex items-center justify-center rounded-[12px] transition-all duration-300 shrink-0 mt-auto"><ArrowRight className="w-[20px] h-[20px] group-hover:translate-x-[2px] transition-transform" /></button>
-                </div>
-              </div>
-            </div>
-          </RevealOnScroll>
-        ))}
-      </div>
+      <RevealOnScroll direction="up"><div className="flex flex-col sm:flex-row sm:items-center justify-between gap-[16px] mb-[40px]"><div className="flex items-center gap-[16px]"><h2 className="text-3xl md:text-4xl font-playfair font-bold text-[#241812] tracking-tight">Flash Promos</h2><div className="bg-red-50 text-red-600 border border-red-200 px-[16px] py-[8px] rounded-[8px] flex items-center gap-[8px] shadow-sm"><span className="w-[8px] h-[8px] bg-red-500 rounded-full animate-pulse shrink-0"></span><span className="text-sm md:text-base font-bold tracking-widest">{formatTime(timeLeft)}</span></div></div></div></RevealOnScroll>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[32px]">{promoItems.map((kos, index) => (
+        <RevealOnScroll key={`promo-${kos.id}`} delay={index * 100} direction="up" className="h-full">
+          <div onClick={() => onNavigate(`/detail/${kos.id}`)} className="bg-white/80 backdrop-blur-md rounded-[24px] overflow-hidden border border-red-100 shadow-[0_8px_30px_rgba(239,68,68,0.06)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.12)] hover:-translate-y-[8px] transition-all duration-300 group cursor-pointer flex flex-col h-full relative"><div className="absolute top-0 right-0 w-[120px] h-[120px] bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full pointer-events-none z-0"></div><div className="relative h-[220px] overflow-hidden shrink-0 bg-slate-100"><img src={kos.image} alt={kos.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" /><div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div><div className="absolute top-[16px] left-[16px] flex flex-col gap-[8px] items-start z-10"><div className="bg-red-500/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-md"><Sparkles className="w-[14px] h-[14px] text-white shrink-0" /><span className="text-xs font-bold text-white whitespace-nowrap">-{kos.discount}% OFF</span></div></div><div className="absolute bottom-[16px] left-[16px] bg-[#241812]/90 backdrop-blur-sm text-white text-xs font-bold h-[28px] flex items-center px-[12px] rounded-[8px] shadow-sm whitespace-nowrap z-10">{kos.type}</div></div><div className="p-[24px] flex flex-col flex-1 relative z-10"><div className="flex items-start gap-[8px] text-slate-500 text-sm mb-[12px]"><MapPin className="w-[16px] h-[16px] mt-[2px] shrink-0 text-teal-600" /><span className="line-clamp-1 leading-relaxed">{kos.campus}</span></div><h3 className="font-playfair font-bold text-xl text-[#241812] mb-[8px] line-clamp-1 group-hover:text-red-600 transition-colors tracking-tight">{kos.name}</h3><div className="text-sm text-slate-500 mb-[24px] line-clamp-1 flex-1 font-light">{kos.facilities.join(" • ")}</div><div className="flex justify-between items-center pt-[20px] border-t border-red-100/50 mt-auto"><div><p className="text-[10px] text-red-500 mb-[4px] font-bold uppercase tracking-wider">Harga Promo</p><div className="flex flex-col"><p className="text-xs text-slate-400 line-through mb-[2px]">Rp {kos.price}</p><p className="font-extrabold text-red-600 text-lg">Rp {kos.discountedPrice}<span className="text-xs text-red-400 font-normal">/bln</span></p></div></div><button className="bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white w-[40px] h-[40px] flex items-center justify-center rounded-[12px] transition-all duration-300 shrink-0 mt-auto"><ArrowRight className="w-[20px] h-[20px] group-hover:translate-x-[2px] transition-transform" /></button></div></div></div>
+        </RevealOnScroll>
+      ))}</div>
     </div>
   );
 };
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  
+  const [viewMode, setViewMode] = useState('explore'); 
   const [activeCampus, setActiveCampus] = useState('Semua');
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const [activeType, setActiveType] = useState('Semua');
+  const [maxPrice, setMaxPrice] = useState(3000000);
+  const [reqFacilities, setReqFacilities] = useState([]);
+  const [activeFaculty, setActiveFaculty] = useState('Semua');
 
-  const filteredKos = kosData.filter(kos => {
-    const matchCampus = activeCampus === 'Semua' || kos.campus.includes(activeCampus);
-    const matchSearch = kos.name.toLowerCase().includes(searchQuery.toLowerCase()) || kos.campus.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCampus && matchSearch;
-  });
+  const campusCoordinates = {
+    'UGM': { x: '25%', y: '30%', color: 'border-blue-400', glow: 'bg-blue-400/20' },
+    'UI': { x: '70%', y: '25%', color: 'border-yellow-400', glow: 'bg-yellow-400/20' },
+    'ITB': { x: '50%', y: '50%', color: 'border-green-400', glow: 'bg-green-400/20' },
+    'UB': { x: '20%', y: '70%', color: 'border-purple-400', glow: 'bg-purple-400/20' },
+    'Undip': { x: '80%', y: '65%', color: 'border-orange-400', glow: 'bg-orange-400/20' },
+    'ITS': { x: '45%', y: '85%', color: 'border-pink-400', glow: 'bg-pink-400/20' }
+  };
+
+  const toggleFacility = (fac) => setReqFacilities(prev => prev.includes(fac) ? prev.filter(f => f !== fac) : [...prev, fac]);
+
+  const filteredKos = useMemo(() => {
+    let result = kosData.filter(kos => {
+      const matchCampus = activeCampus === 'Semua' || kos.campus.includes(activeCampus);
+      const matchSearch = viewMode === 'normal' ? (kos.name.toLowerCase().includes(searchQuery.toLowerCase()) || kos.campus.toLowerCase().includes(searchQuery.toLowerCase())) : true;
+      const matchType = activeType === 'Semua' || kos.type === activeType;
+      const matchPrice = kos.discountedPriceNum <= maxPrice;
+      const matchFacilities = reqFacilities.every(fac => kos.facilities.includes(fac));
+      return matchCampus && matchSearch && matchType && matchPrice && matchFacilities;
+    });
+
+    if (activeFaculty !== 'Semua') {
+      result.sort((a, b) => {
+        const distA = a.distances?.[activeFaculty] || 9999;
+        const distB = b.distances?.[activeFaculty] || 9999;
+        return distA - distB;
+      });
+    }
+    return result;
+  }, [activeCampus, searchQuery, activeType, maxPrice, reqFacilities, activeFaculty, viewMode]);
+
+  const [hoveredKosId, setHoveredKosId] = useState(null);
+
+  const getOrbitalPosition = (kos, index, total) => {
+    const parentCampusKey = Object.keys(campusCoordinates).find(key => kos.campus.includes(key));
+    const parentCoords = parentCampusKey ? campusCoordinates[parentCampusKey] : { x: '50%', y: '50%' };
+    
+    if (activeCampus !== 'Semua') {
+      let radius = 18 + (index * 5); 
+      let displayDistance = Math.floor(radius * 15);
+
+      if (activeFaculty !== 'Semua' && kos.distances?.[activeFaculty]) {
+        displayDistance = kos.distances[activeFaculty];
+        radius = 15 + Math.min(30, (displayDistance / 2000) * 30); 
+      }
+      const angle = (index / total) * Math.PI * 4; 
+      return { x: `calc(50% + ${Math.cos(angle) * radius}%)`, y: `calc(50% + ${Math.sin(angle) * radius}%)`, distance: displayDistance };
+    }
+
+    const radius = 8 + (Math.random() * 8); 
+    const angle = Math.random() * Math.PI * 2; 
+    return { x: `calc(${parseFloat(parentCoords.x)}% + ${Math.cos(angle) * radius}%)`, y: `calc(${parseFloat(parentCoords.y)}% + ${Math.sin(angle) * radius}%)`, distance: null };
+  };
 
   return (
-    <div className="w-full overflow-x-hidden bg-slate-50 font-sans text-slate-800 flex flex-col">
-      <section className="relative w-full h-[450px] md:h-[500px] rounded-b-[40px] md:rounded-b-[64px] overflow-hidden bg-[#241812] z-10 flex flex-col justify-center items-center px-[16px] shrink-0 pt-[80px] shadow-2xl">
-        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80" alt="Interior Background" className="absolute top-0 left-0 w-full h-full object-cover opacity-30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 via-teal-900/70 to-teal-900/90"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#241812]/80 via-transparent to-transparent"></div>
-        <div className="w-full max-w-[896px] mx-auto text-center relative z-20">
-          <RevealOnScroll direction="up" delay={100}><h1 className="font-playfair text-4xl md:text-6xl font-extrabold text-white mb-[24px] drop-shadow-xl tracking-tight">Temukan <span className="italic text-teal-200">Kost Idamanmu</span></h1></RevealOnScroll>
-          <RevealOnScroll direction="up" delay={300}>
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-[8px] md:p-[12px] rounded-[24px] md:rounded-[999px] flex flex-col md:flex-row items-center gap-[8px] shadow-2xl shrink-0">
-              <div className="bg-white/90 md:bg-white h-[48px] md:h-[64px] rounded-[16px] md:rounded-[999px] flex items-center px-[20px] flex-1 w-full shadow-inner overflow-hidden shrink-0 transition-all focus-within:bg-white">
-                <Search className="w-[20px] h-[20px] text-teal-700 mr-[12px] shrink-0" />
-                <input type="text" placeholder="Ketik nama kota, area, atau kampus..." className="bg-transparent border-none outline-none w-full text-slate-800 placeholder-slate-500 text-sm md:text-lg font-medium whitespace-nowrap" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-              </div>
-              <button className="w-full md:w-auto h-[48px] md:h-[64px] bg-orange-500 hover:bg-orange-600 text-white font-bold px-[40px] rounded-[16px] md:rounded-[999px] transition-all shadow-[0_4px_20px_rgba(249,115,22,0.4)] flex items-center justify-center shrink-0 whitespace-nowrap text-base md:text-lg">Cari Sekarang</button>
-            </div>
-          </RevealOnScroll>
-          <RevealOnScroll direction="up" delay={500}>
-            <div className="flex flex-wrap items-center justify-center gap-[12px] mt-[32px]">
-              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 h-[40px] px-[20px] rounded-[999px] text-sm font-medium flex items-center justify-center gap-[8px] transition-all shadow-lg shrink-0 whitespace-nowrap"><MapPin className="w-[16px] h-[16px] text-teal-300 shrink-0" /> Lokasi <ChevronDown className="w-[16px] h-[16px] text-white/70 shrink-0" /></button>
-              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 h-[40px] px-[20px] rounded-[999px] text-sm font-medium flex items-center justify-center gap-[8px] transition-all shadow-lg shrink-0 whitespace-nowrap"><Tag className="w-[16px] h-[16px] text-teal-300 shrink-0" /> Harga <ChevronDown className="w-[16px] h-[16px] text-white/70 shrink-0" /></button>
-              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 h-[40px] px-[20px] rounded-[999px] text-sm font-medium flex items-center justify-center gap-[8px] transition-all shadow-lg shrink-0 whitespace-nowrap"><Filter className="w-[16px] h-[16px] text-teal-300 shrink-0" /> Fasilitas <ChevronDown className="w-[16px] h-[16px] text-white/70 shrink-0" /></button>
-            </div>
-          </RevealOnScroll>
-        </div>
-      </section>
-
-      <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[32px] py-[48px] flex-1 relative z-20">
-        <RevealOnScroll direction="up" delay={100}>
-          <div className="flex items-center gap-[12px] overflow-x-auto pb-[16px] scrollbar-hide mb-[32px]">
-            <span className="text-sm font-bold text-slate-700 mr-[8px] hidden sm:block shrink-0 whitespace-nowrap">Kampus Populer:</span>
-            {campuses.map(campus => (
-              <button key={campus} onClick={() => setActiveCampus(campus)} className={`h-[40px] px-[24px] rounded-[999px] text-sm font-bold whitespace-nowrap transition-all shadow-sm border shrink-0 ${activeCampus === campus ? 'bg-teal-800 text-white border-teal-800 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-teal-500 hover:text-teal-700'}`}>{campus}</button>
-            ))}
-          </div>
-        </RevealOnScroll>
-
-        <PromoSection kosData={kosData} onNavigate={navigate} />
-
-        <RevealOnScroll direction="up" delay={200}>
-          <div className="flex justify-between items-end mb-[32px]">
-            <div>
-              <h2 className="text-3xl font-playfair font-bold text-[#241812] tracking-tight">Kost Tersedia</h2>
-              <p className="text-base text-slate-500 mt-[4px]">Menampilkan {filteredKos.length} tempat istirahat terbaik untukmu</p>
-            </div>
-          </div>
-        </RevealOnScroll>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px]">
-          {filteredKos.map((kos, index) => (
-            <RevealOnScroll key={kos.id} delay={(index % 8) * 100} direction="up" className="h-full">
-              <div onClick={() => navigate(`/detail/${kos.id}`)} className="bg-white rounded-[24px] overflow-hidden border border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-[8px] transition-all duration-300 group cursor-pointer flex flex-col h-full">
-                <div className="relative h-[220px] overflow-hidden shrink-0 bg-slate-100">
-                  <img src={kos.image} alt={kos.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  <div className="absolute top-[16px] left-[16px] flex flex-col gap-[8px] items-start z-10">
-                    {kos.isPromo && <div className="bg-red-500/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-md"><Sparkles className="w-[14px] h-[14px] text-white shrink-0" /><span className="text-xs font-bold text-white whitespace-nowrap">-{kos.discount}% OFF</span></div>}
-                    {kos.verified && <div className="bg-white/95 backdrop-blur-sm h-[32px] px-[12px] rounded-[8px] flex items-center gap-[6px] shadow-sm"><ShieldCheck className="w-[16px] h-[16px] text-teal-600 shrink-0" /><span className="text-xs font-bold text-teal-900 whitespace-nowrap">Terverifikasi</span></div>}
-                  </div>
-                  <div className="absolute top-[16px] right-[16px] bg-white/95 backdrop-blur-sm h-[32px] px-[10px] rounded-[8px] flex items-center gap-[4px] shadow-sm z-10"><Star className="w-[14px] h-[14px] fill-orange-500 text-orange-500 shrink-0" /><span className="text-xs font-bold text-slate-800">{kos.rating}</span></div>
-                  <div className="absolute bottom-[16px] left-[16px] bg-[#241812]/90 backdrop-blur-sm text-white text-xs font-bold h-[28px] flex items-center px-[12px] rounded-[8px] shadow-sm whitespace-nowrap z-10">{kos.type}</div>
-                </div>
-                
-                <div className="p-[24px] flex flex-col flex-1 relative z-10">
-                  <div className="flex items-start gap-[8px] text-slate-500 text-sm mb-[12px]"><MapPin className="w-[16px] h-[16px] mt-[2px] shrink-0 text-teal-600" /><span className="line-clamp-1 leading-relaxed">{kos.campus}</span></div>
-                  <h3 className={`font-playfair font-bold text-xl mb-[8px] line-clamp-1 transition-colors tracking-tight ${kos.isPromo ? 'text-[#241812] group-hover:text-red-600' : 'text-[#241812] group-hover:text-teal-700'}`}>{kos.name}</h3>
-                  <div className="text-sm text-slate-500 mb-[24px] line-clamp-1 flex-1 font-light">{kos.facilities.join(" • ")}</div>
-                  <div className={`flex justify-between items-center pt-[20px] border-t mt-auto ${kos.isPromo ? 'border-red-100/50' : 'border-slate-100'}`}>
-                    {kos.isPromo ? (
-                      <div><p className="text-[10px] text-red-500 mb-[4px] font-bold uppercase tracking-wider">Harga Promo</p><div className="flex flex-col"><p className="text-xs text-slate-400 line-through mb-[2px]">Rp {kos.price}</p><p className="font-extrabold text-red-600 text-lg">Rp {kos.discountedPrice}<span className="text-xs text-red-400 font-normal">/bln</span></p></div></div>
-                    ) : (
-                      <div><p className="text-xs text-slate-400 mb-[4px] uppercase tracking-wider">MULAI DARI</p><p className="font-extrabold text-orange-500 text-lg">Rp {kos.price}<span className="text-xs text-slate-400 font-normal">/bln</span></p></div>
-                    )}
-                    <button className={`w-[40px] h-[40px] flex items-center justify-center rounded-[12px] transition-all duration-300 shrink-0 mt-auto ${kos.isPromo ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' : 'bg-slate-50 text-slate-600 group-hover:bg-teal-800 group-hover:text-white'}`}><ArrowRight className="w-[20px] h-[20px] group-hover:translate-x-[2px] transition-transform" /></button>
-                  </div>
-                </div>
-              </div>
-            </RevealOnScroll>
-          ))}
+    <div className="w-full min-h-screen relative">
+      <div className="fixed bottom-[32px] left-1/2 -translate-x-1/2 z-[100]">
+        <div className="bg-white/80 backdrop-blur-md p-[6px] rounded-full shadow-2xl border border-slate-200/50 flex items-center gap-[4px]">
+          <button onClick={() => setViewMode('normal')} className={`px-[24px] py-[10px] rounded-full text-sm font-bold flex items-center gap-[8px] transition-all duration-300 ${viewMode === 'normal' ? 'bg-[#241812] text-white shadow-md' : 'text-slate-500 hover:text-[#241812]'}`}><LayoutGrid className="w-[16px] h-[16px]" /> Normal</button>
+          <button onClick={() => setViewMode('explore')} className={`px-[24px] py-[10px] rounded-full text-sm font-bold flex items-center gap-[8px] transition-all duration-300 ${viewMode === 'explore' ? 'bg-[#241812] text-white shadow-md' : 'text-slate-500 hover:text-[#241812]'}`}><Compass className="w-[16px] h-[16px]" /> Explore</button>
         </div>
       </div>
+
+      <AnimatePresence mode="wait">
+        {viewMode === 'normal' && (
+          <motion.div key="normal-view" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="w-full bg-slate-50 font-sans text-slate-800 flex flex-col pb-[100px]">
+            <section className="relative w-full h-[400px] md:h-[450px] rounded-b-[40px] md:rounded-b-[64px] overflow-hidden bg-[#241812] z-10 flex flex-col justify-center items-center px-[16px] pt-[80px] shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80" alt="Background" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#241812]/90 via-transparent to-transparent"></div>
+              <div className="w-full max-w-[896px] mx-auto text-center relative z-20">
+                <h1 className="font-playfair text-4xl md:text-6xl font-extrabold text-white mb-[32px] tracking-tight">Cari <span className="italic text-teal-200">Kost Idaman</span></h1>
+                <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-[8px] rounded-[999px] flex items-center gap-[8px]">
+                  <div className="bg-white h-[56px] rounded-[999px] flex items-center px-[20px] flex-1">
+                    <Search className="w-[20px] h-[20px] text-teal-700 mr-[12px]" />
+                    <input type="text" placeholder="Ketik nama atau area kos..." className="bg-transparent border-none outline-none w-full text-slate-800" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className="max-w-[1280px] w-full mx-auto px-[16px] sm:px-[24px] lg:px-[32px] py-[32px] flex flex-col lg:flex-row gap-[32px] relative z-20">
+              
+              <div className="w-full lg:w-[300px] shrink-0 bg-white p-[24px] rounded-[24px] border border-slate-200 shadow-sm h-max lg:sticky lg:top-[120px]">
+                <div className="flex items-center gap-[8px] mb-[24px] border-b border-slate-100 pb-[16px]"><SlidersHorizontal className="w-[18px] h-[18px] text-teal-700" /><h3 className="font-bold text-[#241812] text-lg">Filter Pencarian</h3></div>
+
+                <div className="mb-[24px]">
+                  <label className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-[12px] block">Kampus</label>
+                  <AnimatedDropdown 
+                    options={campuses}
+                    value={activeCampus}
+                    onChange={(val) => { setActiveCampus(val); setActiveFaculty('Semua'); }}
+                    buttonClassName="w-full bg-slate-50 border border-slate-200 text-[#241812] focus:border-teal-500 hover:border-teal-500"
+                  />
+                </div>
+
+                {activeCampus !== 'Semua' && facultiesByCampus[activeCampus] && (
+                  <div className="mb-[24px]">
+                    <label className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-[12px] flex items-center gap-[4px]"><Navigation className="w-[14px] h-[14px] text-teal-600"/> Urutkan Jarak</label>
+                    <AnimatedDropdown 
+                      options={['Semua', ...facultiesByCampus[activeCampus]]}
+                      value={activeFaculty}
+                      onChange={(val) => setActiveFaculty(val)}
+                      buttonClassName="w-full bg-teal-50 border border-teal-200 text-teal-800 font-bold hover:border-teal-500"
+                    />
+                  </div>
+                )}
+
+                <div className="mb-[24px]">
+                  <label className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-[12px] flex justify-between">Harga Maks <span>Rp {(maxPrice/1000000).toFixed(1)} Jt</span></label>
+                  <input type="range" min="500000" max="4000000" step="100000" value={maxPrice} onChange={(e) => setMaxPrice(parseInt(e.target.value))} className="w-full accent-teal-600" />
+                </div>
+
+                <div className="mb-[24px]">
+                  <label className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-[12px] block">Fasilitas Wajib</label>
+                  <div className="flex flex-col gap-[12px]">
+                    {['AC', 'Kamar Mandi Dalam', 'WiFi'].map(fac => (
+                      <label key={fac} className="flex items-center gap-[12px] cursor-pointer">
+                        <input type="checkbox" checked={reqFacilities.includes(fac)} onChange={() => toggleFacility(fac)} className="w-[18px] h-[18px] rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
+                        <span className="text-sm font-medium text-slate-700">{fac}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1">
+                <div className="flex justify-between items-end mb-[24px]"><h2 className="text-2xl font-playfair font-bold text-[#241812]">Hasil Pencarian ({filteredKos.length})</h2></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[24px]">
+                  {filteredKos.map((kos) => (
+                    <div key={kos.id} onClick={() => navigate(`/detail/${kos.id}`)} className="bg-white rounded-[20px] overflow-hidden border border-slate-200 hover:shadow-xl hover:-translate-y-[4px] transition-all cursor-pointer flex flex-col">
+                      <div className="relative h-[180px] bg-slate-100">
+                        <img src={kos.image} alt={kos.name} className="w-full h-full object-cover" />
+                        <div className="absolute top-[12px] left-[12px] flex flex-col gap-[8px]">{kos.isPromo && <span className="bg-red-500 text-white px-[8px] py-[2px] rounded-[6px] text-[10px] font-bold flex items-center gap-[4px]"><Sparkles className="w-[10px] h-[10px]"/> -{kos.discount}%</span>}</div>
+                      </div>
+                      <div className="p-[16px] flex flex-col flex-1">
+                        <div className="flex items-center gap-[4px] text-slate-500 text-xs mb-[8px]"><MapPin className="w-[12px] h-[12px] text-teal-600"/> {kos.campus}</div>
+                        <h3 className="font-playfair font-bold text-lg text-[#241812] mb-[8px] line-clamp-1">{kos.name}</h3>
+                        {activeFaculty !== 'Semua' && kos.distances?.[activeFaculty] && (
+                           <p className="text-xs font-bold text-teal-700 bg-teal-50 px-[8px] py-[4px] rounded-md w-max mb-[12px]">Hanya {kos.distances[activeFaculty]}m ke {activeFaculty}</p>
+                        )}
+                        <div className="mt-auto border-t border-slate-100 pt-[12px] flex justify-between items-center"><p className="font-extrabold text-orange-600">Rp {kos.isPromo ? kos.discountedPrice : kos.price}<span className="text-[10px] font-normal text-slate-400">/bln</span></p></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {viewMode === 'explore' && (
+          <motion.div key="explore-view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full min-h-screen bg-[#241812] font-sans text-white flex flex-col overflow-hidden pb-[100px]">
+            <div className="pt-[100px] pb-[16px] px-[24px] lg:px-[56px] z-20 flex flex-col md:flex-row justify-between md:items-end gap-[16px]">
+              <div><h1 className="font-playfair text-4xl md:text-5xl font-light text-[#eae0d5] tracking-tight">Kosmosphere <span className="italic text-teal-400">Explorer</span></h1><p className="text-[#eae0d5]/60 text-sm mt-[8px] font-light max-w-[600px]">Peta interaktif dengan filter jarak fakultas real-time.</p></div>
+              
+              <div className="flex flex-wrap items-center gap-[12px] bg-white/5 border border-white/10 p-[12px] rounded-[16px] backdrop-blur-md">
+                {/* Menggunakan Animated Dropdown di Mode Gelap */}
+                <div className="w-[120px]">
+                  <AnimatedDropdown 
+                    options={campuses}
+                    value={activeCampus}
+                    onChange={(val) => { setActiveCampus(val); setActiveFaculty('Semua'); }}
+                    buttonClassName="w-full bg-[#241812] border border-white/20 text-white hover:border-white/50 text-xs px-[12px] py-[8px]"
+                    menuClassName="bg-[#241812] border border-white/20 shadow-2xl text-white"
+                    itemClassName="text-white/70 hover:bg-white/10"
+                  />
+                </div>
+                
+                {activeCampus !== 'Semua' && facultiesByCampus[activeCampus] && (
+                  <div className="w-[180px]">
+                    <AnimatedDropdown 
+                      options={['Semua', ...facultiesByCampus[activeCampus]]}
+                      value={activeFaculty}
+                      onChange={(val) => setActiveFaculty(val)}
+                      placeholder="Semua Fakultas"
+                      buttonClassName="w-full bg-teal-900 border border-teal-500 text-teal-100 font-bold hover:border-teal-400 text-xs px-[12px] py-[8px]"
+                      menuClassName="bg-teal-900 border border-teal-500 shadow-2xl text-white"
+                      itemClassName="text-teal-100 hover:bg-teal-800"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center gap-[8px] px-[8px] border-l border-white/20">
+                  <span className="text-[10px] text-white/50 font-bold uppercase">Maks: Rp {(maxPrice/1000000).toFixed(1)}Jt</span>
+                  <input type="range" min="500000" max="4000000" step="100000" value={maxPrice} onChange={(e) => setMaxPrice(parseInt(e.target.value))} className="w-[80px] accent-teal-400" />
+                </div>
+              </div>
+            </div>
+
+            <div className="relative flex-1 w-full min-h-[600px] border-y border-white/10 bg-[#1a1310] overflow-hidden rounded-[32px] mx-[24px] lg:mx-[56px] my-[16px] shadow-2xl">
+              <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+
+              <AnimatePresence>
+                {activeCampus === 'Semua' && Object.entries(campusCoordinates).map(([name, coords]) => (
+                  <motion.div key={`campus-${name}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center justify-center" style={{ left: coords.x, top: coords.y }}>
+                    <div className={`absolute w-[120px] h-[120px] rounded-full ${coords.glow} blur-[40px] animate-pulse`}></div>
+                    <div className={`w-[24px] h-[24px] rounded-full border-2 ${coords.color} border-dashed animate-[spin_10s_linear_infinite]`}></div>
+                    <span className="mt-[8px] text-[10px] font-bold uppercase tracking-widest text-white/40">{name}</span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {activeCampus !== 'Semua' && (
+                  <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">
+                    <div className="w-[200px] h-[200px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-teal-500/10 blur-[60px] rounded-full"></div>
+                    <h2 className="font-playfair text-3xl text-teal-300/50 relative z-10">{activeFaculty !== 'Semua' ? activeFaculty : activeCampus}</h2>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {filteredKos.map((kos, index) => {
+                  const pos = getOrbitalPosition(kos, index, filteredKos.length);
+                  const isHovered = hoveredKosId === kos.id;
+
+                  return (
+                    <motion.div key={`kos-explore-${kos.id}`} layout initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0 }} transition={{ duration: 0.4 }} className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer z-30 flex flex-col items-center justify-center" style={{ left: pos.x, top: pos.y }} onMouseEnter={() => setHoveredKosId(kos.id)} onMouseLeave={() => setHoveredKosId(null)} onClick={() => navigate(`/detail/${kos.id}`)}>
+                      {activeCampus === 'Semua' ? (
+                        <div className="relative flex items-center justify-center">
+                          {isHovered && <motion.div layoutId="hoverRing" className="absolute w-[32px] h-[32px] rounded-full border border-white/50" />}
+                          <div className={`w-[8px] h-[8px] rounded-full transition-all duration-300 bg-teal-300 shadow-[0_0_10px_rgba(94,234,212,0.6)] ${isHovered ? 'scale-150' : 'scale-100'}`}></div>
+                        </div>
+                      ) : (
+                        <div className="relative flex flex-col items-center justify-center group">
+                          <div className={`px-[12px] py-[6px] rounded-[12px] flex flex-col items-center shadow-xl transition-all duration-300 border ${isHovered ? 'scale-110 z-50 border-teal-400 shadow-[0_0_20px_rgba(45,212,191,0.4)]' : 'scale-100 z-30 border-white/10'} ${kos.isPromo ? 'bg-red-500 text-white' : 'bg-white/95 backdrop-blur-md text-[#241812]'}`}>
+                            <span className="text-[9px] font-bold uppercase tracking-wider mb-[2px] opacity-70 line-clamp-1 max-w-[80px] text-center">{kos.name}</span>
+                            <span className="font-extrabold text-xs whitespace-nowrap">Rp {kos.isPromo ? kos.discountedPrice : kos.price}</span>
+                          </div>
+                          <div className={`mt-[6px] bg-black/60 backdrop-blur-md border rounded-full px-[8px] py-[2px] flex items-center gap-[4px] shadow-sm transition-all duration-300 ${activeFaculty !== 'Semua' ? 'border-teal-500/50' : 'border-white/20'} ${isHovered ? 'scale-110 opacity-100' : 'scale-100 opacity-80'}`}>
+                            <MapPin className={`w-[10px] h-[10px] ${activeFaculty !== 'Semua' ? 'text-teal-400' : 'text-slate-400'}`} />
+                            <span className={`text-[9px] font-bold tracking-widest ${activeFaculty !== 'Semua' ? 'text-teal-100' : 'text-white'}`}>{pos.distance}m</span>
+                          </div>
+                        </div>
+                      )}
+                      <AnimatePresence>{isHovered && <KosPreviewCard kos={kos} />}</AnimatePresence>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -1859,13 +2252,67 @@ export default {
 }
 </file>
 
+<file path="package.json">
+{
+  "name": "cosmait-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.7.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-icons": "^5.6.0",
+    "react-router-dom": "^7.14.0",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "gh-pages": "^6.3.0",
+    "globals": "^17.4.0",
+    "postcss": "^8.5.9",
+    "tailwindcss": "^3.4.19",
+    "vite": "^5.4.21"
+  }
+}
+</file>
+
 <file path="vite.config.js">
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // PENTING: Ganti 'testing' dengan nama repository GitHub Anda jika nanti diubah
+  base: '/testing/', 
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 })
 </file>
 

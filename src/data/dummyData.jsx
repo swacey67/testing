@@ -5,28 +5,34 @@ import {
   MapPin, Smartphone, Lock, Sparkles, Wifi, Coffee 
 } from 'lucide-react';
 
-// 1. Data Kampus
 export const campuses = ['Semua', 'UGM', 'UI', 'ITB', 'UB', 'Undip', 'ITS'];
 
-// 2. Data Master Kost
+export const facultiesByCampus = {
+  'UGM': ['FEB UGM', 'Fakultas Teknik', 'Fakultas Hukum', 'Fisipol'],
+  'UI': ['Fasilkom', 'FEB UI', 'Fakultas Teknik', 'FIB'],
+  'ITB': ['STEI', 'SBM', 'FTMD', 'FSRD'],
+  'UB': ['FEB UB', 'FILKOM', 'Fakultas Hukum'],
+  'Undip': ['FEB Undip', 'FSM', 'Fakultas Teknik'],
+  'ITS': ['FTEIC', 'FT-IRS', 'FTSPK']
+};
+
 const baseKosData = [
-  { id: 1, name: "KosMate Eksklusif UGM", campus: "UGM Yogyakarta, Sleman", price: "1.500.000", rating: 4.8, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 2, name: "Kos Mawar UI Depok", campus: "UI Depok, Beji", price: "1.200.000", rating: 4.5, type: "Putri", verified: true, facilities: ["Kipas", "WiFi", "Dapur Bersama"], image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 3, name: "Griya ITB Bandung", campus: "ITB Bandung, Coblong", price: "1.800.000", rating: 4.9, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Water Heater", "Parkir Mobil"], image: "https://images.unsplash.com/photo-1598928506311-c55dd1821430?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 4, name: "Kos Brawijaya Indah", campus: "UB Malang, Lowokwaru", price: "900.000", rating: 4.3, type: "Putri", verified: false, facilities: ["WiFi", "Kamar Mandi Luar", "Akses 24 Jam"], image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 5, name: "Paviliun Undip Tembalang", campus: "Undip Semarang, Tembalang", price: "1.400.000", rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Smart TV", "Dapur"], image: "https://images.unsplash.com/photo-1505691938895-1758d7bef511?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 6, name: "Kos Sukolilo ITS", campus: "ITS Surabaya, Sukolilo", price: "1.100.000", rating: 4.2, type: "Putra", verified: false, facilities: ["Kipas", "Kamar Mandi Dalam", "Parkir Motor"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 7, name: "D'Paragon Pogung", campus: "UGM Yogyakarta, Sleman", price: "2.100.000", rating: 4.9, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kulkas", "Laundry"], image: "https://images.unsplash.com/photo-1497368942940-2e061ddf5948?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 8, name: "Kos Kutek UI", campus: "UI Depok, Kukusan", price: "1.050.000", rating: 4.4, type: "Putri", verified: true, facilities: ["AC", "Kamar Mandi Luar", "Akses Kunci 24 Jam"], image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 9, name: "Asrama Cisitu ITB", campus: "ITB Bandung, Cisitu", price: "1.350.000", rating: 4.5, type: "Putra", verified: false, facilities: ["WiFi", "Water Heater", "Balkon"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/Xt149mwy-540x720.jpg" },
-  { id: 10, name: "Suhat Executive", campus: "UB Malang, Soekarno Hatta", price: "2.500.000", rating: 5.0, type: "Campur", verified: true, facilities: ["AC", "Kolam Renang", "Gym", "WiFi"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/pZNwDuDA.-540x720.jpg" },
-  { id: 11, name: "Kos Tirto Agung", campus: "Undip Semarang, Pedalangan", price: "850.000", rating: 4.1, type: "Putra", verified: false, facilities: ["Kipas", "Parkir Luas", "Kantin"], image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" },
-  { id: 12, name: "Griya Keputih ITS", campus: "ITS Surabaya, Keputih", price: "1.450.000", rating: 4.7, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Dapur Bersama", "CCTV"], image: "https://static.mamikos.com/uploads/cache/data/style/2025-01-09/91mvnVdb-540x720.jpg" },
-  { id: 13, name: "Kos Seturan Nyaman", campus: "UGM Yogyakarta, Seturan", price: "1.750.000", rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "Smart TV", "Kamar Mandi Dalam"], image: "https://static.mamikos.com/uploads/cache/data/style/2023-08-04/DlYvk8D4-540x720.jpg" },
-  { id: 14, name: "Pondok Cina Minimalis", campus: "UI Depok, Pondok Cina", price: "1.600.000", rating: 4.8, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Ruang Belajar"], image: "https://images.unsplash.com/photo-1540518614846-1536a65249a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" }
+  { id: 1, name: "KosMate Eksklusif UGM", campus: "UGM Yogyakarta, Sleman", price: "1.500.000", priceNum: 1500000, rating: 4.8, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], distances: { "FEB UGM": 300, "Fakultas Hukum": 850, "Fisipol": 700 }, image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "2 Hari yang lalu", roomsAvailable: 2, additionalFees: "Kamar berdua: +Rp 500.000/bulan. Listrik: Token prabayar (tanggungan penyewa)." },
+  { id: 2, name: "Kos Mawar UI Depok", campus: "UI Depok, Beji", price: "1.200.000", priceNum: 1200000, rating: 4.5, type: "Putri", verified: true, facilities: ["Kipas", "WiFi", "Dapur Bersama"], distances: { "Fasilkom": 400, "FEB UI": 900 }, image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "1 Minggu yang lalu", roomsAvailable: 1, additionalFees: "Kamar berdua: Tidak diizinkan. Parkir Mobil: +Rp 150.000/bulan." },
+  { id: 3, name: "Griya ITB Bandung", campus: "ITB Bandung, Coblong", price: "1.800.000", priceNum: 1800000, rating: 4.9, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Water Heater", "Parkir Mobil"], distances: { "STEI": 250, "SBM": 600 }, image: "https://static.mamikos.com/uploads/cache/data/style/2025-11-28/RWY5LhZw-360x480.jpg", lastUpdate: "Hari ini", roomsAvailable: 4, additionalFees: "Sudah termasuk air dan listrik (pemakaian wajar). Bawa alat elektronik daya besar: +Rp 50.000/item." },
+  { id: 4, name: "Kos Brawijaya Indah", campus: "UB Malang, Lowokwaru", price: "900.000", priceNum: 900000, rating: 4.3, type: "Putri", verified: false, facilities: ["WiFi", "Kamar Mandi Luar", "Akses 24 Jam"], distances: { "FEB UB": 500, "FILKOM": 800 }, image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "3 Hari yang lalu", roomsAvailable: 0, additionalFees: "Kamar berdua: +Rp 300.000/bulan. Laundry: Bayar sesuai timbangan." },
+  { id: 5, name: "Paviliun Undip Tembalang", campus: "Undip Semarang, Tembalang", price: "1.400.000", priceNum: 1400000, rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Smart TV", "Dapur Bersama"], distances: { "FEB Undip": 350, "FSM": 700 }, image: "https://static.mamikos.com/uploads/cache/data/style/2026-01-14/8zk1q5F8-540x720.jpg", lastUpdate: "2 Minggu yang lalu", roomsAvailable: 3, additionalFees: "Listrik prabayar. Tambahan orang menginap (tamu): Rp 50.000/hari." },
+  { id: 6, name: "Kos Sukolilo ITS", campus: "ITS Surabaya, Sukolilo", price: "1.100.000", priceNum: 1100000, rating: 4.2, type: "Putra", verified: false, facilities: ["Kipas", "Kamar Mandi Dalam", "Parkir Motor"], distances: { "FTEIC": 450, "FT-IRS": 900 }, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "5 Jam yang lalu", roomsAvailable: 1, additionalFees: "Air dan listrik sudah termasuk. Kamar berdua: +Rp 400.000/bulan." },
+  { id: 7, name: "D'Paragon Pogung", campus: "UGM Yogyakarta, Sleman", price: "2.100.000", priceNum: 2100000, rating: 4.9, type: "Campur", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam", "Laundry"], distances: { "FEB UGM": 1200, "Fakultas Teknik": 600 }, image: "https://static.mamikos.com/uploads/cache/data/style/2026-04-03/znaG7sT9-540x720.jpg", lastUpdate: "Kemarin", roomsAvailable: 5, additionalFees: "Harga all-in (Air, Listrik, Laundry bulanan terbatas). Bawa hewan peliharaan: Deposit +Rp 500.000." },
+  { id: 8, name: "Kos Kutek UI", campus: "UI Depok, Kukusan", price: "1.050.000", priceNum: 1050000, rating: 4.4, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Luar"], distances: { "Fakultas Teknik": 300, "FEB UI": 1500 }, image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "1 Bulan yang lalu", roomsAvailable: 2, additionalFees: "Kamar berdua: +Rp 350.000. Tamu pria dilarang masuk area kamar." },
+  { id: 9, name: "Asrama Cisitu ITB", campus: "ITB Bandung, Cisitu", price: "1.350.000", priceNum: 1350000, rating: 4.5, type: "Putra", verified: false, facilities: ["WiFi", "Water Heater", "Kamar Mandi Dalam"], distances: { "FTMD": 500, "FSRD": 900 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/Xt149mwy-540x720.jpg", lastUpdate: "Hari ini", roomsAvailable: 1, additionalFees: "Listrik token. Iuran kebersihan lingkungan: Rp 20.000/bulan." },
+  { id: 10, name: "Suhat Executive", campus: "UB Malang, Soekarno Hatta", price: "2.500.000", priceNum: 2500000, rating: 5.0, type: "Campur", verified: true, facilities: ["AC", "Kamar Mandi Dalam", "Gym", "WiFi"], distances: { "FEB UB": 1500, "Fakultas Hukum": 1800 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-01-10/pZNwDuDA.-540x720.jpg", lastUpdate: "Baru saja", roomsAvailable: 2, additionalFees: "Harga all-in. Fasilitas gym dan kolam renang gratis untuk penyewa. Kamar berdua: +Rp 800.000." },
+  { id: 11, name: "Kos Tirto Agung", campus: "Undip Semarang, Pedalangan", price: "850.000", priceNum: 850000, rating: 4.1, type: "Putra", verified: false, facilities: ["Kipas", "WiFi"], distances: { "Fakultas Teknik": 600, "FEB Undip": 1200 }, image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80", lastUpdate: "3 Minggu yang lalu", roomsAvailable: 0, additionalFees: "Listrik bayar patungan bulanan. Tidak ada parkir mobil." },
+  { id: 12, name: "Griya Keputih ITS", campus: "ITS Surabaya, Keputih", price: "1.450.000", priceNum: 1450000, rating: 4.7, type: "Putri", verified: true, facilities: ["AC", "WiFi", "Dapur Bersama", "Kamar Mandi Dalam"], distances: { "FTSPK": 400, "FTEIC": 1100 }, image: "https://static.mamikos.com/uploads/cache/data/style/2025-01-09/91mvnVdb-540x720.jpg", lastUpdate: "4 Hari yang lalu", roomsAvailable: 3, additionalFees: "Kamar berdua: +Rp 500.000. Jam malam berlaku." },
+  { id: 13, name: "Kos Seturan Nyaman", campus: "UGM Yogyakarta, Seturan", price: "1.750.000", priceNum: 1750000, rating: 4.6, type: "Campur", verified: true, facilities: ["AC", "Smart TV", "Kamar Mandi Dalam", "WiFi"], distances: { "FEB UGM": 2500, "Fisipol": 2800 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-08-04/DlYvk8D4-540x720.jpg", lastUpdate: "1 Hari yang lalu", roomsAvailable: 2, additionalFees: "Listrik token. Parkir mobil terbatas, harap konfirmasi. Kamar berdua: +Rp 450.000." },
+  { id: 14, name: "Pondok Cina Minimalis", campus: "UI Depok, Pondok Cina", price: "1.600.000", priceNum: 1600000, rating: 4.8, type: "Putra", verified: true, facilities: ["AC", "WiFi", "Kamar Mandi Dalam"], distances: { "FIB": 500, "Fasilkom": 800 }, image: "https://static.mamikos.com/uploads/cache/data/style/2023-07-13/LV0xlx2z-540x720.jpg", lastUpdate: "2 Hari yang lalu", roomsAvailable: 1, additionalFees: "Harga all-in (termasuk cuci gosok 10kg/bulan). Kamar berdua: +Rp 600.000." }
 ];
 
-// 3. Logika Generator Promo (Tereksekusi otomatis saat file di-import)
 export const kosData = (() => {
   const shuffledIndices = [...Array(baseKosData.length).keys()].sort(() => 0.5 - Math.random());
   const promoIndices = shuffledIndices.slice(0, 4);
@@ -35,32 +41,27 @@ export const kosData = (() => {
   return baseKosData.map((kos, index) => {
     if (promoIndices.includes(index)) {
       const discount = discountOptions[Math.floor(Math.random() * discountOptions.length)];
-      const originalPrice = parseInt(kos.price.replace(/\./g, ''), 10);
-      const discountedPrice = originalPrice - (originalPrice * discount / 100);
+      const discountedPriceNum = kos.priceNum - (kos.priceNum * discount / 100);
       return {
         ...kos,
         isPromo: true,
         discount,
-        discountedPrice: discountedPrice.toLocaleString('id-ID').replace(/,/g, '.')
+        discountedPriceNum: discountedPriceNum,
+        discountedPrice: discountedPriceNum.toLocaleString('id-ID').replace(/,/g, '.')
       };
     }
-    return { ...kos, isPromo: false };
+    return { ...kos, isPromo: false, discountedPriceNum: kos.priceNum };
   });
 })();
 
-// 4. Kumpulan Gambar untuk Halaman Galeri Full (Bento Box)
 export const galleryImagesPool = [
   ...baseKosData.map(k => k.image),
   "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1502672260266-1c1b5594b281?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1505691938895-1758d7bef511?auto=format&fit=crop&w=1920&q=80"
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80"
 ].sort(() => 0.5 - Math.random());
 
-// 5. Data Tim (Halaman About)
 export const teamMembers = [
   { id: 1, name: "Akmal W", role: "Ketua Kelompok", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80", bio: "Visioner di balik KosMate dengan 10 tahun pengalaman di industri proptech. Mengutamakan kenyamanan pengguna di atas segalanya." },
   { id: 2, name: "Sekarayu A", role: "Anggota #2", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80", bio: "Arsitek di balik antarmuka mewah dan pengalaman pengguna yang seamless yang membedakan KosMate dari yang lain." },
@@ -69,41 +70,31 @@ export const teamMembers = [
   { id: 5, name: "Devi I", role: "Anggota #5", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", bio: "Pengembang tangal yang menerjemahkan bahasa desain visual ke dalam baris kode pixel-perfect dengan performa tinggi." }
 ];
 
-// 6. Data Fitur (Landing Page)
 export const features = [
   { title: "Smart Search & Filter", description: "Filter lengkap (lokasi, harga, fasilitas) bantu kamu temukan kos idaman tanpa ribet.", icon: <Search className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Informasi Transparan", description: "Foto asli, deskripsi kamar, rincian harga lengkap. No hidden fee!", icon: <Home className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Verified Kost", description: "Setiap properti dicek keasliannya. Label 'Verified' menjamin keamanan dan bebas penipuan.", icon: <ShieldCheck className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Review & Rating Asli", description: "Ulasan jujur dari penghuni sebelumnya untuk gambaran realistis kondisi kos sebenarnya.", icon: <Star className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Booking & Bayar Online", description: "Reservasi kamar dan bayar aman dari mana saja. Cocok buat kamu yang belum bisa survei.", icon: <CreditCard className="w-[32px] h-[32px] text-teal-500 shrink-0" /> },
-  { title: "Virtual Tour 360°", description: "Lihat kondisi kamar secara menyeluruh lewat layar HP kamu sebelum deal.", icon: <Eye className="w-[32px] h-[32px] text-teal-500 shrink-0" /> }
+  { title: "Informasi Transparan", description: "Foto asli, deskripsi kamar, rincian harga lengkap. No hidden fee!", icon: <Home className="w-[32px] h-[32px] text-teal-500 shrink-0" /> }
 ];
 
-// 7. Data Langkah Penggunaan (Landing Page)
 export const steps = [
   { step: "01", title: "Cari Kos Sesuai Lokasi", description: "Gunakan fitur pencarian untuk menemukan kos di dekat kampus atau kantor.", icon: <MapPin className="w-[40px] h-[40px] text-teal-600 shrink-0" /> },
-  { step: "02", title: "Bandingkan Pilihan", description: "Cek fasilitas, baca review asli, dan bandingkan harga antar kos dengan mudah.", icon: <Search className="w-[40px] h-[40px] text-teal-600 shrink-0" /> },
-  { step: "03", title: "Pesan & Hubungi Pemilik", description: "Booking langsung via aplikasi dengan pembayaran aman tanpa perantara.", icon: <Smartphone className="w-[40px] h-[40px] text-teal-600 shrink-0" /> }
+  { step: "02", title: "Bandingkan Pilihan", description: "Cek fasilitas, baca review asli, dan bandingkan harga antar kos dengan mudah.", icon: <Search className="w-[40px] h-[40px] text-teal-600 shrink-0" /> }
 ];
 
-// 8. Data Slideshow Lokasi
+// INI YANG BARU: 5 Slide Lengkap dengan Link Unsplash Aktif!
 export const locationSlides = [
-  { img: "https://ui.kompas.id/wp-content/uploads/2020/09/kampus-ui-shutterstock-featured-default.jpg", text: ["DEPOK,", "UNIVERSITAS INDONESIA"] },
-  { img: "https://uisi.ac.id/assets/upload/article/1280x572/69a541e6e8cfc4697562707faa0795c8.jpg", text: ["BANDUNG,", "INSTITUT TEKNOLOGI BANDUNG"] },
-  { img: "https://cdn.antaranews.com/cache/1200x800/2021/06/09/IMG_20210609_235450.jpg", text: ["YOGYAKARTA,", "UNIVERSITAS GADJAH MADA"] },
-  { img: "https://prasetya.ub.ac.id/wp-content/uploads/2022/01/Unibraw-Rektorat-Pagi-scaled.jpg", text: ["MALANG,", "UNIVERSITAS BRAWIJAYA"] },
-  { img: "https://www.its.ac.id/wp-content/uploads/2020/12/slider-1-1.jpg", text: ["SURABAYA,", "INSTITUT TEKNOLOGI SEP NOPEMBER"] },
+  { img: "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvMzYvMzMvNzA2ZWNhMjctZTkzZC00ZjM0LWI0NTAtNTFjNDMwNjgwOGYwLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiXSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ", text: ["DEPOK,", "UNIVERSITAS INDONESIA"] },
+  { img: "https://zjglidcehtsqqqhbdxyp.supabase.co/storage/v1/object/public/atourin/images/destination/bandung/institut-teknologi-bandung-profile1695282317.jpeg?x-image-process=image/resize,p_100,limit_1/imageslim", text: ["BANDUNG,", "INSTITUT TEKNOLOGI BANDUNG"] },
+  { img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEge2UsCaDGcOmMHAtqt5uPbJZavCmiYjf4fmRQs5HRteD3frHVUz_WJSUDwIbgBONT98lT09LAYnL7qiK2xc2x9mZfGlaa7RcEiwHK6q01Sdf1cZdGinEAb6O04A6M_xzKikx5yTtOo_Pfu/s1300/2017_10_17_34201_1508237640._large.jpg", text: ["YOGYAKARTA,", "UNIVERSITAS GADJAH MADA"] },
+  { img: "https://serayunews.pw/wp-content/uploads/2025/01/Universitas-Brawijaya-.jpg", text: ["MALANG,", "UNIVERSITAS BRAWIJAYA"] },
+  { img: "https://tugujatim.id/wp-content/uploads/2024/03/5f6b8d6b-87aa-408d-91d6-000d50343e56-1.jpeg", text: ["SURABAYA,", "INSTITUT TEKNOLOGI SEP NOPEMBER"] },
 ];
 
-// 9. Fungsi Helper Detail Kost (Menggabungkan Gambar Acak & Deskripsi)
 export const getRichKosData = (kos) => {
   const interiorPool = [
-    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1502672260266-1c1b5594b281?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1505691938895-1758d7bef511?auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1512918580421-6c84b423dd71?auto=format&fit=crop&w=1920&q=80",
+    "https://i0.wp.com/rancangrekaruang.id/wp-content/uploads/2023/01/Arsitek-Semarang-Desain-Interior-Kost-Modern-Kontemporer-Ibu-Yutta-07.jpg",
+    "https://www.ruparupa.com/blog/wp-content/uploads/2021/08/Screenshot-2021-08-09-170709.png",
+    "https://arsigriya.id/wp-content/uploads/2023/06/12-2.png",
+    "https://rancangrekaruang.id/wp-content/uploads/2023/01/Arsitek-Semarang-Desain-Interior-Kost-Modern-Kontemporer-Ibu-Yutta-00.jpg"
   ];
   
   const shuffledInteriors = interiorPool.filter(img => img !== kos.image).sort(() => 0.5 - Math.random()).slice(0, 4);
@@ -111,17 +102,27 @@ export const getRichKosData = (kos) => {
   return {
     ...kos,
     gallery: [kos.image, ...shuffledInteriors],
-    description: `Rasakan pengalaman menetap yang tak tertandingi di ${kos.name}. Dirancang khusus untuk mengutamakan privasi dan kenyamanan, properti ini menawarkan perpaduan sempurna antara estetika modern dan fungsionalitas.\n\nSetiap sudut ruangan didesain dengan saksama menggunakan material premium, pencahayaan alami yang optimal, serta sirkulasi udara yang menyegarkan. Berlokasi strategis hanya beberapa langkah dari ${kos.campus}, properti ini membebaskan Anda dari stres kemacetan harian. Nikmati akses eksklusif ke berbagai fasilitas kelas atas yang dikurasi khusus untuk mendukung gaya hidup produktif sekaligus memberikan relaksasi maksimal.`,
+    description: `Rasakan pengalaman menetap yang tak tertandingi di ${kos.name}. Dirancang khusus untuk mengutamakan privasi dan kenyamanan, properti ini menawarkan perpaduan sempurna antara estetika modern dan fungsionalitas.\n\nBerlokasi strategis hanya beberapa langkah dari ${kos.campus}, properti ini membebaskan Anda dari stres kemacetan harian.`,
     uniqueFeatures: [
       { title: "Smart Door Lock", desc: "Akses kamar menggunakan PIN & RFID khusus.", icon: <Lock className="w-[20px] h-[20px] text-[#241812]" /> },
       { title: "Weekly Cleaning", desc: "Layanan pembersihan kamar gratis setiap minggunya.", icon: <Sparkles className="w-[20px] h-[20px] text-[#241812]" /> },
-      { title: "High-Speed WiFi", desc: "Koneksi internet dedikasi hingga 100Mbps.", icon: <Wifi className="w-[20px] h-[20px] text-[#241812]" /> },
-      { title: "Premium Lounge", desc: "Area komunal mewah untuk bekerja atau bersantai.", icon: <Coffee className="w-[20px] h-[20px] text-[#241812]" /> }
+      { title: "High-Speed WiFi", desc: "Koneksi internet dedikasi hingga 100Mbps.", icon: <Wifi className="w-[20px] h-[20px] text-[#241812]" /> }
+    ],
+    rules: [
+      "Tamu menginap wajib lapor pemilik/penjaga kos.",
+      "Dilarang membawa hewan peliharaan (anjing/kucing).",
+      "Dilarang merokok di dalam kamar tidur.",
+      "Akses pintu utama/pagar ditutup pukul 23:00 WIB (kecuali shift malam)."
+    ],
+    terms: [
+      "Penyewa wajib melampirkan KTP dan Kartu Tanda Mahasiswa / ID Card Pegawai yang masih berlaku saat pengajuan sewa.",
+      "Uang Muka (Booking) tidak dapat dikembalikan apabila penyewa membatalkan sewa sepihak.",
+      "Pembayaran sewa bulanan wajib dilunasi paling lambat tanggal 5 setiap bulannya.",
+      "Minimal masa sewa adalah 3 bulan. Pemutusan sewa di bawah 3 bulan akan dikenakan penalti sebesar 50% dari harga sewa satu bulan."
     ],
     reviewsList: [
-      { id: 1, name: "Joko Wi", date: "Oktober 2025", rating: 5, text: "Sangat nyaman dan aman. Penjaganya super ramah, fasilitas selalu bersih dan wangi. Worth the price!" },
-      { id: 2, name: "Aldi Burger", date: "Agustus 2025", rating: kos.rating >= 4.5 ? 5 : 4, text: "Desain interior kamarnya sangat estetik. Cocok banget buat mahasiswa/pekerja karena suasananya tenang banget." },
-      { id: 3, name: "Pak Basu", date: "Juli 2025", rating: 5, text: "Lokasi paling strategis! Gampang cari makan dan akses ke kampus benar-benar tinggal jalan kaki saja." }
+      { id: 1, name: "Joko Wi", date: "Oktober 2025", rating: 5, text: "Sangat nyaman dan aman. Worth the price!" },
+      { id: 2, name: "Aldi Burger", date: "Agustus 2025", rating: kos.rating >= 4.5 ? 5 : 4, text: "Desain interior kamarnya sangat estetik. Cocok banget." }
     ]
   };
 };
