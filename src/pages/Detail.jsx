@@ -1,49 +1,72 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
-// INI YANG SEBELUMNYA KURANG: ChevronRight sekarang sudah masuk ke daftar import!
 import { 
   ChevronLeft, ChevronRight, MapPin, ShieldCheck, Star, 
   Sparkles, Camera, Coffee, ShoppingBag, Landmark, Map, 
   Share, Heart, ArrowDown, CheckCircle2, X, 
   Calendar as CalendarIcon, ArrowRight, Clock, 
-  BedDouble, AlertCircle, FileText, Bus, Navigation 
+  BedDouble, AlertCircle, FileText, Bus, Navigation
 } from 'lucide-react';
 
 import { kosData, getRichKosData } from '../data/dummyData';
 import RevealOnScroll from '../components/RevealOnScroll';
 import ChatDrawer from '../components/ChatDrawer';
+import VirtualTourModal from '../components/VirtualTourModal';
 
 // ======================================================================
 // KOMPONEN: FULLSCREEN GALLERY MODAL
 // ======================================================================
 const GalleryModal = ({ isOpen, onClose, images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousFocus = document.activeElement;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev + 1) % images.length);
+      if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+      
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); } 
+        else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    setTimeout(() => modalRef.current?.querySelector('button')?.focus(), 100);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (previousFocus) previousFocus.focus();
+    };
+  }, [isOpen, onClose, images.length]);
 
   if (!isOpen) return null;
 
-  const nextImg = (e) => { e.stopPropagation(); setCurrentIndex((prev) => (prev + 1) % images.length); };
-  const prevImg = (e) => { e.stopPropagation(); setCurrentIndex((prev) => (prev - 1 + images.length) % images.length); };
-
   return (
-    <div className="fixed inset-0 z-[300] flex flex-col bg-black/95 backdrop-blur-md">
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-label="Galeri Foto" className="fixed inset-0 z-[300] flex flex-col bg-black/95 backdrop-blur-md">
       <div className="flex justify-between items-center p-[24px] text-white">
         <span className="font-bold tracking-widest text-sm uppercase">Foto {currentIndex + 1} / {images.length}</span>
-        <button onClick={onClose} className="p-[8px] bg-white/10 hover:bg-white/20 rounded-full transition-colors"><X className="w-[24px] h-[24px]" /></button>
+        <button onClick={onClose} aria-label="Tutup galeri" className="p-[8px] bg-white/10 hover:bg-white/20 rounded-full transition-colors"><X className="w-[24px] h-[24px]" /></button>
       </div>
       
       <div className="flex-1 relative flex items-center justify-center overflow-hidden px-[16px]">
-        <button onClick={prevImg} className="absolute left-[24px] md:left-[48px] z-10 w-[48px] h-[48px] md:w-[64px] md:h-[64px] bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"><ChevronLeft className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
-        <motion.img key={currentIndex} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} src={images[currentIndex]} alt="Kos Gallery" className="max-w-full max-h-full object-contain rounded-[16px] shadow-2xl" />
-        <button onClick={nextImg} className="absolute right-[24px] md:right-[48px] z-10 w-[48px] h-[48px] md:w-[64px] md:h-[64px] bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"><ChevronRight className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
+        <button onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)} aria-label="Foto sebelumnya" className="absolute left-[24px] md:left-[48px] z-10 w-[48px] h-[48px] md:w-[64px] md:h-[64px] bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"><ChevronLeft className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
+        <motion.img key={currentIndex} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} src={images[currentIndex]} alt={`Foto interior properti ${currentIndex + 1}`} className="max-w-full max-h-full object-contain rounded-[16px] shadow-2xl" />
+        <button onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)} aria-label="Foto berikutnya" className="absolute right-[24px] md:right-[48px] z-10 w-[48px] h-[48px] md:w-[64px] md:h-[64px] bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"><ChevronRight className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] shrink-0" /></button>
       </div>
       
       <div className="p-[24px] flex justify-center gap-[12px] overflow-x-auto">
         {images.map((img, idx) => (
-          <div key={idx} onClick={() => setCurrentIndex(idx)} className={`w-[60px] h-[60px] rounded-[8px] cursor-pointer overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-teal-500 scale-110 opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}>
-            <img src={img} alt="Thumb" className="w-full h-full object-cover" />
-          </div>
+          <button key={idx} onClick={() => setCurrentIndex(idx)} aria-label={`Lihat thumbnail interior ${idx + 1}`} className={`w-[60px] h-[60px] rounded-[8px] cursor-pointer overflow-hidden border-2 transition-all p-0 ${idx === currentIndex ? 'border-teal-500 scale-110 opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}>
+            <img src={img} alt={`Thumbnail interior properti ${idx + 1}`} className="w-full h-full object-cover" />
+          </button>
         ))}
       </div>
     </div>
@@ -53,17 +76,49 @@ const GalleryModal = ({ isOpen, onClose, images }) => {
 // ======================================================================
 // KOMPONEN: MULTI-STEP BOOKING MODAL
 // ======================================================================
-const BookingModal = ({ isOpen, onClose, kos }) => {
+const BookingModal = ({ isOpen, onClose, kos, onSuccess }) => {
   const [step, setStep] = useState(1);
   const [startDate, setStartDate] = useState('');
   const [paymentOption, setPaymentOption] = useState('full');
+  const [bookingId] = useState(() => Math.floor(Math.random() * 90000) + 10000);
+  
+  const modalRef = useRef(null);
+  const dateInputContainerRef = useRef(null);
   
   useEffect(() => {
-    if (isOpen) { setStep(1); setStartDate(''); setPaymentOption('full'); }
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        setStep(1);
+        setStartDate('');
+        setPaymentOption('full');
+      }, 0);
+      return () => clearTimeout(timer);
+    }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousFocus = document.activeElement;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll('button, input');
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); } 
+        else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    setTimeout(() => modalRef.current?.querySelector('input, button')?.focus(), 100);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (previousFocus) previousFocus.focus();
+    };
+  }, [isOpen, onClose, step]);
 
+  if (!isOpen) return null;
   const handleNext = () => { if (startDate) setStep(2); };
 
   const baseSewa = kos.isPromo ? kos.discountedPriceNum : kos.priceNum;
@@ -73,26 +128,31 @@ const BookingModal = ({ isOpen, onClose, kos }) => {
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center px-[24px]">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-[#241812]/80 backdrop-blur-sm cursor-pointer" />
-      <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="relative w-full max-w-[500px] bg-white rounded-[32px] p-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] overflow-y-auto scrollbar-hide">
-        <button onClick={onClose} className="absolute top-[24px] right-[24px] text-slate-400 hover:text-[#241812] transition-colors z-10"><X className="w-[24px] h-[24px]" /></button>
+      <motion.div ref={modalRef} role="dialog" aria-modal="true" aria-label="Formulir Pengajuan Sewa" initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="relative w-full max-w-[500px] bg-white rounded-[32px] p-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] overflow-y-auto scrollbar-hide">
+        <button onClick={onClose} aria-label="Tutup modal" className="absolute top-[24px] right-[24px] text-slate-400 hover:text-[#241812] transition-colors z-10"><X className="w-[24px] h-[24px]" /></button>
 
         <AnimatePresence mode="wait">
           {step === 1 && (
-            <motion.div key="step-1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="flex flex-col w-full">
+            <motion.form key="step-1" onSubmit={(e) => { e.preventDefault(); handleNext(); }} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="flex flex-col w-full" aria-label="Langkah 1: Detail Pengajuan">
               <h2 className="font-playfair text-3xl font-bold text-[#241812] mb-[8px] tracking-tight">Pengajuan Sewa</h2>
               <p className="text-slate-500 mb-[24px] text-sm">Silakan lengkapi detail pengajuan untuk <strong>{kos.name}</strong>.</p>
 
-              <div className="mb-[24px]">
+              <div className="mb-[24px]" ref={dateInputContainerRef}>
                 <label className="text-xs uppercase tracking-widest font-bold text-[#241812]/70 mb-[12px] block">Mulai Ngekos</label>
                 <div className="flex items-center w-full bg-slate-50 border border-slate-200 rounded-[16px] focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-100 transition-all overflow-hidden">
-                  <div className="pl-[16px] pr-[12px] border-r border-slate-200 h-[56px] flex items-center bg-white">
-                    <CalendarIcon className="h-[20px] w-[20px] text-teal-600" />
-                  </div>
+                  <div className="pl-[16px] pr-[12px] border-r border-slate-200 h-[56px] flex items-center bg-white"><CalendarIcon className="h-[20px] w-[20px] text-teal-600" /></div>
                   <input 
                     type="date" 
+                    aria-label="Tanggal mulai ngekos" 
                     value={startDate} 
                     onChange={(e) => setStartDate(e.target.value)} 
+                    onFocus={() => {
+                      setTimeout(() => {
+                        dateInputContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 300);
+                    }}
                     className="w-full h-[56px] bg-transparent text-[#241812] text-sm px-[16px] outline-none" 
+                    required 
                   />
                 </div>
               </div>
@@ -100,14 +160,14 @@ const BookingModal = ({ isOpen, onClose, kos }) => {
               <div className="mb-[32px]">
                 <label className="text-xs uppercase tracking-widest font-bold text-[#241812]/70 mb-[12px] block">Skema Pembayaran Awal</label>
                 <div className="grid grid-cols-2 gap-[12px]">
-                  <div onClick={() => setPaymentOption('dp')} className={`border-[2px] rounded-[16px] p-[16px] cursor-pointer transition-all ${paymentOption === 'dp' ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-white hover:border-teal-300'}`}>
+                  <button type="button" onClick={() => setPaymentOption('dp')} aria-pressed={paymentOption === 'dp'} className={`text-left border-[2px] rounded-[16px] p-[16px] cursor-pointer transition-all ${paymentOption === 'dp' ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-white hover:border-teal-300'}`}>
                     <div className="flex justify-between items-start mb-[4px]"><p className="font-bold text-[#241812]">Bayar DP</p><div className={`w-[16px] h-[16px] rounded-full border-[2px] flex items-center justify-center ${paymentOption === 'dp' ? 'border-teal-600' : 'border-slate-300'}`}>{paymentOption === 'dp' && <div className="w-[8px] h-[8px] bg-teal-600 rounded-full"></div>}</div></div>
                     <p className="text-xs text-slate-500">Amankan kamar dengan DP saja.</p>
-                  </div>
-                  <div onClick={() => setPaymentOption('full')} className={`border-[2px] rounded-[16px] p-[16px] cursor-pointer transition-all ${paymentOption === 'full' ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-white hover:border-teal-300'}`}>
+                  </button>
+                  <button type="button" onClick={() => setPaymentOption('full')} aria-pressed={paymentOption === 'full'} className={`text-left border-[2px] rounded-[16px] p-[16px] cursor-pointer transition-all ${paymentOption === 'full' ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-white hover:border-teal-300'}`}>
                     <div className="flex justify-between items-start mb-[4px]"><p className="font-bold text-[#241812]">Bayar Lunas</p><div className={`w-[16px] h-[16px] rounded-full border-[2px] flex items-center justify-center ${paymentOption === 'full' ? 'border-teal-600' : 'border-slate-300'}`}>{paymentOption === 'full' && <div className="w-[8px] h-[8px] bg-teal-600 rounded-full"></div>}</div></div>
                     <p className="text-xs text-slate-500">DP + Harga sewa 1 bulan.</p>
-                  </div>
+                  </button>
                 </div>
               </div>
 
@@ -120,10 +180,10 @@ const BookingModal = ({ isOpen, onClose, kos }) => {
                 <div className="flex justify-between items-center pt-[12px] border-t border-slate-200 mt-[4px]"><span className="font-bold text-[#241812]">Total Tagihan</span><span className="font-bold text-teal-700 text-xl">Rp {totalTagihan.toLocaleString('id-ID').replace(/,/g, '.')}</span></div>
               </div>
 
-              <button onClick={handleNext} disabled={!startDate} className="w-full h-[56px] bg-[#241812] text-white rounded-[16px] font-bold shadow-lg hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-[8px]">
+              <button type="submit" disabled={!startDate} className="w-full h-[56px] bg-[#241812] text-white rounded-[16px] font-bold shadow-lg hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-[8px]">
                 Konfirmasi & Ajukan <ArrowRight className="w-[18px] h-[18px]" />
               </button>
-            </motion.div>
+            </motion.form>
           )}
 
           {step === 2 && (
@@ -133,11 +193,11 @@ const BookingModal = ({ isOpen, onClose, kos }) => {
               <p className="text-slate-600 mb-[32px] leading-relaxed text-sm">Permintaan sewa Anda untuk <strong>{kos.name}</strong> mulai tanggal <strong>{new Date(startDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> telah diteruskan ke pemilik.</p>
               
               <div className="w-full bg-slate-50 p-[16px] rounded-[16px] border border-slate-100 mb-[32px]">
-                <div className="flex justify-between text-sm mb-[8px]"><span className="text-slate-500">ID Booking</span><span className="font-bold text-[#241812]">#KM-{Math.floor(Math.random() * 90000) + 10000}</span></div>
+                <div className="flex justify-between text-sm mb-[8px]"><span className="text-slate-500">ID Booking</span><span className="font-bold text-[#241812]">#KM-{bookingId}</span></div>
                 <div className="flex justify-between text-sm"><span className="text-slate-500">Status</span><span className="font-bold text-orange-600 bg-orange-100 px-[8px] py-[2px] rounded">Menunggu Verifikasi</span></div>
               </div>
 
-              <button onClick={() => { onClose(); navigate('/'); }} className="w-full h-[56px] bg-teal-700 text-white rounded-[16px] font-bold shadow-[0_10px_20px_rgba(15,118,110,0.2)] hover:bg-teal-800 hover:-translate-y-[2px] transition-all">
+              <button onClick={() => { onClose(); onSuccess(); }} className="w-full h-[56px] bg-teal-700 text-white rounded-[16px] font-bold shadow-[0_10px_20px_rgba(15,118,110,0.2)] hover:bg-teal-800 hover:-translate-y-[2px] transition-all">
                 Menuju Dashboard
               </button>
             </motion.div>
@@ -159,12 +219,13 @@ export default function Detail() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isVirtualTourOpen, setIsVirtualTourOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLocationTab, setActiveLocationTab] = useState('terdekat');
   
   const baseKos = kosData.find(k => k.id === parseInt(kosId)) || kosData[0];
-  const kos = getRichKosData(baseKos);
+  const kos = useMemo(() => getRichKosData(baseKos), [baseKos]);
 
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
@@ -196,20 +257,27 @@ export default function Detail() {
   return (
     <div className="w-full overflow-x-hidden bg-black font-sans text-[#241812] flex flex-col">
       <AnimatePresence>
-        {isBookingOpen && <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} kos={kos} />}
+        {isVirtualTourOpen && (
+          <VirtualTourModal 
+            isOpen={isVirtualTourOpen} 
+            onClose={() => setIsVirtualTourOpen(false)} 
+            kos={kos} 
+          />
+        )}
+        {isBookingOpen && <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} kos={kos} onSuccess={() => navigate('/')} />}
         {isGalleryOpen && <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} images={kos.gallery} />}
       </AnimatePresence>
 
       <div className={`fixed top-0 w-full h-[80px] z-40 flex items-center justify-between px-[24px] lg:px-[56px] transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-b border-slate-200 shadow-sm' : 'bg-gradient-to-b from-black/60 to-transparent'}`}>
         <button onClick={() => navigate('/search')} className={`flex items-center gap-[8px] font-bold transition-colors ${isScrolled ? 'text-[#241812] hover:text-teal-700' : 'text-white hover:text-white/70'}`}><ChevronLeft className="w-[20px] h-[20px]" /> <span className="hidden md:inline">Kembali</span></button>
         <div className="flex items-center gap-[16px]">
-          <button className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-[#241812]' : 'text-white hover:text-white/70'}`}><Share className="w-[18px] h-[18px]" /> <span className="hidden md:inline">Bagikan</span></button>
-          <button onClick={() => setIsSaved(!isSaved)} className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-red-500' : 'text-white hover:text-red-400'}`}><Heart className={`w-[18px] h-[18px] ${isSaved ? 'fill-red-500 text-red-500' : ''}`} /> <span className="hidden md:inline">Simpan</span></button>
+          <button aria-label="Bagikan properti" className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-[#241812]' : 'text-white hover:text-white/70'}`}><Share className="w-[18px] h-[18px]" /> <span className="hidden md:inline">Bagikan</span></button>
+          <button aria-label={isSaved ? "Hapus dari simpanan" : "Simpan properti"} onClick={() => setIsSaved(!isSaved)} className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-red-500' : 'text-white hover:text-red-400'}`}><Heart className={`w-[18px] h-[18px] ${isSaved ? 'fill-red-500 text-red-500' : ''}`} /> <span className="hidden md:inline">Simpan</span></button>
         </div>
       </div>
 
       <div ref={heroRef} className="relative w-full h-screen sticky top-0 overflow-hidden z-0">
-        <motion.img style={{ y: heroY, scale: heroScale }} src={kos.gallery[0]} alt={kos.name} className="absolute inset-0 w-full h-full object-cover" />
+        <motion.img style={{ y: heroY, scale: heroScale }} src={kos.gallery[0]} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <motion.div style={{ opacity: heroOpacity }} className="absolute inset-0 flex flex-col justify-end items-center text-center pb-[15vh] px-[24px]">
@@ -240,20 +308,36 @@ export default function Detail() {
             </RevealOnScroll>
 
             <RevealOnScroll direction="up">
-              <div className="grid grid-cols-2 gap-[12px] md:gap-[16px] mb-[64px]">
-                <div onClick={() => setIsGalleryOpen(true)} className="h-[250px] md:h-[350px] rounded-[24px] overflow-hidden group relative cursor-pointer shadow-sm">
-                  <img src={kos.gallery[1]} alt="Interior 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
-                </div>
-                <div onClick={() => setIsGalleryOpen(true)} className="h-[250px] md:h-[350px] rounded-[24px] overflow-hidden group relative cursor-pointer shadow-sm">
-                  <img src={kos.gallery[2]} alt="Interior 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-[#241812]/80 backdrop-blur-md text-white px-[20px] py-[10px] rounded-full text-sm font-bold flex items-center gap-[8px] shadow-xl pointer-events-auto hover:bg-[#241812] transition-colors">
-                      <Camera className="w-[16px] h-[16px]" /> Lihat Semua Foto
+              <div className="mb-[64px]">
+                <div className="grid grid-cols-2 gap-[12px] md:gap-[16px] mb-[12px]">
+                  <button onClick={() => setIsGalleryOpen(true)} aria-label="Buka galeri foto" className="h-[250px] md:h-[350px] rounded-[24px] overflow-hidden group relative cursor-pointer shadow-sm p-0 border-0">
+                    <img src={kos.gallery[1]} alt={`Foto interior kamar ${kos.name} bagian 1`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                  </button>
+                  <button onClick={() => setIsGalleryOpen(true)} aria-label="Buka galeri foto" className="h-[250px] md:h-[350px] rounded-[24px] overflow-hidden group relative cursor-pointer shadow-sm p-0 border-0">
+                    <img src={kos.gallery[2]} alt={`Foto interior kamar ${kos.name} bagian 2`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="bg-[#241812]/80 backdrop-blur-md text-white px-[20px] py-[10px] rounded-full text-sm font-bold flex items-center gap-[8px] shadow-xl pointer-events-auto hover:bg-[#241812] transition-colors">
+                        <Camera className="w-[16px] h-[16px]" /> Lihat Semua Foto
+                      </div>
                     </div>
-                  </div>
+                  </button>
                 </div>
+                
+                <button
+                  onClick={() => setIsVirtualTourOpen(true)}
+                  aria-label="Buka virtual tour 360 derajat"
+                  className="w-full h-[64px] bg-[#241812] text-white rounded-[20px] font-bold flex items-center justify-center gap-[12px] hover:bg-black transition-all hover:-translate-y-[2px] shadow-lg group border-0 mt-[4px]"
+                >
+                  <div className="w-[32px] h-[32px] rounded-full border-2 border-white/30 flex items-center justify-center group-hover:border-teal-400 transition-colors shrink-0">
+                    <div className="w-[10px] h-[10px] rounded-full bg-teal-400"></div>
+                  </div>
+                  Virtual Tour 360°
+                  <span className="text-xs text-white/40 font-normal ml-auto pr-[4px] tracking-wider hidden md:block">
+                    Seret untuk menjelajah
+                  </span>
+                </button>
               </div>
             </RevealOnScroll>
 
@@ -299,7 +383,7 @@ export default function Detail() {
                 <h2 className="font-playfair text-4xl font-bold text-[#241812] mb-[8px] tracking-tight">Lokasi dan lingkungan sekitar</h2>
                 <p className="flex items-center gap-[8px] text-slate-500 font-medium mb-[32px]"><MapPin className="w-[16px] h-[16px] text-teal-600" /> Kawasan {kos.campus}</p>
                 <div className="relative w-full h-[300px] bg-slate-200 rounded-[32px] overflow-hidden mb-[40px] group cursor-pointer border border-slate-200 shadow-inner">
-                  <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80" alt="Map Visualization" className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-700" />
+                  <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80" alt="" className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#241812]/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-colors duration-500"></div>
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                      <div className="w-[80px] h-[80px] bg-teal-500/20 rounded-full animate-ping absolute -inset-[25px]"></div>

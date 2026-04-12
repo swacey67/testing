@@ -62,8 +62,5 @@
   width: 100%;
 }
 
-/* FIX BAYANGAN HITAM: Menghapus shadow penyebab glitch saat animasi GPU berjalan */
-.shadow-2xl, 
-.shadow-\[0_-30px_60px_rgba\(0\,0\,0\,0\.9\)\] {
-  box-shadow: none !important;
-}
+/* CATATAN: Rule shadow-2xl global yang merusak komponen telah dihapus. 
+   Shadow ditangani secara lokal (drop-shadow & will-change-transform) di komponen animasi (Landing.jsx). */

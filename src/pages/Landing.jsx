@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate, useAnimationFrame } from 'framer-motion';
 import { Search, Home, ShieldCheck, Star, CreditCard, Eye, MapPin, Smartphone } from 'lucide-react';
 
-// IMPORT KOMPONEN EKSTERNAL (Membersihkan Penumpukan Kode)
+// IMPORT KOMPONEN EKSTERNAL
 import RevealOnScroll from '../components/RevealOnScroll';
 import SlideshowGallery from '../components/SlideshowGallery';
 
 // ======================================================================
-// DATA LOKAL (Ikon dibersihkan dari warna bawaan agar hover effect bekerja)
+// DATA LOKAL
 // ======================================================================
 const features = [
   { title: "Smart Search", description: "Filter presisi membantu Anda menemukan properti idaman tanpa membuang waktu.", icon: <Search className="w-[28px] h-[28px] stroke-[1.5]" /> },
@@ -44,6 +44,17 @@ const InteractiveGridSection = ({ children, className, id, refProp, style }) => 
   const mouseY = useMotionValue(-1000);
   const gridOffsetX = useMotionValue(0);
   const gridOffsetY = useMotionValue(0);
+  const isVisible = useRef(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisible.current = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handleMouseMove = (e) => {
     const { left, top } = e.currentTarget.getBoundingClientRect();
@@ -56,8 +67,8 @@ const InteractiveGridSection = ({ children, className, id, refProp, style }) => 
     mouseY.set(-1000);
   };
 
-  // Animasi infinite scroll grid
   useAnimationFrame(() => {
+    if (!isVisible.current) return;
     gridOffsetX.set((gridOffsetX.get() + 0.4) % 54);
     gridOffsetY.set((gridOffsetY.get() + 0.4) % 54);
   });
@@ -67,7 +78,11 @@ const InteractiveGridSection = ({ children, className, id, refProp, style }) => 
   return (
     <motion.section
       id={id}
-      ref={refProp}
+      ref={(node) => {
+        sectionRef.current = node;
+        if (typeof refProp === 'function') refProp(node);
+        else if (refProp) refProp.current = node;
+      }}
       style={style}
       className={`relative ${className}`}
       onMouseMove={handleMouseMove}
@@ -98,17 +113,17 @@ export default function Landing() {
   const navigate = useNavigate();
   const section2Ref = useRef(null);
 
-  // Animasi Stacking Card (Diukur dari ujung atas layar agar tidak ada black glitch)
   const { scrollYProgress } = useScroll({
     target: section2Ref,
     offset: ['start end', 'start start'],
   });
 
-  const scale1 = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, -5]);
+  // LOGIKA ANIMASI BARU (Luxury / Premium Feel)
+  const opacity1 = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scale1   = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
-  const scale2 = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [5, 0]);
+  const y2       = useTransform(scrollYProgress, [0, 1], ['6vh', '0vh']);
+  const opacity2 = useTransform(scrollYProgress, [0.1, 0.7], [0, 1]);
 
   return (
     <div className="w-full overflow-x-hidden font-sans animate-in fade-in duration-700 flex flex-col bg-black">
@@ -117,8 +132,8 @@ export default function Landing() {
         
         {/* SECTION 1: HERO */}
         <motion.section 
-          style={{ scale: scale1, rotate: rotate1 }} 
-          className="sticky top-0 h-screen w-full overflow-hidden bg-[#1a2e2b] flex flex-col z-0 origin-center shadow-2xl"
+          style={{ scale: scale1, opacity: opacity1 }} 
+          className="sticky top-0 h-screen w-full overflow-hidden bg-[#1a2e2b] flex flex-col z-0 drop-shadow-2xl will-change-transform"
         >
           <img src="https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=2126&q=80" alt="City Background" className="absolute top-0 left-0 w-full h-full object-cover opacity-40 pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#1a2e2b]/95 via-[#1a2e2b]/60 to-transparent pointer-events-none"></div>
@@ -148,8 +163,8 @@ export default function Landing() {
         {/* SECTION 2: KENAPA HARUS KOSMATE */}
         <InteractiveGridSection 
           refProp={section2Ref}
-          style={{ scale: scale2, rotate: rotate2 }}
-          className="z-10 w-full min-h-screen bg-[#241812] flex flex-col pt-[100px] pb-[160px] md:pt-[160px] md:pb-[200px] shadow-[0_-20px_50px_rgba(0,0,0,0.8)] origin-center"
+          style={{ y: y2, opacity: opacity2 }}
+          className="z-10 w-full min-h-screen bg-[#241812] flex flex-col pt-[100px] pb-[160px] md:pt-[160px] md:pb-[200px] drop-shadow-[0_-20px_25px_rgba(0,0,0,0.8)] will-change-transform"
         >
           <div className="relative z-10 max-w-[1280px] w-full mx-auto px-[24px] lg:px-[56px] flex flex-col gap-[80px] md:gap-[120px]">
             <RevealOnScroll direction="up">
@@ -182,7 +197,7 @@ export default function Landing() {
       </main>
 
       {/* SECTION 3: SLIDESHOW GALLERY */}
-      <section className="relative z-20 w-full shrink-0 shadow-[0_-30px_60px_rgba(0,0,0,0.8),0_30px_60px_rgba(0,0,0,0.8)] bg-black">
+      <section className="relative z-20 w-full shrink-0 drop-shadow-[0_-30px_30px_rgba(0,0,0,0.8)] bg-black will-change-transform">
         <SlideshowGallery onNavigate={navigate} />
       </section>
 

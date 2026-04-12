@@ -8,7 +8,12 @@ export default {
     preflight: false, 
   },
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'crimson': ['"Crimson Pro"', 'serif'],
+        'forum': ['Forum', 'cursive'],
+      }
+    },
   },
   plugins: [],
 }

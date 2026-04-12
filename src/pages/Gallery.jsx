@@ -3,14 +3,20 @@ import { useInView } from 'framer-motion';
 import { galleryImagesPool } from '../data/dummyData';
 import RevealOnScroll from '../components/RevealOnScroll';
 
-const AnimatedImage = ({ src, className }) => {
+const AnimatedImage = ({ src, className, index }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "100px" });
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
     <div ref={ref} className={`relative w-full h-full rounded-[16px] md:rounded-[24px] overflow-hidden bg-slate-100 shadow-sm hover:shadow-xl hover:scale-[1.02] hover:z-10 transition-all duration-500 cursor-pointer ${className || ''}`}>
-      <img src={src} alt="KosMate Gallery" loading="lazy" onLoad={() => setIsLoaded(true)} className={`w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${isInView && isLoaded ? 'opacity-100' : 'opacity-0'}`} />
+      <img 
+        src={src} 
+        alt={`Foto galeri properti KosMate ${index + 1}`} 
+        loading="lazy" 
+        onLoad={() => setIsLoaded(true)} 
+        className={`w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${isInView && isLoaded ? 'opacity-100' : 'opacity-0'}`} 
+      />
       <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300"></div>
     </div>
   );
@@ -36,7 +42,7 @@ export default function Gallery() {
               if (i % 7 === 0) spanClass = "col-span-2 row-span-2";
               else if (i % 5 === 0) spanClass = "col-span-2 row-span-1";
               else if (i % 4 === 0) spanClass = "col-span-1 row-span-2";
-              return <AnimatedImage key={i} src={src} className={spanClass} />;
+              return <AnimatedImage key={i} src={src} className={spanClass} index={i} />;
             })}
           </div>
         </div>
