@@ -49,7 +49,9 @@ export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, on
 
   // LOGIKA TEMA BARU: Memperbaiki background saat di-scroll pada halaman terang
   const scrolledBg = isLightPage ? 'bg-white/95 shadow-sm border-b border-slate-100' : 'bg-[#241812]/95 shadow-lg';
-  const useDarkText = isLightPage; // Di halaman terang, text harus selalu gelap (baik di top maupun scrolled)
+  
+  // Teks hanya gelap jika berada di halaman terang DAN sudah di-scroll
+  const useDarkText = isLightPage && isScrolled; 
 
   const logoColor = useDarkText ? 'text-[#241812]' : 'text-white/90';
   const menuLinkColor = useDarkText ? 'text-[#241812]/80 hover:text-[#241812]' : 'text-white/80 hover:text-white';
@@ -61,7 +63,8 @@ export default function ShadcnNavbar({ isMobileMenuOpen, setIsMobileMenuOpen, on
     ? 'hover:text-white hover:border-[#D4AF37] hover:bg-[#D4AF37]' 
     : 'hover:text-white hover:border-white hover:bg-white/10';
 
-  const bgGradient = isLightPage ? 'before:from-[#faf9f7]/90' : 'before:from-black/60';
+  // Seluruh halaman dimulai dengan Hero Section gelap, jadi gradient atas selalu gelap
+  const bgGradient = 'before:from-black/60';
 
   return (
     <header className={`w-full fixed top-0 left-0 z-50 pointer-events-none transition-all duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${isScrolled ? `${scrolledBg} backdrop-blur-md` : `bg-transparent before:absolute before:inset-0 before:bg-gradient-to-b ${bgGradient} before:to-transparent before:-z-10 before:h-[140px]`}`}>

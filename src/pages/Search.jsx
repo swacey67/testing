@@ -57,7 +57,8 @@ const RenderViewSwitcher = ({ isDark, viewMode, setViewMode, activeFilterCount }
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState('explore'); 
+  // Perbaikan 2: Default viewMode menjadi 'normal'
+  const [viewMode, setViewMode] = useState('normal'); 
   const [activeCampus, setActiveCampus] = useState('Semua');
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -66,6 +67,7 @@ export default function SearchPage() {
   const [maxPrice, setMaxPrice] = useState(7000000);
   const [reqFacilities, setReqFacilities] = useState([]);
   const [activeFaculty, setActiveFaculty] = useState('Semua');
+  const [sortBy, setSortBy] = useState('default');
 
   const toggleFacility = (fac) => setReqFacilities(prev => prev.includes(fac) ? prev.filter(f => f !== fac) : [...prev, fac]);
 
@@ -77,6 +79,7 @@ export default function SearchPage() {
     setMaxPrice(7000000);
     setReqFacilities([]);
     setActiveFaculty('Semua');
+    setSortBy('default');
   };
 
   const activeFilterCount = 
@@ -84,7 +87,8 @@ export default function SearchPage() {
     (activePropertyType !== 'Semua' ? 1 : 0) +
     (activeType !== 'Semua' ? 1 : 0) + 
     (maxPrice < 7000000 ? 1 : 0) + 
-    reqFacilities.length;
+    reqFacilities.length +
+    (sortBy !== 'default' ? 1 : 0);
 
   const filteredKos = useMemo(() => {
     let result = kosData.filter(kos => {
@@ -105,8 +109,14 @@ export default function SearchPage() {
         return distA - distB;
       });
     }
+    
+    if (activeFaculty === 'Semua') {
+      if (sortBy === 'price-asc') result.sort((a, b) => a.discountedPriceNum - b.discountedPriceNum);
+      if (sortBy === 'price-desc') result.sort((a, b) => b.discountedPriceNum - a.discountedPriceNum);
+      if (sortBy === 'rating') result.sort((a, b) => b.rating - a.rating);
+    }
     return result;
-  }, [activeCampus, searchQuery, activePropertyType, activeType, maxPrice, reqFacilities, activeFaculty, viewMode]);
+  }, [activeCampus, searchQuery, activePropertyType, activeType, maxPrice, reqFacilities, activeFaculty, viewMode, sortBy]);
 
   const [hoveredKosId, setHoveredKosId] = useState(null);
 
@@ -249,6 +259,28 @@ export default function SearchPage() {
               <div className="flex-1">
                 <div className="flex justify-between items-end mb-[24px]"><h2 className="text-2xl font-playfair font-bold text-[#241812]">Hasil Pencarian ({filteredKos.length})</h2></div>
                 
+                <div className="flex flex-wrap items-center gap-[8px] mb-[24px] mt-[8px]">
+                  <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Urutkan:</span>
+                  {[
+                    { value: 'default', label: 'Default' },
+                    { value: 'price-asc', label: 'Harga ↑' },
+                    { value: 'price-desc', label: 'Harga ↓' },
+                    { value: 'rating', label: 'Rating Tertinggi' },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setSortBy(opt.value)}
+                      className={`px-[14px] py-[6px] rounded-full text-xs font-bold border transition-all ${
+                        sortBy === opt.value
+                          ? 'bg-[#241812] text-white border-[#241812]'
+                          : 'bg-white text-slate-600 border-slate-200 hover:border-[#241812]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+
                 {filteredKos.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[24px]">
                     {filteredKos.map((kos) => (
@@ -332,6 +364,42 @@ export default function SearchPage() {
                     />
                   </div>
                 )}
+
+                {/* Filter Jenis Properti */}
+                <div className="flex items-center gap-[6px] border-l border-white/20 pl-[12px]">
+                  <span className="text-[10px] text-white/50 font-bold uppercase hidden lg:block">Tipe:</span>
+                  {['Semua', 'Kos', 'Apartment', 'Rumah'].map(type => (
+                    <button
+                      key={type}
+                      onClick={() => setActivePropertyType(type)}
+                      className={`px-[10px] py-[6px] rounded-[8px] text-[10px] font-bold border transition-all ${
+                        activePropertyType === type
+                          ? 'bg-white text-[#241812] border-white'
+                          : 'bg-white/10 text-white/70 border-white/20 hover:border-white/50'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Filter Penghuni */}
+                <div className="flex items-center gap-[6px] border-l border-white/20 pl-[12px]">
+                  <span className="text-[10px] text-white/50 font-bold uppercase hidden lg:block">Penghuni:</span>
+                  {['Semua', 'Putra', 'Putri', 'Campur'].map(type => (
+                    <button
+                      key={type}
+                      onClick={() => setActiveType(type)}
+                      className={`px-[10px] py-[6px] rounded-[8px] text-[10px] font-bold border transition-all ${
+                        activeType === type
+                          ? 'bg-white text-[#241812] border-white'
+                          : 'bg-white/10 text-white/70 border-white/20 hover:border-white/50'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
 
                 <div className="flex items-center gap-[8px] px-[8px] border-l border-white/20">
                   <span className="text-[10px] text-white/50 font-bold uppercase">Maks: Rp {(maxPrice/1000000).toFixed(1)}Jt</span>

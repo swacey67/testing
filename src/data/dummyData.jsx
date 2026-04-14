@@ -5,6 +5,12 @@ import {
   MapPin, Smartphone, Lock, Sparkles, Wifi, Coffee 
 } from 'lucide-react';
 
+import fotoAkmal from '../images/akmal.jpg';
+import fotoSekarayu from '../images/sekarayu.jpg';
+import fotoElisya from '../images/elisya.jpg';
+import fotoFawwaz from '../images/fawwaz.jpg';
+import fotoDevi from '../images/devi.jpg';
+
 export const campuses = ['Semua', 'UGM', 'UI', 'ITB', 'UB', 'Undip', 'ITS'];
 
 export const facultiesByCampus = {
@@ -69,11 +75,41 @@ export const galleryImagesPool = [
 ].sort((a, b) => a.length - b.length); 
 
 export const teamMembers = [
-  { id: 1, name: "Akmal W", role: "Ketua Kelompok", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80", bio: "Visioner di balik KosMate dengan 10 tahun pengalaman di industri proptech. Mengutamakan kenyamanan pengguna di atas segalanya." },
-  { id: 2, name: "Sekarayu A", role: "Anggota #2", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80", bio: "Arsitek di balik antarmuka mewah dan pengalaman pengguna yang seamless yang membedakan KosMate dari yang lain." },
-  { id: 3, name: "Elisya A", role: "Anggota #3", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80", bio: "Pakar infrastruktur cloud yang memastikan platform KosMate berjalan sangat cepat, stabil, dan aman sepanjang waktu." },
-  { id: 4, name: "Fawwaz S", role: "Anggota #4", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80", bio: "Ahli strategi pemasaran yang membawa KosMate ke seluruh penjuru nusantara dengan kampanye yang menginspirasi." },
-  { id: 5, name: "Devi I", role: "Anggota #5", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", bio: "Pengembang tangal yang menerjemahkan bahasa desain visual ke dalam baris kode pixel-perfect dengan performa tinggi." }
+  { 
+    id: 1, 
+    name: "Akmal W", 
+    role: "Ketua Kelompok", 
+    image: fotoAkmal, // <-- Gunakan variabel tanpa tanda kutip
+    bio: "Visioner di balik KosMate dengan 10 tahun pengalaman di industri proptech. Mengutamakan kenyamanan pengguna di atas segalanya." 
+  },
+  { 
+    id: 2, 
+    name: "Sekarayu A", 
+    role: "Anggota #1", 
+    image: fotoSekarayu, 
+    bio: "Arsitek di balik antarmuka mewah dan pengalaman pengguna yang seamless yang membedakan KosMate dari yang lain." 
+  },
+  { 
+    id: 3, 
+    name: "Elisya A", 
+    role: "Anggota #2", 
+    image: fotoElisya, 
+    bio: "Pakar infrastruktur cloud yang memastikan platform KosMate berjalan sangat cepat, stabil, dan aman sepanjang waktu." 
+  },
+  { 
+    id: 4, 
+    name: "Fawwaz S", 
+    role: "Anggota #3", 
+    image: fotoFawwaz, 
+    bio: "Ahli strategi pemasaran yang membawa KosMate ke seluruh penjuru nusantara dengan kampanye yang menginspirasi." 
+  },
+  { 
+    id: 5, 
+    name: "Devi I", 
+    role: "Anggota #4", 
+    image: fotoDevi, 
+    bio: "Pengembang tangal yang menerjemahkan bahasa desain visual ke dalam baris kode pixel-perfect dengan performa tinggi." 
+  }
 ];
 
 export const features = [

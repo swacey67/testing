@@ -233,11 +233,32 @@ export default function Detail() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
+  const [shareMsg, setShareMsg] = useState('');
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > window.innerHeight * 0.8);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleShare = async () => {
+    const shareData = {
+      title: kos.name,
+      text: `Lihat properti ini di KosMate: ${kos.name} — ${kos.campus}`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        setShareMsg('Link disalin!');
+        setTimeout(() => setShareMsg(''), 2000);
+      }
+    } catch (err) {
+      // User cancelled, no action needed
+    }
+  };
 
   const nearbyPlaces = [
     { icon: <Coffee className="w-[20px] h-[20px] text-slate-600" />, name: "Rumah Makan & Cafe Madem", dist: "150 m" },
@@ -271,7 +292,18 @@ export default function Detail() {
       <div className={`fixed top-0 w-full h-[80px] z-40 flex items-center justify-between px-[24px] lg:px-[56px] transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-b border-slate-200 shadow-sm' : 'bg-gradient-to-b from-black/60 to-transparent'}`}>
         <button onClick={() => navigate('/search')} className={`flex items-center gap-[8px] font-bold transition-colors ${isScrolled ? 'text-[#241812] hover:text-teal-700' : 'text-white hover:text-white/70'}`}><ChevronLeft className="w-[20px] h-[20px]" /> <span className="hidden md:inline">Kembali</span></button>
         <div className="flex items-center gap-[16px]">
-          <button aria-label="Bagikan properti" className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-[#241812]' : 'text-white hover:text-white/70'}`}><Share className="w-[18px] h-[18px]" /> <span className="hidden md:inline">Bagikan</span></button>
+          <button 
+            aria-label="Bagikan properti" 
+            onClick={handleShare}
+            className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${
+              isScrolled ? 'text-slate-600 hover:text-[#241812]' : 'text-white hover:text-white/70'
+            }`}
+          >
+            <Share className="w-[18px] h-[18px]" /> 
+            <span className="hidden md:inline">
+              {shareMsg || 'Bagikan'}
+            </span>
+          </button>
           <button aria-label={isSaved ? "Hapus dari simpanan" : "Simpan properti"} onClick={() => setIsSaved(!isSaved)} className={`flex items-center gap-[8px] text-sm font-bold transition-colors ${isScrolled ? 'text-slate-600 hover:text-red-500' : 'text-white hover:text-red-400'}`}><Heart className={`w-[18px] h-[18px] ${isSaved ? 'fill-red-500 text-red-500' : ''}`} /> <span className="hidden md:inline">Simpan</span></button>
         </div>
       </div>
