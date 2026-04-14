@@ -173,7 +173,7 @@ const MissionSection = () => (
             <div>
               <h2 className="font-playfair text-4xl md:text-5xl text-[#241812] tracking-tight leading-[1.1] mb-[24px]">
                 Visi kami adalah platform <br />
-                <em>properti paling dipercaya</em> <br /> di Asia Tenggara.
+                <em>properti paling dipercaya</em> <br /> di Indonesia.
               </h2>
             </div>
 
