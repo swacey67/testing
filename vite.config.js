@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename)
 // https://vitejs.dev/config/
 export default defineConfig({
   // PENTING: Ganti 'testing' dengan nama repository GitHub Anda jika nanti diubah
-  base: '/testing/', 
+  base: '/', 
   plugins: [react()],
   resolve: {
     alias: {
